@@ -45,7 +45,7 @@ public class Client {
 
 @Data
 @AllArgsConstructor
-class Message implements Serializable{
+class Message2 implements Serializable{
 	/**
 	 * 
 	 */

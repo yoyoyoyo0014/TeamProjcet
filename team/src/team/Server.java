@@ -39,7 +39,7 @@ public class Server {
 //			System.out.println(str);
 
 			System.out.println("서버 다기다림");
-//			}
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +76,6 @@ public class Server {
 //	}
 
 }
-}
 
 @Data
 @AllArgsConstructor
@@ -87,4 +86,6 @@ class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	String type;
 	String msg;
+	
+	
 }
