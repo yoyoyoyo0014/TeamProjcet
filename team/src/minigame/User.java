@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class User implements Serializable {
-	// 추후 DB 대체 데이터 
-	
+	// 추후 DB 대체 데이터
+
 	private static final long serialVersionUID = -1178561973660991852L;
 
 	@NonNull
@@ -32,6 +32,7 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -40,21 +41,29 @@ public class User implements Serializable {
 	public boolean isValidPassword(String password) {
 		return this.password.equals(password);
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public List<Game> getGames() {
 		return games;
 	}
-	
+
 	public void setGames(List<Game> games) {
 		this.games = games;
+	}
+
+//	public String getPassword() {
+//		return password;
+//	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
