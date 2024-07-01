@@ -70,6 +70,7 @@ public class Client {
 					System.out.println("[방이 꽉찼습니다.]");
 					printPrev();
 					runRoomMenu();
+					break;
 				}
 				runRoomList(msg);
 				break;
