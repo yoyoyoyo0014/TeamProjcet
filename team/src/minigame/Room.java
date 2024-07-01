@@ -58,6 +58,9 @@ public class Room {
 					msg = baseball.getResult();
 				}
 				break;
+				
+//			case Tag.otherGame:
+//				break;
 		}
 
 		return msg;
@@ -65,7 +68,7 @@ public class Room {
 
 	public void gameInit() {
 		// 게임 객체 생성
-		// 객체는 방장, 플레이어 두 객의 닉네임 정도만 간단하게 받음
+		// 객체는 방장, 플레이어 두 객의 닉네임 정도만 간단하게 받음(가안)
 
 		switch (gameTitle) {
 			case Tag.baseBall:
