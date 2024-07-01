@@ -43,6 +43,32 @@ public class Server implements Program {
 
 	}
 
+	public void sendAll(String message) {
+		// 나를 제외한 모든 client에게 전송
+		for (int i = 0; i < cUserList.size(); i++) {
+			ObjectOutputStream tOos = cUserList.get(i).getOos();
+			if (tOos == null) {
+				return;
+			}
+			// client 본인이거나 접속은 했으나 로그인을 안했다면 전송하지 않음.
+			if (tOos.equals(oos) || cUserList.get(i).getUserId() == null) {
+				continue;
+			}
+
+			try {
+				synchronized (oos) {
+					tOos.writeUTF(message);
+					tOos.flush();
+				}
+			} catch (IOException e) {
+				cUserList.remove(cUser);
+				// oosList.remove(oos);
+				userCount--;
+			}
+		}
+
+	}
+
 	public void send(ObjectOutputStream oos, String message) {
 		if (oos == null) {
 			return;
@@ -76,8 +102,11 @@ public class Server implements Program {
 	@Override
 	public void run() {
 
+		// 임시로 유저 추가.
 		totalUser.add(new User("qwe", "1234"));
 		totalUser.add(new User("asd", "1234"));
+		totalUser.add(new User("zxc", "1234"));
+		totalUser.add(new User("wer", "1234"));
 
 		Thread t = new Thread(() -> {
 			try {
@@ -97,7 +126,10 @@ public class Server implements Program {
 				if (loginedUser.size() != 0) {
 					for (User tmp : loginedUser) {
 						if (tmp.getId().equals(cUser.getUserId())) {
-							System.out.println("[" + cUser.getUserId() + "]님이 나갔습니다.");
+							String msg = "[<" + cUser.getUserId() + ">님이 나갔습니다.]";
+							System.out.println("[<" + cUser.getUserId() + ">님이 나갔습니다.]");
+							msg = Tag.alert + Tag.split + msg;
+							sendAll(msg);
 							loginedUser.remove(tmp);
 							break;
 						}
@@ -183,12 +215,13 @@ public class Server implements Program {
 
 	private void runGame(Room currentRoom, String tag, String message) {
 
-		/*
-		 * 게임을 관리하는 메소드 게임 태그는 크게 start, playing, end로 나뉨 start : 처음 게임을 시작할 때 안내 멘트와 유저
-		 * 인터페이스를 제공 playing : client의 입력 값을 토대로 result를 구하여 client에게 반환 result에는 입력한 값의
-		 * 결과와 다음 차례를 넣어서 보냄 end : 게임이 끝난 경우로 승자를 안내하고, 데이터를 기록한다. end는 server에 client에
-		 * 보낼 때 사용하는 태그라 server 받을 일은 없을 듯
-		 */
+//		게임을 관리하는 메소드 
+//		게임 태그는 크게 start, playing, end로 나뉨 
+//		start : 처음 게임을 시작할 때 안내 멘트와 유저 인터페이스를 제공 
+//		playing : client의 입력 값을 토대로 result를 구하여 client에게 반환 
+//		결과와 다음 차례를 넣어서 보냄 
+//		end : 게임이 끝난 경우로 승자를 안내하고, 데이터를 기록한다. 
+//		end는 server에서 client로 보낼 때 사용하는 태그라 server 받을 일은 없을 듯
 
 		String msg = "";
 		String cTurn; // 현재 차례
@@ -277,7 +310,7 @@ public class Server implements Program {
 	private void sendRoomList() {
 		String msg = "";
 		for (int i = 0; i < roomList.size(); i++) {
-			msg += i + 1 + ". " + roomList.get(i);
+			msg += i + 1 + ". [" + roomList.get(i).getGameTitle() + "][" + roomList.get(i) + "]\n";
 		}
 		// 생성된 방이 없다면 Tag만 전송된다.
 		msg = Tag.roomList + Tag.split + msg;
@@ -372,6 +405,9 @@ public class Server implements Program {
 			cUser.setUserId(id);
 			msg = Tag.menu + Tag.split + msg;
 			send(oos, msg);
+			String welcomeMsg = "[<" + cUser.getUserId() + ">님이 접속하셨습니다.]";
+			welcomeMsg = Tag.alert + Tag.split + welcomeMsg;
+			sendAll(welcomeMsg);
 		}
 	}
 
