@@ -1,12 +1,10 @@
 package minigame;
 
-public class Tag {
+public class Type {
 
 	// 태그와 메세지 구분자
 	// 기본적으로 클라이언트에 메세지를 전송할 때
-	// Tag::Message로 전송한다.
-	// 클라이언트는 Tag와 메세지를 구분한다.
-	final static String split = "::";
+	// Type::Message로 전송한다.
 
 	// 로그인 관련 태그
 	final static String login = "LOGIN"; // 로그인

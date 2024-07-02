@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Game implements Serializable {
+
 	// 추후 DB 대체 데이터
 	private static final long serialVersionUID = -3639078028209149053L;
 
@@ -32,15 +33,17 @@ public class Game implements Serializable {
 		Game other = (Game) obj;
 		return Objects.equals(name, other.name);
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
 	}
 
-	public void increaseWin() {
+	public void updateWin() {
 		win++;
 	}
-	public void increaseLose() {
+
+	public void updateLose() {
 		lose++;
 	}
 

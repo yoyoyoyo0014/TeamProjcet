@@ -14,11 +14,11 @@ public class Room {
 	// private Othergame othergame;
 	// ..
 
-	private String isPlaying = Tag.start;
+	private String isPlaying = Type.start;
 	private String gameTitle;
 	private String roomTitle;
 
-	public Room(ConnectedUser roomManager, String gameTitle, String roomTitle) {
+	public Room(ConnectedUser roomManager, String roomTitle, String gameTitle) {
 
 		this.roomManager = roomManager;
 		this.gameTitle = gameTitle;
@@ -29,7 +29,7 @@ public class Room {
 		String msg = "";
 
 		switch (gameTitle) {
-			case Tag.baseBall:
+			case Type.baseBall:
 				msg = baseball.getCurrentTurn();
 				// case Tag.otherGame :
 				break;
@@ -40,27 +40,27 @@ public class Room {
 	// 게임을 통괄하는 메소드
 	// start, playing, end로 나눠서
 	// 처음 시작시, 중간 플레이 과정, 승패 결과로 나뉨
-	public String gameRun(String message) {
+	public Message gameRun(Message message) {
 
-		String msg = "";
+		Message tmp = new Message();
+
 		switch (gameTitle) {
-			case Tag.baseBall:
+			case Type.baseBall:
 
-				if (isPlaying.equals(Tag.start)) {
+				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
-					msg = baseball.getResult();
-					isPlaying = Tag.playing;
+					isPlaying = Type.playing;
 				} else {
 					baseball.run(message);
-					msg = baseball.getResult();
 				}
+				tmp.setMsg(baseball.getResult());
 				break;
 
 //			case Tag.otherGame:
 //				break;
-		}
 
-		return msg;
+		}
+		return tmp;
 	}
 
 	public void gameInit() {
@@ -68,9 +68,9 @@ public class Room {
 		// 객체는 방장, 플레이어 두 객의 닉네임 정도만 간단하게 받음(가안)
 
 		switch (gameTitle) {
-			case Tag.baseBall:
-				baseball = new Baseball(roomManager.getUserId(),
-						player.getUserId());
+			case Type.baseBall:
+				baseball = new Baseball(roomManager.getUser().getId(),
+						player.getUser().getId());
 				break;
 		}
 
@@ -79,7 +79,7 @@ public class Room {
 	@Override
 	public String toString() {
 		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:"
-				+ roomManager.getUserId() + ">\n";
+				+ roomManager.getUser().getId() + ">";
 	}
 
 }

@@ -26,78 +26,80 @@ public class Client {
 					socket.getInputStream());
 
 			while (true) {
-				String msg = ois.readUTF();
+				Message msg = (Message) ois.readObject();
 				readMessage(msg);
 			}
 
 			// ois.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// (Message) ois.readObject() 에러
 			e.printStackTrace();
 		}
 	}
 
-	private void readMessage(String message) {
+	private void readMessage(Message message) {
 		// TODO Auto-generated method stub
-		String[] tmpMsg = message.split(Tag.split);
-		String tag = tmpMsg[0];
-		String msg = Tag.blank;
-		// tag랑 msg를 같이 보냈다면
-		if (tmpMsg.length >= 2) {
-			msg = tmpMsg[1];
-		}
+		String tag = message.getType();
+		System.out.println(message);
 
 		switch (tag) {
-			case Tag.alert:
-				System.out.println(msg);
+			case Type.alert:
+				System.out.println(message.getMsg());
 				break;
-			case Tag.login:
-				if (!msg.equals(Tag.blank)) {
-					id = Tag.blank; // id 초기화
-					System.out.println(msg);
+			case Type.login:
+				if (message.getMsg() != null) {
+					id = Type.blank; // id 초기화
+					System.out.println(message.getMsg());
 				}
 				inputUserLogin();
 				break;
-			case Tag.menu:
+			case Type.menu:
 				// System.out.println("<로그인 성공>");
 				runRoomMenu();
 				break;
-			case Tag.roomList:
-				if (msg.equals(Tag.blank)) {
+			case Type.roomList:
+				if (message.getMsg() == null) {
 					System.out.println("<생성된 방이 없습니다.>");
 					printPrev();
 					runRoomMenu();
 					break;
-				} else if (msg.equals(Tag.full)) {
+				} else if (message.getMsg().equals(Type.full)) {
 					System.out.println("<방이 꽉찼습니다.>");
 					printPrev();
 					runRoomMenu();
 					break;
 				}
-				runRoomList(msg);
+				runRoomList(message.getMsg());
 				break;
-			case Tag.start:
-				System.out.print(msg);
-				if (id.equals(tmpMsg[2])) {
+			case Type.start:
+				System.out.print(message.getMsg());
+				if (id.equals(message.getOpt1())) {
 					String input = sc.nextLine();
-					msg = Tag.playing + Tag.split + input;
+					Message msg = new Message();
+					msg.setType(Type.playing);
+					msg.setMsg(input);
 					send(msg);
 				} else {
 					System.out.println("<상대방의 차례입니다.>");
 				}
 				break;
-			case Tag.playing:
-				System.out.print(msg);
-				if (id.equals(tmpMsg[2])) {
+			case Type.playing:
+				System.out.print(message.getMsg());
+				if (id.equals(message.getOpt1())) {
 					String input = sc.nextLine();
-					msg = Tag.playing + Tag.split + input;
+					Message msg = new Message();
+					msg.setType(Type.playing);
+					msg.setMsg(input);
 					send(msg);
 				} else {
 					System.out.println("<상대방의 차례입니다.>");
 				}
 				break;
-			case Tag.end:
-				if (msg.equals(id)) {
+			case Type.end:
+				if (message.getMsg().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
 
 				} else {
@@ -124,7 +126,9 @@ public class Client {
 			runRoomMenu();
 			return;
 		}
-		String msg = Tag.roomList + Tag.split + menu;
+		Message msg = new Message();
+		msg.setType(Type.roomList);
+		msg.setMsg(menu);
 		send(msg);
 	}
 
@@ -159,7 +163,8 @@ public class Client {
 
 	private void serarchRoom() {
 		System.out.println("방 검색을 요청합니다.");
-		String msg = Tag.roomList + Tag.split;
+		Message msg = new Message();
+		msg.setType(Type.roomList);
 		send(msg);
 	}
 
@@ -187,7 +192,7 @@ public class Client {
 		}
 		switch (gameNum) {
 			case 1:
-				gameName = Tag.baseBall;
+				gameName = Type.baseBall;
 				break;
 			case 2:
 				gameName = "";
@@ -209,8 +214,12 @@ public class Client {
 		sc.nextLine();
 		System.out.print("방 제목 입력 : ");
 		roomTitle = sc.nextLine();
-		String msg = Tag.createRoom + Tag.split + gameName + Tag.split
-				+ roomTitle;
+
+		Message msg = new Message();
+		msg.setType(Type.createRoom);
+		msg.setMsg(gameName);
+		msg.setOpt1(roomTitle);
+
 		send(msg);
 
 	}
@@ -262,22 +271,23 @@ public class Client {
 		System.out.print("비밀번호 : ");
 		String password = sc.next();
 
-		String msg = id + " " + password;
+		Message message = new Message();
+		message.setMsg(id + " " + password);
 		if (menu == 1) {
-			msg = Tag.login + Tag.split + msg;
+			message.setType(Type.login);
 		} else {
-			msg = Tag.join + Tag.split + msg;
+			message.setType(Type.join);
 		}
-		send(msg);
+		send(message);
 	}
 
-	public void send(String message) {
+	public void send(Message msg) {
 
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(
 					socket.getOutputStream());
 
-			oos.writeUTF(message);
+			oos.writeObject(msg);
 			oos.flush();
 
 		} catch (IOException e) {
