@@ -23,14 +23,8 @@ public class Room {
 		this.roomManager = roomManager;
 		this.gameTitle = gameTitle;
 		this.roomTitle = roomTitle;
-
 	}
 
-	// public void runGame() {
-	//
-	// gameInit();
-	//
-	// }
 	public String getCurrentTurn() {
 		String msg = "";
 
@@ -43,12 +37,15 @@ public class Room {
 		return msg;
 	}
 
+	// 게임을 통괄하는 메소드
+	// start, playing, end로 나눠서
+	// 처음 시작시, 중간 플레이 과정, 승패 결과로 나뉨
 	public String gameRun(String message) {
 
 		String msg = "";
 		switch (gameTitle) {
 			case Tag.baseBall:
-			
+
 				if (isPlaying.equals(Tag.start)) {
 					// 게임 첫 시작.
 					msg = baseball.getResult();
@@ -58,7 +55,7 @@ public class Room {
 					msg = baseball.getResult();
 				}
 				break;
-				
+
 //			case Tag.otherGame:
 //				break;
 		}
@@ -82,7 +79,7 @@ public class Room {
 	@Override
 	public String toString() {
 		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:"
-				+ roomManager.getUserId() + ">";
+				+ roomManager.getUserId() + ">\n";
 	}
 
 }

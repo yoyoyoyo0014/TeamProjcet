@@ -362,7 +362,7 @@ public class Server implements Program {
 		// message는 id + " " + password로 형태
 		// 서버는 list(db)에서 로그인 정보를 확인
 		// id가 없다면 새로 등록.
-		// id가 있는데 password가 없다면 로그인 실패. <종료>
+		// id가 있는데 password가 다르다면 로그인 실패. <종료>
 		String[] tmp = message.split(" ");
 		String id = tmp[0];
 		String password = tmp[1];

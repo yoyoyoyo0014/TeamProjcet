@@ -19,7 +19,6 @@ public class Baseball {
 	private String player2;
 	private String currentTurn;
 
-	// 현재 차례, 0 or 1
 
 	private List<Integer> randomNumber;
 
@@ -42,10 +41,10 @@ public class Baseball {
 		gameResult = "<게임을 시작합니다.>\n";
 		gameResult += "<" + player1 + " vs " + player2 + ">\n";
 
-		randomGen();
 		gameResult += "<랜덤 번호를 생성합니다.>\n";
+		randomGen();
 
-		// 차례
+		// 차례 정하기
 		currentTurnInit();
 
 		//
@@ -64,6 +63,7 @@ public class Baseball {
 
 	}
 
+	// winner가 정해졌는 지 판별하는 메소드
 	public boolean isEnd() {
 		if (winner != null) {
 			return true;
@@ -127,15 +127,19 @@ public class Baseball {
 		}
 
 		if (winner != null) {
-			gameResult = "<게임이 끝났습니다. 승자는 : " + currentTurn + "님 입니다.>";
+
+			gameResult = "--------------------------------------------------\n";
+			gameResult += "<게임이 끝났습니다. 승자는 : " + currentTurn + "님 입니다.>";
+			gameResult += "--------------------------------------------------\n";
 			return;
 		}
 
 		turnNext();
-
+		gameResult += "--------------------------------------------------\n";
 		gameResult += "<입력 " + userNum + ", 결과 : " + result + "> 입니다. \n";
 		gameResult += "<" + turnCount + "차 시도>\n";
 		gameResult += "<" + currentTurn + "의 차례입니다.>\n";
+		gameResult += "--------------------------------------------------\n";
 		gameResult += "<숫자 3개를 입력해주세요.(예: 3 6 9) > : ";
 
 	}

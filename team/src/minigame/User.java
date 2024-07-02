@@ -38,10 +38,6 @@ public class User implements Serializable {
 		return Objects.hash(id);
 	}
 
-	public boolean isValidPassword(String password) {
-		return this.password.equals(password);
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -58,13 +54,24 @@ public class User implements Serializable {
 		this.games = games;
 	}
 
+	public boolean isValidPassword(String password) {
+		return this.password.equals(password);
+	}
+
+	public void updatePwd(String prevPwd, String newPwd) {
+		if (this.password.equals(prevPwd)) {
+			this.password = newPwd;
+		}
+	}
+//	보안상 이유로 password는 getter/setter 미구현
+
 //	public String getPassword() {
 //		return password;
 //	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+//	public void setPassword(String password) {
+//		this.password = password;
+//	}
 
 }
 

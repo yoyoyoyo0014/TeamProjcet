@@ -17,6 +17,7 @@ public class Client {
 	private Socket socket;
 	private static Scanner sc = new Scanner(System.in);
 
+	// 로그인 시 입력받은 id
 	private String id;
 
 	public void run() {
@@ -52,6 +53,7 @@ public class Client {
 				break;
 			case Tag.login:
 				if (!msg.equals(Tag.blank)) {
+					id = Tag.blank; // id 초기화
 					System.out.println(msg);
 				}
 				inputUserLogin();
@@ -62,12 +64,12 @@ public class Client {
 				break;
 			case Tag.roomList:
 				if (msg.equals(Tag.blank)) {
-					System.out.println("[생성된 방이 없습니다.]");
+					System.out.println("<생성된 방이 없습니다.>");
 					printPrev();
 					runRoomMenu();
 					break;
 				} else if (msg.equals(Tag.full)) {
-					System.out.println("[방이 꽉찼습니다.]");
+					System.out.println("<방이 꽉찼습니다.>");
 					printPrev();
 					runRoomMenu();
 					break;
@@ -75,7 +77,7 @@ public class Client {
 				runRoomList(msg);
 				break;
 			case Tag.start:
-				System.out.println(msg);
+				System.out.print(msg);
 				if (id.equals(tmpMsg[2])) {
 					String input = sc.nextLine();
 					msg = Tag.playing + Tag.split + input;
@@ -85,7 +87,7 @@ public class Client {
 				}
 				break;
 			case Tag.playing:
-				System.out.println(msg);
+				System.out.print(msg);
 				if (id.equals(tmpMsg[2])) {
 					String input = sc.nextLine();
 					msg = Tag.playing + Tag.split + input;
@@ -96,10 +98,10 @@ public class Client {
 				break;
 			case Tag.end:
 				if (msg.equals(id)) {
-					System.out.println("당신이 승리하였습니다.");
+					System.out.println("<당신이 승리하였습니다.>");
 
 				} else {
-					System.out.println("패배하였습니다.");
+					System.out.println("<당신이 패배하였습니다.>");
 				}
 				printPrev();
 				runRoomMenu();
@@ -114,7 +116,7 @@ public class Client {
 
 		System.out.println("<방 목록>");
 		System.out.println(message);
-		System.out.println("이전으로 (-1)");
+		System.out.println("(-1). 이전으로");
 		System.out.print("방 번호 입력 : ");
 		sc.nextLine();
 		String menu = sc.nextLine();
@@ -168,13 +170,14 @@ public class Client {
 		// 새로 만드는 게임을 이곳에서 추가하면 됩니다.
 		// 선택된 게임의 Tag를 통해 gameName을 설정합니다.
 		// roomTitle은 방의 제목입니다.
-
+		System.out.println("-----------------------");
 		System.out.println("<방 만들기>");
 		System.out.println("1. 야구<구현>");
-		System.out.println("2. 사탕찾기<미구현><가제목>");
+		System.out.println("2. 블랙잭<미구현><가제목>");
 		System.out.println("3. 타자연습<미구현><가제목>");
 		System.out.println("4. 빙고<미구현><가제목>");
 		System.out.println("5. 이전으로 ");
+		System.out.println("-----------------------");
 		System.out.print("게임 선택 : ");
 		int gameNum = sc.nextInt();
 
@@ -222,23 +225,25 @@ public class Client {
 
 	private void printRoomMenu() {
 		// TODO Auto-generated method stub
-
-		System.out.println("메뉴");
+		System.out.println("-----------------------");
+		System.out.println("<메뉴>");
 		System.out.println("1. 방 만들기");
 		System.out.println("2. 방 검색하기");
 		System.out.println("3. 전적 조회<구현예정>");
 		System.out.println("4. 회원 정보 변경<구현예정>");
 		System.out.println("5. 종료<구현예정>");
+		System.out.println("-----------------------");
 		System.out.print("메뉴 선택 : ");
 
 	}
 
 	public void printLoginMenu() {
-
+		System.out.println("-----------------------");
 		System.out.println("<로그인>");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
 		System.out.println("3. 종료<구현예정>");
+		System.out.println("-----------------------");
 		System.out.print("메뉴선택 : ");
 	}
 
