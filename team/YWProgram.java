@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +47,7 @@ class Program implements program.Program {
 		
 		System.out.print("메뉴를 선택하세요 : ");
 	}
+	
 	@Override
 	public void run() {
 		
@@ -66,6 +67,7 @@ class Program implements program.Program {
 		save(fileName);
 		
 	}
+	
 	@Override
 	public void save(String fileName) {
 		try(FileOutputStream fos = new FileOutputStream(fileName);
@@ -74,6 +76,7 @@ class Program implements program.Program {
 		} catch (Exception e) {
 		}
 	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void load(String fileName) {
@@ -122,7 +125,7 @@ class Program implements program.Program {
 		
 	}
 	
-	private void start() {
+	private void start() throws ParseException {
 		
 		int totalScore = 0;
 		
@@ -142,10 +145,11 @@ class Program implements program.Program {
 		
 	}
 	
-	private int stage1() {
+	private int stage1() throws ParseException {
 		
 		Collections.shuffle(eWords);
 		
+		int score = 0;
 		int totalScore = 0;
 		
 		System.out.println("Enter를 입력하면 게임이 시작됩니다");
@@ -153,15 +157,23 @@ class Program implements program.Program {
 		scan.nextLine();
 		
 		System.out.println("게임 시작!");
-		String now = time();
+		
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String formatedNow = now.format(formatter);
+		
 		for(int i = 0; i<eWords.size(); i++) {
 			System.out.println(eWords.get(i));
 			answer.add(scan.nextLine());
 		}
 		
-		String after = time();
-		long diff = timeOper(now, after);
-		int score = (int)Math.max(15000 - diff, 0);
+		LocalDateTime after = LocalDateTime.now();
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String formatedAfter = after.format(formatter2);
+		
+		long diff = timeOper(formatedNow, formatedAfter);
+		
+		score = (int)Math.max(15000 - diff, 0);
 		
 		for(int i = 0; i<eWords.size(); i++) {
 			eWords.get(i).contains(answer.get(i));
@@ -185,41 +197,21 @@ class Program implements program.Program {
 		
 	}
 	
-	private String time() {
 		
-		LocalDate now = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH/mm/ss");
-		String formatedNow = now.format(formatter);
-		
-		return formatedNow;
-	}
-	
-	private long timeOper(String str1, String str2) {
+	private long timeOper(String str1, String str2) throws ParseException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		
-		Date date1 = null;
-		try {
-			date1 = sdf.parse(str1);
-		} 
-		catch (ParseException e) {
-			e.printStackTrace();
-		}
+		String time1 = str1;
+		String time2 = str2;
 		
-		Date date2 = null;
-		try {
-			date2 = sdf.parse(str2);
-		} 
-		catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Date date1 = sdf.parse(time1);
+		Date date2 = sdf.parse(time2);
 		
-		long timeMil1 = date1.getTime();
-		long timeMil2 = date2.getTime();
-		
-		long diff = timeMil2 - timeMil1;
+		long diff = date2.getTime() - date1.getTime();
 		
 		return diff / 1000;
+		
 	}
 }
 
