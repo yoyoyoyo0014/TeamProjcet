@@ -133,6 +133,10 @@ class Program implements program.Program {
 		int totalScore = 0;
 		int score = 0;
 		
+		System.out.println("점수 : " + totalScore);
+		System.out.println("스테이지를 시작하려면 Enter를 눌러주세요");
+		scan.nextLine();
+		String str1 = scan.nextLine();
 		System.out.println("=====STAGE 1=====");
 		score = stage();
 		totalScore += score;
@@ -144,9 +148,9 @@ class Program implements program.Program {
 		
 		System.out.println("점수 : " + totalScore);
 		System.out.println("다음 스테이지로 넘어가려면 Enter를 눌러주세요");
-		String str = scan.nextLine();
+		String str2 = scan.nextLine();
 		
-		if(!str.isBlank()) {
+		if(!str2.isBlank()) {
 			saveScore(totalScore);
 			System.out.println();
 			System.out.println("메뉴로 돌아갑니다.");
@@ -164,9 +168,9 @@ class Program implements program.Program {
 		
 		System.out.println("점수 : " + totalScore);
 		System.out.println("다음 스테이지로 넘어가려면 Enter를 눌러주세요");
-		String str2 = scan.nextLine();
+		String str3 = scan.nextLine();
 		
-		if(!str2.isBlank()) {
+		if(!str3.isBlank()) {
 			saveScore(totalScore);
 			System.out.println();
 			System.out.println("메뉴로 돌아갑니다.");
@@ -204,7 +208,6 @@ class Program implements program.Program {
 		int totalScore = 0;
 		
 		System.out.println("Enter를 입력하면 게임이 시작됩니다");
-		scan.nextLine();
 		scan.nextLine();
 		
 		System.out.println("게임 시작!");
