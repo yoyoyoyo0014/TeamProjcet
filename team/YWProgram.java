@@ -5,12 +5,12 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -28,8 +28,11 @@ public class YWProgram {
 
 class Program implements program.Program {
 	
-	private List<Score> list = new ArrayList<Score>();
-	private List<String> words = new ArrayList<String>();
+	private List<User> list = new ArrayList<User>();
+	private List<String> eWords = new ArrayList<String>();
+	private List<String> nWords = new ArrayList<String>();
+	private List<String> hWords = new ArrayList<String>();
+	private List<String> answer = new ArrayList<String>();
 	private Scanner scan = new Scanner(System.in);
 	private String fileName = "src/team/ywprogram.txt";
 
@@ -76,7 +79,7 @@ class Program implements program.Program {
 	public void load(String fileName) {
 		try(FileInputStream fis = new FileInputStream(fileName);
 			ObjectInputStream ois = new ObjectInputStream(fis)){
-			list = (List<Score>)ois.readObject();
+			list = (List<User>)ois.readObject();
 		} 
 		catch (Exception e) {
 		} 
@@ -88,14 +91,27 @@ class Program implements program.Program {
 		switch(menu) {
 		
 		case 1:
-			System.out.println("==========게임을 설명합니다==========");
-			break;
+			System.out.println("======게임을 설명합니다======");
+			System.out.println();
+			System.out.println("게임이 시작되면 문장이 나옵니다");
+			System.out.println("문장이 나오는 순간부터 시간이 흐릅니다!");
+			System.out.println("빠르고 정확하게 문장을 따라 입력합니다");
+			System.out.println("게임이 종료 되었을 때, 스코어가 높다면 다음 스테이지로 넘어갑니다.");
+			System.out.println("하지만 스코어가 높지 않다면 게임은 종료됩니다.");
+			System.out.println("스테이지는 총 3단계까지 있습니다.");
+			System.out.println("최종 스테이지까지 완료하고 자신의 기록을 확인해보세요!");
+			System.out.println();
+			System.out.println("이전으로 되돌아가고 싶으시다면, Enter를 입력해주세요.");
+			scan.nextLine();
+			String str = scan.nextLine();
+			if(str.isBlank()) {
+				break;
+			}
 		case 2:
 			start();
 			break;
 		case 3:
 			System.out.println("==========점수를 출력합니다==========");
-			
 			break;
 		case 4:
 			System.out.println("==========프로그램을 종료합니다==========");
@@ -108,62 +124,116 @@ class Program implements program.Program {
 	
 	private void start() {
 		
-		System.out.println("Enter를 입력하면 게임이 시작됩니다");
-		String str = scan.nextLine();
+		int totalScore = 0;
 		
-		if(str.isBlank()) {
-			System.out.println("게임 시작!");
-			LocalTime now = LocalTime.now();
-			int hour = now.getHour();
-			int minute = now.getMinute();
-			int second = now.getSecond();
-			for(int i = 0; i<words.size(); i++) {
-				System.out.println(words.get(i));
-				String answer = scan.nextLine();
-			}
-			LocalTime after = LocalTime.now();
-			
-			int ahour = now.getHour();
-			int aminute = now.getMinute();
-			int asecond = now.getSecond();
-			
-			int resulth = ahour - hour;
-			int resultm = aminute - minute;
-			int results = asecond - second;
-			
-			if(hour > ahour || minute > aminute || second > asecond) {
-				
-			}
-			
-			
-			
-			
+		System.out.println("=====STAGE 1=====");
+		totalScore = stage1();
+		
+		if(totalScore < 20000) {
+			System.out.print("ID를 입력해주세요 : ");
+			String ID = scan.nextLine();
+			list.add(new User(ID, totalScore));
+			System.out.println("=====기록이 저장되었습니다=====");
+			save(fileName);
+			return;
 		}
+		
+		totalScore = 0;
 		
 	}
 	
+	private int stage1() {
+		
+		Collections.shuffle(eWords);
+		
+		int totalScore = 0;
+		
+		System.out.println("Enter를 입력하면 게임이 시작됩니다");
+		scan.nextLine();
+		scan.nextLine();
+		
+		System.out.println("게임 시작!");
+		String now = time();
+		for(int i = 0; i<eWords.size(); i++) {
+			System.out.println(eWords.get(i));
+			answer.add(scan.nextLine());
+		}
+		
+		String after = time();
+		long diff = timeOper(now, after);
+		int score = (int)Math.max(15000 - diff, 0);
+		
+		for(int i = 0; i<eWords.size(); i++) {
+			eWords.get(i).contains(answer.get(i));
+			if(eWords.get(i) != answer.get(i)) {
+				score -= 100;
+			}
+		}
+		
+		totalScore += score;
+		
+		return totalScore;
+	}
+	
+	@SuppressWarnings("unused")
 	private void centens() {
 		
-		words.add("동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세");
-		words.add("간장 공장 공장장은 강 공장장이고 된장 공장 공장장은 장 공장장이다.");
-		words.add("네가 떨어뜨린 도끼가 이 쇠도끼냐 아니면 금도끼냐 아니면 은도끼냐");
-		words.add("토끼와 거북이가 경주를 하는테 토끼가 중간에 낮잠을 자고 말았어요");
+		eWords.add("동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세");
+		eWords.add("간장 공장 공장장은 강 공장장이고 된장 공장 공장장은 장 공장장이다.");
+		eWords.add("네가 떨어뜨린 도끼가 이 쇠도끼냐 아니면 금도끼냐 아니면 은도끼냐");
+		eWords.add("토끼와 거북이가 경주를 하는테 토끼가 중간에 낮잠을 자고 말았어요.");
 		
+	}
+	
+	private String time() {
+		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH/mm/ss");
+		String formatedNow = now.format(formatter);
+		
+		return formatedNow;
+	}
+	
+	private long timeOper(String str1, String str2) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		Date date1 = null;
+		try {
+			date1 = sdf.parse(str1);
+		} 
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		Date date2 = null;
+		try {
+			date2 = sdf.parse(str2);
+		} 
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		long timeMil1 = date1.getTime();
+		long timeMil2 = date2.getTime();
+		
+		long diff = timeMil2 - timeMil1;
+		
+		return diff / 1000;
 	}
 }
 
 @Data
-class Score implements Serializable {
+class User implements Serializable {
 
 	private static final long serialVersionUID = 12345L;
 	
 	private String ID;
-	private String PW;
 	private int score;
 	
-}
-
-@Data
-class Centens {
-	private String words;
+	public User(String iD, int score) {
+		ID = iD;
+		this.score = score;
+	}
+	
 }
