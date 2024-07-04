@@ -113,17 +113,17 @@ class Program implements program.Program {
 			start();
 			break;
 		case 3:
-			System.out.println("==========점수를 출력합니다==========");
+			System.out.println("======점수를 출력합니다======");
 			Collections.sort(list);
-			for(int i = 0; i<list.size(); i++) {
+			for(int i = 0; i<5; i++) {
 				System.out.println(i+1 + ". " + list.get(i));
 			}
 			break;
 		case 4:
-			System.out.println("==========프로그램을 종료합니다==========");
+			System.out.println("====프로그램을 종료합니다====");
 			break;
 		default:
-			System.out.println("==========잘못된 메뉴를 선택했습니다==========");
+			System.out.println("===잘못된 메뉴를 선택했습니다===");
 		}
 		
 	}
@@ -184,9 +184,11 @@ class Program implements program.Program {
 	
 	private void saveScore(int totalScore) {
 		
+		System.out.println();
 		System.out.print("ID를 입력해주세요 : ");
 		String ID = scan.nextLine();
 		list.add(new User(ID, totalScore));
+		System.out.println();
 		Collections.sort(list);
 		System.out.println("=====기록이 저장되었습니다=====");
 		save(fileName);
