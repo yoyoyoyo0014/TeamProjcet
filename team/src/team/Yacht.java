@@ -1,4 +1,4 @@
-
+package team;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Main {
+public class Yacht {
 	
  	static Scanner scanner = new Scanner(System.in);
  	public static final String blue     = "\u001B[34m" ;
