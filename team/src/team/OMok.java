@@ -50,137 +50,75 @@ public class OMok implements Program {
 
 	}
 
+	public boolean isValidNum(int num) {
+
+		if (num < 0)
+			return false;
+		if (num >= 16)
+			return false;
+		return true;
+
+	}
+
+	public int checkCount(int[][] stone, int curRow, int curCol, boolean isRight, boolean isLeft, boolean isBottom, boolean isTop) {
+
+		int count = 0;
+
+		curRow += (isRight) ? +1 : (isLeft) ? -1 : 0;
+		curCol += (isBottom) ? +1 : (isTop) ? -1 : 0;
+
+		while (isValidNum(curRow) && isValidNum(curCol)) {
+			if (stone[curRow][curCol] != 0) {
+				count++;
+				curRow += (isRight) ? +1 : (isLeft) ? -1 : 0;
+				curCol += (isBottom) ? +1 : (isTop) ? -1 : 0;
+			} else if (stone[curRow][curCol] == 0) {
+				break;
+			}
+		}
+
+		return count;
+	}
+
 	public boolean checkWin(int[][] stone, int curRow, int curCol) {
 		int count = 1;
-		int tmpRow;
-		int tmpCol;
 
-		tmpRow = curRow;
-		tmpCol = curCol;
+		// 좌 탐색.
+		count += checkCount(stone, curRow, curCol, false, true, false, false);
+		// 우 탐색.
+		count += checkCount(stone, curRow, curCol, true, false, false, false);
 
-		tmpRow--;
-		while (tmpRow > 0) { // 좌 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow--;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				break;
-			}
-		}
-
-		tmpRow++;
-		while (tmpRow < 16) { // 우 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow++;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				break;
-			}
-		}
-
-		if (count >= 5) {
+		// 오목 판별.
+		if (count >= 5)
 			return true;
-		} else {
-			count = 1;
-		}
 
-		tmpCol--;
-		while (tmpCol > 0) { // 위 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpCol--;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpCol = curCol;
-				break;
-			}
-		}
-
-		tmpCol++;
-		while (tmpCol < 16) { // 아래 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpCol++;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpCol = curCol;
-				break;
-			}
-		}
-
-		if (count >= 5) {
+		count = 1;
+		
+		// 위 탐색.
+		count += checkCount(stone, curRow, curCol, false, false, false, true);
+		// 아래 탐색.
+		count += checkCount(stone, curRow, curCol, false, false, true, false);
+		if (count >= 5)
 			return true;
-		} else {
-			count = 1;
-		}
 
-		tmpRow--;
-		tmpCol--;
-		while (tmpRow > 0 && tmpCol > 0) { // 위좌 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow--;
-				tmpCol--;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				tmpCol = curCol;
-				break;
-			}
-		}
-		tmpRow++;
-		tmpCol++;
-		while (tmpRow < 16 && tmpCol < 16) { // 아래우 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow++;
-				tmpCol++;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				tmpCol = curCol;
-				break;
-			}
-		}
-
-		if (count >= 5) {
+		count = 1;
+		
+		// 왼쪽 위 탐색.
+		count += checkCount(stone, curRow, curCol, false, true, false, true);
+		// 오른쪽 아래 탐색.
+		count += checkCount(stone, curRow, curCol, true, false, true, false);
+		if (count >= 5)
 			return true;
-		} else {
-			count = 1;
-		}
+		count = 1;
 
-		tmpRow++;
-		tmpCol--;
-		while (tmpCol > 0 && tmpRow < 16) { // 위우 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow++;
-				tmpCol--;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				tmpCol = curCol;
-				break;
-			}
-		}
-
-		tmpRow--;
-		tmpCol++;
-		while (tmpCol < 16 && tmpRow > 16) { // 아래좌 탐색
-			if (stone[tmpRow][tmpCol] != 0) {
-				count++;
-				tmpRow--;
-				tmpCol++;
-			} else if (stone[tmpRow][tmpCol] == 0) {
-				tmpRow = curRow;
-				tmpCol = curCol;
-				break;
-			}
-		}
-
-		if (count >= 5) {
+		// 오른쪽 위 탐색.
+		count += checkCount(stone, curRow, curCol, true, false, false, true);
+		// 왼쪽 아래 탐색.
+		count += checkCount(stone, curRow, curCol, false, true, true, false);
+		if (count >= 5)
 			return true;
-		} else {
-			count = 1;
-		}
-
+		
+		
 		return false;
 	}
 
