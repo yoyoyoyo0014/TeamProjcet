@@ -9,13 +9,15 @@ import lombok.Data;
 import program.Program;
 
 @Data
-public class OMok implements Program {
+public class Omok implements Program {
 
 	private List<String> list = new ArrayList<>();
 	private static Scanner sc = new Scanner(System.in);
 
 	private final static String row_init = "   0 1 2 3 4 5 6 7 8 9 A B C D E F";
 	private final static String row = "□ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □";
+	
+	private final static int BOARD_SIZE = 16;
 
 	public static void clearConsoleScreen() {
 		for (int i = 0; i < 20; i++) {
@@ -26,13 +28,13 @@ public class OMok implements Program {
 	public void resetBoard() {
 
 		if (list.size() == 0) {
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < BOARD_SIZE; i++) {
 				list.add(row);
 			}
 		}
 
 		System.out.println(row_init);
-		for (int i = 0x0; i < 16; i++) {
+		for (int i = 0x0; i < BOARD_SIZE; i++) {
 			System.out.printf(" %X %s\n", i, list.get(i));
 
 		}
@@ -54,7 +56,7 @@ public class OMok implements Program {
 
 		if (num < 0)
 			return false;
-		if (num >= 16)
+		if (num >= BOARD_SIZE)
 			return false;
 		return true;
 
@@ -91,7 +93,6 @@ public class OMok implements Program {
 		// 오목 판별.
 		if (count >= 5)
 			return true;
-
 		count = 1;
 		
 		// 위 탐색.
@@ -100,7 +101,6 @@ public class OMok implements Program {
 		count += checkCount(stone, curRow, curCol, false, false, true, false);
 		if (count >= 5)
 			return true;
-
 		count = 1;
 		
 		// 왼쪽 위 탐색.
@@ -118,7 +118,6 @@ public class OMok implements Program {
 		if (count >= 5)
 			return true;
 		
-		
 		return false;
 	}
 
@@ -128,8 +127,8 @@ public class OMok implements Program {
 
 		List<String> select = new ArrayList<String>();
 		int sel_r, sel_c;
-		int[][] whiteStone = new int[16][16];
-		int[][] blackStone = new int[16][16];
+		int[][] whiteStone = new int[BOARD_SIZE][BOARD_SIZE];
+		int[][] blackStone = new int[BOARD_SIZE][BOARD_SIZE];
 		int count = 0;
 
 		while (true) {
@@ -144,15 +143,22 @@ public class OMok implements Program {
 			// 16진수 값을 정수로 변환하여 저장
 			sel_r = Integer.parseInt(select.get(0), 16);
 			sel_c = Integer.parseInt(select.get(1), 16);
-
+			
+			// 범위를 벗어난 숫자 입력. 반칙패로 규정
+			// 재선택으로 구현 예정
+			if(!isValidNum(sel_r) || !isValidNum(sel_c)) {
+				System.out.println("올바르지 않은 위치입니다." + nowTurn + " 패배<반칙패>");
+				return;
+			}
+			
 			// 흑돌이나 백돌에 이미 등록된 위치라면 반칙패 처리
-			// 추후 재선택으로 변경 가능
+			// 재선택으로 구현 예정	
 			if (whiteStone[sel_r][sel_c] != 0 || blackStone[sel_r][sel_c] != 0) {
 				System.out.println("이미 선택한 위치입니다. " + nowTurn + " 패배<반칙패>");
 				return;
 			}
 
-			// c는 맵을 돌을 둔 위치를 업데이트하는데 사용되는 변수
+			// c는 board에 둔 돌을 업데이트 함. 
 			char[] c = list.get(sel_c).toCharArray();
 
 			if (nowTurn.equals("흑돌")) {
@@ -195,7 +201,7 @@ public class OMok implements Program {
 
 	public static void main(String[] args) {
 		// test용 Main
-		OMok gm = new OMok();
+		Omok gm = new Omok();
 		gm.run();
 	}
 
