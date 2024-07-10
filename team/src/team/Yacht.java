@@ -106,6 +106,21 @@ public class Yacht {
 			totalP2 = 0;
 		}
 		
+		/*
+		int menu = 0;
+		
+		switch (menu) {
+		case 1: {
+			
+		}
+		case 2: {
+			
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + menu);
+		}
+		*/
+		
 		//12턴 동안 반복
 		while(turn <= 12) {
 			
@@ -153,13 +168,13 @@ public class Yacht {
 			
 			//족보에 무사히 값이 들어가면 while문 종료
 			while(validInputP1 == false) {
-				String menu = "0";
+				String SelHR = "0";
 				
 				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
-				menu = scanner.next();
+				SelHR = scanner.next();
 				scanner.nextLine();
 				
-				switch (menu) {
+				switch (SelHR) {
 				case "1": {
 					if(oneBlP1 == true) { //족보에 이미 값이 들어가 있으면
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
@@ -341,13 +356,13 @@ public class Yacht {
 			
 			//족보에 무사히 값이 들어가면 while문 종료
 			while(validInputP2 == false) {
-				String menu = "0";
+				String SelHR = "0";
 				
 				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
-				menu = scanner.next();
+				SelHR = scanner.next();
 				scanner.nextLine();
 				
-				switch (menu) {
+				switch (SelHR) {
 				case "1": {
 					if(oneBlP2 == true) { //족보에 이미 값이 들어가 있으면
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
