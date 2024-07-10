@@ -23,8 +23,8 @@ public class Yacht {
 		int oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2;
 		
 		//족보 1~6 합
-		int oneToSixP1 = 0;
-		int oneToSixP2 = 0;
+		int oneToSixP1;
+		int oneToSixP2;
 		
 		//보너스 점수 변수
 		int bonusP1;
@@ -99,13 +99,18 @@ public class Yacht {
 			lsP2 = 0;
 			yaP2 = 0;
 			
+			oneToSixP1 = 0;
+			oneToSixP2 = 0;
+			
 			totalP1 = 0;
 			totalP2 = 0;
 		}
 		
 		//12턴 동안 반복
 		while(turn <= 12) {
-
+			
+			//player1의 차례
+			{
 			//주사위 굴리기
 			diceRoll(dicesP1);
 			
@@ -114,6 +119,7 @@ public class Yacht {
 					 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
 			
 			//배열의 내용을 출력
+			System.out.println("player1의 차례입니다");
 			System.out.println("주사위 결과:");
 			for (int result : dicesP1) {
 				System.out.print("[" + result + "]");
@@ -143,10 +149,10 @@ public class Yacht {
 			//insertDice(dicesP1, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1);
 			
 			//while문 조건용 변수
-			boolean validInput = false;
+			boolean validInputP1 = false;
 			
 			//족보에 무사히 값이 들어가면 while문 종료
-			while(validInput == false) {
+			while(validInputP1 == false) {
 				String menu = "0";
 				
 				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
@@ -161,7 +167,7 @@ public class Yacht {
 					}
 					oneP1 = oneCal(dicesP1, oneP1, oneBlP1);
 					oneBlP1 = true;
-					validInput = true; //while문 빠져나오는 용
+					validInputP1 = true; //while문 빠져나오는 용
 					break;
 				}
 				case "2": {
@@ -171,7 +177,7 @@ public class Yacht {
 					}
 					twoP1 = twoCal(dicesP1, twoP1, twoBlP1);
 					twoBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "3": {
@@ -181,7 +187,7 @@ public class Yacht {
 					}
 					threeP1 = threeCal(dicesP1, threeP1, threeBlP1);
 					threeBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "4": {
@@ -191,7 +197,7 @@ public class Yacht {
 					}
 					fourP1 = fourCal(dicesP1, fourP1, fourBlP1);
 					fourBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "5": {
@@ -201,7 +207,7 @@ public class Yacht {
 					}
 					fiveP1 = fiveCal(dicesP1, fiveP1, fiveBlP1);
 					fiveBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "6": {
@@ -211,7 +217,7 @@ public class Yacht {
 					}
 					sixP1 = sixCal(dicesP1, sixP1, sixBlP1);
 					sixBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "7": {
@@ -221,7 +227,7 @@ public class Yacht {
 					}
 					chP1 = chCal(dicesP1, chP1, chBlP1);
 					chBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "8": {
@@ -231,7 +237,7 @@ public class Yacht {
 					}
 					fkP1 = fkCal(dicesP1, fkP1, fkBlP1);
 					fkBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "9": {
@@ -241,7 +247,7 @@ public class Yacht {
 					}
 					fhP1 = fhCal(dicesP1, fhP1, fhBlP1);
 					fhBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "10": {
@@ -251,7 +257,7 @@ public class Yacht {
 					}
 					ssP1 = ssCal(dicesP1, ssP1, ssBlP1);
 					ssBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "11": {
@@ -261,7 +267,7 @@ public class Yacht {
 					}
 					lsP1 = lsCal(dicesP1, lsP1, lsBlP1);
 					lsBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 				case "12": {
@@ -271,7 +277,7 @@ public class Yacht {
 					}
 					yaP1 = yaCal(dicesP1, yaP1, yaBlP1);
 					yaBlP1 = true;
-					validInput = true;
+					validInputP1 = true;
 					break;
 				}
 			}
@@ -283,18 +289,223 @@ public class Yacht {
 					bonusP1 = 35;
 				}
 				
-				totalP1 = totalCal(oneP1, twoP1, threeP1, fourP1, fiveP1, oneToSixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1);
-				totalP2 = totalCal(oneP2, twoP2, threeP2, fourP2, fiveP2, oneToSixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2);
+				for(int i = 0; i < dicesP1.length; i++) {
+					dicesP1[i] = 0;
+				}
+				
+				totalP1 = totalCal(oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1);
+			}
+			
+			
+			//player2의 차례
+			{
+			//주사위 굴리기
+			diceRoll(dicesP2);
+			
+			//화면 출력
+			print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+					 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+			
+			//배열의 내용을 출력
+			System.out.println("player2의 차례입니다");
+			System.out.println("주사위 결과:");
+			for (int result : dicesP2) {
+				System.out.print("[" + result + "]");
+			}
+			System.out.println();
+			
+			//주사위 다시 굴리기(최대 2회)
+			for(int r = 2; r > 0;) {
+		        // 주사위를 다시 굴리기
+		        r = diceReroll(dicesP2, r);
+		        
+		        //r = n;
+		        
+				print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+						 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+				
+		        // 배열의 내용을 출력
+		        System.out.println("다시 굴린 주사위 결과:");
+		        for (int result : dicesP2) {
+		            System.out.print("[" + result + "]");
+		        }
+		        System.out.println();
+		        
+		        r--;
+			}
+			
+			//insertDice(dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2);
+			
+			//while문 조건용 변수
+			boolean validInputP2 = false;
+			
+			//족보에 무사히 값이 들어가면 while문 종료
+			while(validInputP2 == false) {
+				String menu = "0";
+				
+				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
+				menu = scanner.next();
+				scanner.nextLine();
+				
+				switch (menu) {
+				case "1": {
+					if(oneBlP2 == true) { //족보에 이미 값이 들어가 있으면
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue; //whlie문 다시 시작
+					}
+					oneP2 = oneCal(dicesP2, oneP2, oneBlP2);
+					oneBlP2 = true;
+					validInputP2 = true; //while문 빠져나오는 용
+					break;
+				}
+				case "2": {
+					if(twoBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					twoP2 = twoCal(dicesP2, twoP2, twoBlP2);
+					twoBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "3": {
+					if(threeBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					threeP2 = threeCal(dicesP2, threeP2, threeBlP2);
+					threeBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "4": {
+					if(fourBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fourP2 = fourCal(dicesP2, fourP2, fourBlP2);
+					fourBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "5": {
+					if(fiveBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fiveP2 = fiveCal(dicesP2, fiveP2, fiveBlP2);
+					fiveBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "6": {
+					if(sixBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					sixP2 = sixCal(dicesP2, sixP2, sixBlP2);
+					sixBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "7": {
+					if(chBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					chP2 = chCal(dicesP2, chP2, chBlP2);
+					chBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "8": {
+					if(fkBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fkP2 = fkCal(dicesP2, fkP2, fkBlP2);
+					fkBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "9": {
+					if(fhBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fhP2 = fhCal(dicesP2, fhP2, fhBlP2);
+					fhBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "10": {
+					if(ssBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					ssP2 = ssCal(dicesP2, ssP2, ssBlP2);
+					ssBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "11": {
+					if(lsBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					lsP2 = lsCal(dicesP2, lsP2, lsBlP2);
+					lsBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "12": {
+					if(yaBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					yaP2 = yaCal(dicesP2, yaP2, yaBlP2);
+					yaBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+			}
+				//보너스 점수 획득 가능한지 계산
+				oneToSixP2 = oneP2 + twoP2 + threeP2 + fourP2 + fiveP2 + sixP2;
+				
+				if(oneToSixP2 >= 63) {
+					bonusBlP2 = true;
+					bonusP2 = 35;
+				}
+				
+				for(int i = 0; i < dicesP2.length; i++) {
+					dicesP2[i] = 0;
+				}
+				
+				totalP2 = totalCal(oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2);
+			}
 			
 				System.out.println("-------------------------------------------------------------------\n");
 				turn++;
 			}
 		}
+		}
 		turn = 12;
 		
+		/*
 		print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
 				 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+		*/
 		
+		print(turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneToSixP1, totalP1,
+				 oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneToSixP2, totalP2);
+		
+		if(totalP1 > totalP2) {
+			System.out.println("\nplayer1의 승리입니다!");
+		}else if(totalP1 < totalP2) {
+			System.out.println("\nplayer2의 승리입니다!");
+		}else {
+			System.out.println("\n무승부입니다.");
+		}
 	}
 	
 	private static void diceRoll(int[] dices) {
@@ -386,7 +597,13 @@ public class Yacht {
 		System.out.println(" ================================== ");
 		System.out.println("|\t   Turn " + turn + "/12  \t\t   |");
 		System.out.println("|==================================|");
-		System.out.println("| Categorries\t |player1 |player2 |");
+		if(dicesP1[0] > 0) {
+			System.out.println("| Categorries\t |" + blue + "player1" + exit + " |player2 |");
+		}else if(dicesP2[0] > 0) {
+			System.out.println("| Categorries\t |player1 |" + blue + "player2 " + exit + "|");
+		}else{
+			System.out.println("| Categorries\t |player1 |player2 |");
+		}
 		System.out.println("|==================================|");
 		
 		//1 ~ 6
@@ -1108,5 +1325,35 @@ public class Yacht {
 					+ ch + fk + fh + ss + ls + ya;
 		
 		return total;
+	}
+	
+	private static void print(int turn, int oneP1, int twoP1, int threeP1, int fourP1, int fiveP1, int sixP1, int bonusP1, int chP1, int fkP1, int fhP1, int ssP1, int lsP1, int yaP1, int oneToSixP1, int totalP1,
+			int oneP2, int twoP2, int threeP2, int fourP2, int fiveP2, int sixP2, int bonusP2, int chP2, int fkP2, int fhP2, int ssP2, int lsP2, int yaP2, int oneToSixP2, int totalP2) {
+		System.out.println(" ================================== ");
+		System.out.println("|\t   Turn " + turn + "/12  \t\t   |");
+		System.out.println("|==================================|");
+		System.out.println("| Categorries\t |player1 |player2 |");
+		System.out.println("|==================================|");
+		System.out.println("|1. Aces\t | " + oneP1 + "\t  | " + oneP2 + "\t   |");
+		System.out.println("|2. Deuces\t | " + twoP1 + "\t  | " + twoP2 + "\t   |");
+		System.out.println("|3. Threes\t | " + threeP1 + "\t  | " + threeP2 + "\t   |");
+		System.out.println("|4. Fours\t | " + fourP1 + "\t  | " + fourP2 + "\t   |");
+		System.out.println("|5. Fives\t | " + fiveP1 + "\t  | " + fiveP2 + "\t   |");
+		System.out.println("|6. Sixes\t | " + sixP1 + "\t  | " + sixP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|Subtotal\t | " + oneToSixP1 + "/63" + "  | " + oneToSixP2 + "/63  |");
+		System.out.println("|----------------------------------|");
+		System.out.println("|+35 Bonus\t | " + "+" + bonusP1 + "\t  | " + "+" + bonusP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|7. Choice\t | " + chP1 + "\t  | " + chP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|8. 4 of a Kind  | " + fkP1 + "\t  | " + fkP2 + "\t   |");
+		System.out.println("|9. Full House   | " + fhP1 + "\t  | " + fhP2 + "\t   |");
+		System.out.println("|10. S. Straight | " + ssP1 + "\t  | " + ssP2 + "\t   |");
+		System.out.println("|11. L. Straight | " + lsP1 + "\t  | " + lsP2 + "\t   |");
+		System.out.println("|12. Yacht\t | " + yaP1 + "\t  | " + yaP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("| Total\t\t | " + totalP1 + "\t  | " + totalP2 + "\t   |");
+		System.out.println(" ================================== ");
 	}
 }
