@@ -114,12 +114,15 @@ public class Yacht {
 			
 		}
 		case 2: {
-			
+			printRule();
 		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + menu);
 		}
 		*/
+		
+		
+		printRule();
 		
 		//12턴 동안 반복
 		while(turn <= 12) {
@@ -1340,6 +1343,53 @@ public class Yacht {
 					+ ch + fk + fh + ss + ls + ya;
 		
 		return total;
+	}
+	
+	private static void printRule(){		
+		System.out.println("1. 주사위 5개를 던진다.\n");
+		System.out.println("2. 이 중 원하는 주사위들은 남겨두고, 나머지 주사위들을 다시 던진다. \n다시 던지기는 한 라운드에 2번까지 가능하며, 앞에서 던지지 않았던 주사위도 원한다면 다시 던질 수 있다.\n");
+		System.out.println("3. 주사위 던지기가 끝난 후 나온 최종 조합으로, 아래 제시된 족보 중 아직까지 기록되지 않은 하나를 반드시 선택하여, 점수판에 기록한다.\n");
+		System.out.println("4. 만약 조건에 만족하지 않는 족보를 선택하는 경우, 선택한 족보의 점수칸에 0점으로 기록된다.\n");
+		System.out.println("5. 모든 플레이어가 점수판을 모두 채우면 게임이 종료되고, 점수 총합이 가장 높은 플레이어가 승리한다.\n\n");
+		
+		System.out.println(" ======================================================================= ");
+		System.out.println("|\t\t\t\t족보\t\t\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 이름\t\t| 설명\t\t\t\t| 예시\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Aces\t\t| " + "1이 나온 주사위 눈의 총합. 최대 5점.\t" + "|[1][1][1][5][6] => 3점\t|");
+		System.out.println("| Deuces\t| " + "2가 나온 주사위 눈의 총합. 최대 10점.\t" + "|[2][2][2][5][6] => 6점\t|");
+		System.out.println("| Threes\t| " + "3이 나온 주사위 눈의 총합. 최대 15점.\t" + "|[3][3][3][5][6] => 9점\t|");
+		System.out.println("| Fours\t\t| " + "4가 나온 주사위 눈의 총합. 최대 20점.\t" + "|[1][2][4][4][4] => 12점\t|");
+		System.out.println("| Fives\t\t| " + "5가 나온 주사위 눈의 총합. 최대 25점.\t" + "|[1][2][5][5][5] => 15점\t|");
+		System.out.println("| Sixes\t\t| " + "6이 나온 주사위 눈의 총합. 최대 30점.\t" + "|[1][2][6][6][6] => 18점\t|");
+		System.out.println(" ======================================================================= ");
+		System.out.println("상단 항목의 점수 합계가 63점 이상일 때, 보너스 점수 35점을 추가로 얻는다.\n");
+		
+		System.out.println(" ======================================================================= ");
+		System.out.println("|\t\t\t\t족보\t\t\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 이름\t\t| 설명\t\t\t\t| 예시\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Choice\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|[3][4][5][6][6] => 24점\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 4 of a Kind\t| " + "동일한 주사위 눈이 4개 이상일 때,\t" + "|[5][6][6][6][6] => 29점\t|");
+		System.out.println("|\t\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("|\t\t| " + "주사위를 3개, 2개로 묶었을 때 각각의\t" + "|\t\t\t|");
+		System.out.println("| Full House\t| " + "묶음 안에서 주사위 눈이 서로 동일할 때,\t" + "|[5][5][6][6][6] => 28점\t|");
+		System.out.println("|\t\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| S. Straight\t| " + "이어지는 주사위 눈이 4개 이상일 때.\t" + "|[1][2][3][4][6] => 15점\t|");
+		System.out.println("|\t\t| " + "고정 15점.\t\t\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| L. Straight\t| " + "이어지는 주사위 눈이 5개일 때.\t" + "|[1][2][3][4][5] => 30점\t|");
+		System.out.println("|\t\t| " + "고정 30점.\t\t\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Yacht\t\t| " + "동일한 주사위 눈이 5개일 때.\t\t" + "|[1][1][1][1][1] => 50점\t|");
+		System.out.println("|\t\t| " + "고정 50점.\t\t\t" + "|\t\t\t|");
+		System.out.println(" ======================================================================= ");
+		System.out.println();
 	}
 	
 	private static void print(int turn, int oneP1, int twoP1, int threeP1, int fourP1, int fiveP1, int sixP1, int bonusP1, int chP1, int fkP1, int fhP1, int ssP1, int lsP1, int yaP1, int oneToSixP1, int totalP1,
