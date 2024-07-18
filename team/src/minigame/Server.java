@@ -52,9 +52,9 @@ public class Server implements Program {
 				return;
 			} 
 			// client 본인이거나 접속은 했으나 로그인을 안했다면 전송하지 않음.
-//			if (tOos.equals(oos) || cUserList.get(i).getUser() == null) {
-//				continue;
-//			}
+			if (tOos.equals(oos) || cUserList.get(i).getUser() == null) {
+				continue;
+			}
 
 			try {
 				synchronized (oos) {
@@ -127,13 +127,14 @@ public class Server implements Program {
 		totalUser.add(new User("zxc", "1234"));
 		totalUser.add(new User("wer", "1234"));
 
+		//new Thread().sleep(1000);
+		
 		Thread t = new Thread(() -> {
 			try {
 				oos = new ObjectOutputStream(socket.getOutputStream());
 				cUser = new ConnectedUser(oos);
 				cUserList.add(cUser);
 				userCount++;
-
 				sendUserLogin(null);
 				while (true) {
 					ObjectInputStream ois = new ObjectInputStream(
@@ -226,6 +227,7 @@ public class Server implements Program {
 			send(oos, msg);
 		} else { // 방에 인원이 모두 차서 게임을 시작합니다.
 			msg.setType(Type.start);
+//			msg.setType(Type.playing);
 			userRoom = tmpRoom;
 			userRoom.setPlayer(cUser);
 			runGame(userRoom, msg);
@@ -251,7 +253,7 @@ public class Server implements Program {
 				currentRoom.gameInit();
 				msg = currentRoom.gameRun(message);
 				currTurn = currentRoom.getCurrentTurn();
-				msg.setType(Type.start);
+				msg.setType(Type.playing);
 				msg.setOpt1(currTurn);
 
 				break;
@@ -259,7 +261,7 @@ public class Server implements Program {
 
 				msg = currentRoom.gameRun(message);
 
-				if (currentRoom.getBaseball().getWinner() == null) {
+				if (currentRoom.getWinner() == null) {
 
 					currTurn = currentRoom.getCurrentTurn();
 
@@ -271,10 +273,10 @@ public class Server implements Program {
 					// 승패 기록
 					// 방 폭파시키기
 					String gameTitle = currentRoom.getGameTitle();
-					String winner = currentRoom.getBaseball().getWinner();
-					String loser = currentRoom.getBaseball().getLoser();
+					String winner = currentRoom.getWinner();
+					String loser = currentRoom.getLoser();
 					msg.setType(Type.end);
-					msg.setMsg(winner);
+					msg.setOpt1(winner);
 
 					recordScore(gameTitle, winner, loser);
 					roomList.remove(userRoom);
@@ -315,7 +317,7 @@ public class Server implements Program {
 		// 처음한 게임이라면 게임의 객체를 생성하고 반환한다.
 		if (!isExist) {
 			user.getGames().add(tGame);
-			return user.getGames().get(user.getGames().size());
+			return user.getGames().get(user.getGames().size()-1);
 		}
 		return null;
 	}

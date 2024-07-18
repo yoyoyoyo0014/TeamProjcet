@@ -11,8 +11,8 @@ public class Room {
 
 	// 게임 객체 생성
 	private Baseball baseball;
-	// private Othergame othergame;
-	// ..
+	private Omok omok;
+	// .. private otherGame otherGame
 
 	private String isPlaying = Type.start;
 	private String gameTitle;
@@ -31,7 +31,40 @@ public class Room {
 		switch (gameTitle) {
 			case Type.baseBall:
 				msg = baseball.getCurrentTurn();
+				break;
 				// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getCurrentTurn();
+				break;
+		}
+		return msg;
+	}
+	
+	public String getLoser() {
+		String msg = null;
+
+		switch (gameTitle) {
+			case Type.baseBall:
+				msg = baseball.getLoser();
+				break;
+				// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getLoser();
+				break;
+		}
+		return msg;
+	}
+	
+	public String getWinner() {
+		String msg = null;
+
+		switch (gameTitle) {
+			case Type.baseBall:
+				msg = baseball.getWinner();
+				break;
+				// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getWinner();
 				break;
 		}
 		return msg;
@@ -55,6 +88,16 @@ public class Room {
 				}
 				tmp.setMsg(baseball.getResult());
 				break;
+			case Type.omok:
+//				게임 이닛, 차례 정하고 초기화면 받기
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					omok.run(message);
+				}
+				tmp.setMsg(omok.getResult());
+				break;
 
 //			case Tag.otherGame:
 //				break;
@@ -72,6 +115,10 @@ public class Room {
 				baseball = new Baseball(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
+			case Type.omok:
+				omok = new Omok(roomManager.getUser().getId(),
+						player.getUser().getId());
+				break;
 		}
 
 	}
@@ -81,5 +128,7 @@ public class Room {
 		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:"
 				+ roomManager.getUser().getId() + ">";
 	}
+
+
 
 }

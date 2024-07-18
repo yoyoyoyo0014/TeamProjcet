@@ -19,6 +19,7 @@ public class ServerMain {
 				Server server = new Server(socket);
 				server.run();
 			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("예외발생");

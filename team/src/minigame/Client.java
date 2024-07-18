@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import lombok.NonNull;
@@ -16,13 +17,14 @@ public class Client {
 	@NonNull
 	private Socket socket;
 	private static Scanner sc = new Scanner(System.in);
+	private ObjectInputStream ois;
 
 	// 로그인 시 입력받은 id
 	private String id;
 
 	public void run() {
 		try {
-			ObjectInputStream ois = new ObjectInputStream(
+			ois = new ObjectInputStream(
 					socket.getInputStream());
 
 			while (true) {
@@ -60,6 +62,7 @@ public class Client {
 				// System.out.println("<로그인 성공>");
 				runRoomMenu();
 				break;
+
 			case Type.roomList:
 				if (message.getMsg() == null) {
 					System.out.println("<생성된 방이 없습니다.>");
@@ -74,32 +77,16 @@ public class Client {
 				}
 				runRoomList(message.getMsg());
 				break;
+
 			case Type.start:
-				System.out.print(message.getMsg());
-				if (id.equals(message.getOpt1())) {
-					String input = sc.nextLine();
-					Message msg = new Message();
-					msg.setType(Type.playing);
-					msg.setMsg(input);
-					send(msg);
-				} else {
-					System.out.println("<상대방의 차례입니다.>");
-				}
-				break;
+//				gameStart(message);
+//				break;
 			case Type.playing:
-				System.out.print(message.getMsg());
-				if (id.equals(message.getOpt1())) {
-					String input = sc.nextLine();
-					Message msg = new Message();
-					msg.setType(Type.playing);
-					msg.setMsg(input);
-					send(msg);
-				} else {
-					System.out.println("<상대방의 차례입니다.>");
-				}
+				gamePlay(message);
 				break;
 			case Type.end:
-				if (message.getMsg().equals(id)) {
+				System.out.println(message.getMsg());
+				if (message.getOpt1().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
 
 				} else {
@@ -113,6 +100,33 @@ public class Client {
 		}
 
 	}
+
+	private void gamePlay(Message message) {
+		System.out.print(message.getMsg());
+		if (id.equals(message.getOpt1())) {
+			String input = sc.nextLine();
+			Message msg = new Message();
+			msg.setType(Type.playing);
+			msg.setMsg(input);
+			send(msg);
+		} else {
+			System.out.println("<상대방의 차례입니다.>");
+		}
+	}
+
+//	private void gameStart(Message message) {
+//
+//		System.out.print(message.getMsg());
+//		if (id.equals(message.getOpt1())) {
+//			String input = sc.nextLine();
+//			Message msg = new Message();
+//			msg.setType(Type.playing);
+//			msg.setMsg(input);
+//			send(msg);
+//		} else {
+//			System.out.println("<상대방의 차례입니다.>");
+//		}
+//	}
 
 	private void runRoomList(String message) {
 
@@ -177,14 +191,20 @@ public class Client {
 		// roomTitle은 방의 제목입니다.
 		System.out.println("-----------------------");
 		System.out.println("<방 만들기>");
-		System.out.println("1. 야구<구현>");
-		System.out.println("2. 블랙잭<미구현><가제목>");
-		System.out.println("3. 타자연습<미구현><가제목>");
-		System.out.println("4. 빙고<미구현><가제목>");
+		System.out.println("1. 야구");
+		System.out.println("2. 오목");
+		System.out.println("3. 타자연습<미구현>");
+		System.out.println("4. Yacht<미구현>");
 		System.out.println("5. 이전으로 ");
 		System.out.println("-----------------------");
 		System.out.print("게임 선택 : ");
-		int gameNum = sc.nextInt();
+
+		int gameNum;
+		try {
+			gameNum = sc.nextInt();
+		} catch (InputMismatchException e) {
+			gameNum = 5;
+		}
 
 		if (gameNum == 5) { // 이전으로
 			runRoomMenu();
@@ -195,7 +215,7 @@ public class Client {
 				gameName = Type.baseBall;
 				break;
 			case 2:
-				gameName = "";
+				gameName = Type.omok;
 				break;
 			case 3:
 				gameName = "";

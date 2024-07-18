@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import lombok.Data;
 
@@ -24,8 +25,8 @@ public class Baseball {
 	// 게임에 관한 모든 출력 값을 gameResult 변수로 받음.
 	private String gameResult;
 
-	private String winner;
-	private String loser;
+	private String winner = null;
+	private String loser = null;
 
 	private int min = 1;
 	private int max = 9;
@@ -53,13 +54,12 @@ public class Baseball {
 	}
 
 	private void currentTurnInit() {
-		// 순서 랜덤으로 지정
-		int turn = (int) (Math.random() * 2);
-		if (turn == 0) {
+		// 순서 랜덤으로 지정. 
+		// true, false가 랜덤으로 나옴.
+		if (new Random().nextBoolean()) {
 			currentTurn = player1;
 		} else
 			currentTurn = player2;
-
 	}
 
 	// winner가 정해졌는 지 판별하는 메소드
