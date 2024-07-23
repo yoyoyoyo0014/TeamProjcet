@@ -33,7 +33,7 @@ class Program implements program.Program {
 	private List<String> words = new ArrayList<String>();
 	private List<String> answer = new ArrayList<String>();
 	private Scanner scan = new Scanner(System.in);
-	private String fileName = "team/ywprogram.txt";
+	private String fileName = "src/team/ywprogram.txt";
 
 	@Override
 	public void printMenu() {
@@ -115,12 +115,12 @@ class Program implements program.Program {
 		case 3:
 			System.out.println("======점수를 출력합니다======");
 			Collections.sort(list);
-			for(int i = 0; i<5; i++) {
-				System.out.println(i+1 + ". " + list.get(i));
+			for(int i = 0; i< 5; i++) {
+				System.out.println(i+1 + "위. " + list.get(i));
 			}
 			break;
 		case 4:
-			System.out.println("====프로그램을 종료합니다====");
+			System.out.println("=====프로그램을 종료합니다=====");
 			break;
 		default:
 			System.out.println("===잘못된 메뉴를 선택했습니다===");
@@ -137,6 +137,11 @@ class Program implements program.Program {
 		System.out.println("스테이지를 시작하려면 Enter를 눌러주세요");
 		scan.nextLine();
 		String str1 = scan.nextLine();
+		
+		if(!str1.isBlank()) {
+			System.out.println("메뉴로 돌아갑니다.");
+			return;
+		}
 		System.out.println("=====STAGE 1=====");
 		score = stage();
 		totalScore += score;

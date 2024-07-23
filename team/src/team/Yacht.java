@@ -15,67 +15,131 @@ public class Yacht {
 	public static void main(String[] args) {
 		
 		//주사위 눈금 배열
-		int[] dices = new int[5];
+		int[] dicesP1 = new int[5];
+		int[] dicesP2 = new int[5];
 		
 		//족보 저장 변수
-		int one, two, three, four, five, six;
+		int oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1;
+		int oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2;
 		
 		//족보 1~6 합
-		int oneToSix = 0;
+		int oneToSixP1;
+		int oneToSixP2;
 		
 		//보너스 점수 변수
-		int bonus;
+		int bonusP1;
+		int bonusP2;
 		
 		//족보 저장 변수
-		int ch, fk, fh, ss, ls, ya;
+		int chP1, fkP1, fhP1, ssP1, lsP1, yaP1;
+		int chP2, fkP2, fhP2, ssP2, lsP2, yaP2;
+		
+		int totalP1, totalP2;
 		
 		//족보 저장 여부 판별용
-		boolean oneB = false;
-		boolean twoB = false;
-		boolean threeB = false;
-		boolean fourB = false;
-		boolean fiveB = false;
-		boolean sixB = false;
-		boolean bonusB = false;
-		boolean chB = false;
-		boolean fkB = false;
-		boolean fhB = false;
-		boolean ssB = false;
-		boolean lsB = false;
-		boolean yaB = false;
+		boolean oneBlP1 = false;
+		boolean twoBlP1 = false;
+		boolean threeBlP1 = false;
+		boolean fourBlP1 = false;
+		boolean fiveBlP1 = false;
+		boolean sixBlP1 = false;
+		boolean chBlP1 = false;
+		boolean fkBlP1 = false;
+		boolean fhBlP1 = false;
+		boolean ssBlP1 = false;
+		boolean lsBlP1 = false;
+		boolean yaBlP1 = false;
+		
+		boolean oneBlP2 = false;
+		boolean twoBlP2 = false;
+		boolean threeBlP2 = false;
+		boolean fourBlP2 = false;
+		boolean fiveBlP2 = false;
+		boolean sixBlP2 = false;
+		boolean chBlP2 = false;
+		boolean fkBlP2 = false;
+		boolean fhBlP2 = false;
+		boolean ssBlP2 = false;
+		boolean lsBlP2 = false;
+		boolean yaBlP2 = false;
+		
+		boolean bonusBlP1 = false;
+		boolean bonusBlP2 = false;
 		
 		//게임의 턴 저장 변수
 		int turn = 1;
 		
 		//변수 초기화
 		{
-			one = 0;
-			two = 0;
-			three = 0;
-			four = 0;
-			five = 0;
-			six = 0;
-			bonus = 0;
-			ch = 0;
-			fk = 0;
-			fh = 0;
-			ss = 0;
-			ls = 0;
-			ya = 0;
+			oneP1 = 0;
+			twoP1 = 0;
+			threeP1 = 0;
+			fourP1 = 0;
+			fiveP1 = 0;
+			sixP1 = 0;
+			bonusP1 = 0;
+			chP1 = 0;
+			fkP1 = 0;
+			fhP1 = 0;
+			ssP1 = 0;
+			lsP1 = 0;
+			yaP1 = 0;
+			
+			oneP2 = 0;
+			twoP2 = 0;
+			threeP2 = 0;
+			fourP2 = 0;
+			fiveP2 = 0;
+			sixP2 = 0;
+			bonusP2 = 0;
+			chP2 = 0;
+			fkP2 = 0;
+			fhP2 = 0;
+			ssP2 = 0;
+			lsP2 = 0;
+			yaP2 = 0;
+			
+			oneToSixP1 = 0;
+			oneToSixP2 = 0;
+			
+			totalP1 = 0;
+			totalP2 = 0;
 		}
+		
+		/*
+		int menu = 0;
+		
+		switch (menu) {
+		case 1: {
+			
+		}
+		case 2: {
+			printRule();
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + menu);
+		}
+		*/
+		
+		
+		printRule();
 		
 		//12턴 동안 반복
 		while(turn <= 12) {
 			
+			//player1의 차례
+			{
 			//주사위 굴리기
-			diceRoll(dices);
+			diceRoll(dicesP1);
 			
 			//화면 출력
-			print(dices, turn, one, two, three, four, five, six, bonus, ch, fk, fh, ss, ls, ya, oneB, twoB, threeB, fourB, fiveB, sixB, bonusB, chB, fkB, fhB, ssB, lsB, yaB, oneToSix);
+			print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+					 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
 			
 			//배열의 내용을 출력
+			System.out.println("player1의 차례입니다");
 			System.out.println("주사위 결과:");
-			for (int result : dices) {
+			for (int result : dicesP1) {
 				System.out.print("[" + result + "]");
 			}
 			System.out.println();
@@ -83,15 +147,16 @@ public class Yacht {
 			//주사위 다시 굴리기(최대 2회)
 			for(int r = 2; r > 0;) {
 		        // 주사위를 다시 굴리기
-		        r = diceReroll(dices, r);
+		        r = diceReroll(dicesP1, r);
 		        
 		        //r = n;
 		        
-		        print(dices, turn, one, two, three, four, five, six, bonus, ch, fk, fh, ss, ls, ya, oneB, twoB, threeB, fourB, fiveB, sixB, bonusB, chB, fkB, fhB, ssB, lsB, yaB, oneToSix);
-
+				print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+						 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+				
 		        // 배열의 내용을 출력
 		        System.out.println("다시 굴린 주사위 결과:");
-		        for (int result : dices) {
+		        for (int result : dicesP1) {
 		            System.out.print("[" + result + "]");
 		        }
 		        System.out.println();
@@ -99,157 +164,366 @@ public class Yacht {
 		        r--;
 			}
 			
-			//insertDice(dices, one, two, three, four, five, six, ch, fk, fh, ss, ls, ya);
+			//insertDice(dicesP1, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1);
 			
 			//while문 조건용 변수
-			boolean validInput = false;
+			boolean validInputP1 = false;
 			
 			//족보에 무사히 값이 들어가면 while문 종료
-			while(validInput == false) {
-				String menu = "0";
+			while(validInputP1 == false) {
+				String SelHR = "0";
 				
 				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
-				menu = scanner.next();
+				SelHR = scanner.next();
 				scanner.nextLine();
 				
-				switch (menu) {
+				switch (SelHR) {
 				case "1": {
-					if(oneB == true) { //족보에 이미 값이 들어가 있으면
+					if(oneBlP1 == true) { //족보에 이미 값이 들어가 있으면
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue; //whlie문 다시 시작
 					}
-					one = oneCal(dices, one, oneB);
-					oneB = true;
-					validInput = true; //while문 빠져나오는 용
+					oneP1 = oneCal(dicesP1, oneP1, oneBlP1);
+					oneBlP1 = true;
+					validInputP1 = true; //while문 빠져나오는 용
 					break;
 				}
 				case "2": {
-					if(twoB == true) {
+					if(twoBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					two = twoCal(dices, two, twoB);
-					twoB = true;
-					validInput = true;
+					twoP1 = twoCal(dicesP1, twoP1, twoBlP1);
+					twoBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "3": {
-					if(threeB == true) {
+					if(threeBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					three = threeCal(dices, three, threeB);
-					threeB = true;
-					validInput = true;
+					threeP1 = threeCal(dicesP1, threeP1, threeBlP1);
+					threeBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "4": {
-					if(fourB == true) {
+					if(fourBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					four = fourCal(dices, four, fourB);
-					fourB = true;
-					validInput = true;
+					fourP1 = fourCal(dicesP1, fourP1, fourBlP1);
+					fourBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "5": {
-					if(fiveB == true) {
+					if(fiveBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					five = fiveCal(dices, five, fiveB);
-					fiveB = true;
-					validInput = true;
+					fiveP1 = fiveCal(dicesP1, fiveP1, fiveBlP1);
+					fiveBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "6": {
-					if(sixB == true) {
+					if(sixBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					six = sixCal(dices, six, sixB);
-					sixB = true;
-					validInput = true;
+					sixP1 = sixCal(dicesP1, sixP1, sixBlP1);
+					sixBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "7": {
-					if(chB == true) {
+					if(chBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					ch = chCal(dices, ch, chB);
-					chB = true;
-					validInput = true;
+					chP1 = chCal(dicesP1, chP1, chBlP1);
+					chBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "8": {
-					if(fkB == true) {
+					if(fkBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					fk = fkCal(dices, fk, fkB);
-					fkB = true;
-					validInput = true;
+					fkP1 = fkCal(dicesP1, fkP1, fkBlP1);
+					fkBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "9": {
-					if(fhB == true) {
+					if(fhBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					fh = fhCal(dices, fh, fhB);
-					fhB = true;
-					validInput = true;
+					fhP1 = fhCal(dicesP1, fhP1, fhBlP1);
+					fhBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "10": {
-					if(ssB == true) {
+					if(ssBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					ss = ssCal(dices, ss, ssB);
-					ssB = true;
-					validInput = true;
+					ssP1 = ssCal(dicesP1, ssP1, ssBlP1);
+					ssBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "11": {
-					if(lsB == true) {
+					if(lsBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					ls = lsCal(dices, ls, lsB);
-					lsB = true;
-					validInput = true;
+					lsP1 = lsCal(dicesP1, lsP1, lsBlP1);
+					lsBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 				case "12": {
-					if(yaB == true) {
+					if(yaBlP1 == true) {
 						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
 						continue;
 					}
-					ya = yaCal(dices, ya, yaB);
-					yaB = true;
-					validInput = true;
+					yaP1 = yaCal(dicesP1, yaP1, yaBlP1);
+					yaBlP1 = true;
+					validInputP1 = true;
 					break;
 				}
 			}
 				//보너스 점수 획득 가능한지 계산
-				oneToSix = one + two + three + four + five + six;
+				oneToSixP1 = oneP1 + twoP1 + threeP1 + fourP1 + fiveP1 + sixP1;
 				
-				if(oneToSix >= 63) {
-					bonusB = true;
-					bonus = 35;
+				if(oneToSixP1 >= 63) {
+					bonusBlP1 = true;
+					bonusP1 = 35;
 				}
+				
+				for(int i = 0; i < dicesP1.length; i++) {
+					dicesP1[i] = 0;
+				}
+				
+				totalP1 = totalCal(oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1);
+			}
 			
+			
+			//player2의 차례
+			{
+			//주사위 굴리기
+			diceRoll(dicesP2);
+			
+			//화면 출력
+			print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+					 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+			
+			//배열의 내용을 출력
+			System.out.println("player2의 차례입니다");
+			System.out.println("주사위 결과:");
+			for (int result : dicesP2) {
+				System.out.print("[" + result + "]");
+			}
+			System.out.println();
+			
+			//주사위 다시 굴리기(최대 2회)
+			for(int r = 2; r > 0;) {
+		        // 주사위를 다시 굴리기
+		        r = diceReroll(dicesP2, r);
+		        
+		        //r = n;
+		        
+				print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+						 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+				
+		        // 배열의 내용을 출력
+		        System.out.println("다시 굴린 주사위 결과:");
+		        for (int result : dicesP2) {
+		            System.out.print("[" + result + "]");
+		        }
+		        System.out.println();
+		        
+		        r--;
+			}
+			
+			//insertDice(dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2);
+			
+			//while문 조건용 변수
+			boolean validInputP2 = false;
+			
+			//족보에 무사히 값이 들어가면 while문 종료
+			while(validInputP2 == false) {
+				String SelHR = "0";
+				
+				System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
+				SelHR = scanner.next();
+				scanner.nextLine();
+				
+				switch (SelHR) {
+				case "1": {
+					if(oneBlP2 == true) { //족보에 이미 값이 들어가 있으면
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue; //whlie문 다시 시작
+					}
+					oneP2 = oneCal(dicesP2, oneP2, oneBlP2);
+					oneBlP2 = true;
+					validInputP2 = true; //while문 빠져나오는 용
+					break;
+				}
+				case "2": {
+					if(twoBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					twoP2 = twoCal(dicesP2, twoP2, twoBlP2);
+					twoBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "3": {
+					if(threeBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					threeP2 = threeCal(dicesP2, threeP2, threeBlP2);
+					threeBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "4": {
+					if(fourBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fourP2 = fourCal(dicesP2, fourP2, fourBlP2);
+					fourBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "5": {
+					if(fiveBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fiveP2 = fiveCal(dicesP2, fiveP2, fiveBlP2);
+					fiveBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "6": {
+					if(sixBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					sixP2 = sixCal(dicesP2, sixP2, sixBlP2);
+					sixBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "7": {
+					if(chBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					chP2 = chCal(dicesP2, chP2, chBlP2);
+					chBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "8": {
+					if(fkBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fkP2 = fkCal(dicesP2, fkP2, fkBlP2);
+					fkBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "9": {
+					if(fhBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					fhP2 = fhCal(dicesP2, fhP2, fhBlP2);
+					fhBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "10": {
+					if(ssBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					ssP2 = ssCal(dicesP2, ssP2, ssBlP2);
+					ssBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "11": {
+					if(lsBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					lsP2 = lsCal(dicesP2, lsP2, lsBlP2);
+					lsBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+				case "12": {
+					if(yaBlP2 == true) {
+						System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+						continue;
+					}
+					yaP2 = yaCal(dicesP2, yaP2, yaBlP2);
+					yaBlP2 = true;
+					validInputP2 = true;
+					break;
+				}
+			}
+				//보너스 점수 획득 가능한지 계산
+				oneToSixP2 = oneP2 + twoP2 + threeP2 + fourP2 + fiveP2 + sixP2;
+				
+				if(oneToSixP2 >= 63) {
+					bonusBlP2 = true;
+					bonusP2 = 35;
+				}
+				
+				for(int i = 0; i < dicesP2.length; i++) {
+					dicesP2[i] = 0;
+				}
+				
+				totalP2 = totalCal(oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2);
+			}
 			
 				System.out.println("-------------------------------------------------------------------\n");
 				turn++;
 			}
 		}
+		}
 		turn = 12;
 		
-		print(dices, turn, one, two, three, four, five, six, bonus, ch, fk, fh, ss, ls, ya, oneB, twoB, threeB, fourB, fiveB, sixB, bonusB, chB, fkB, fhB, ssB, lsB, yaB, oneToSix);
+		/*
+		print(dicesP1, turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneBlP1, twoBlP1, threeBlP1, fourBlP1, fiveBlP1, sixBlP1, bonusBlP1, chBlP1, fkBlP1, fhBlP1, ssBlP1, lsBlP1, yaBlP1, oneToSixP1, totalP1,
+				 dicesP2, oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneBlP2, twoBlP2, threeBlP2, fourBlP2, fiveBlP2, sixBlP2, bonusBlP2, chBlP2, fkBlP2, fhBlP2, ssBlP2, lsBlP2, yaBlP2, oneToSixP2, totalP2);
+		*/
+		
+		print(turn, oneP1, twoP1, threeP1, fourP1, fiveP1, sixP1, bonusP1, chP1, fkP1, fhP1, ssP1, lsP1, yaP1, oneToSixP1, totalP1,
+				 oneP2, twoP2, threeP2, fourP2, fiveP2, sixP2, bonusP2, chP2, fkP2, fhP2, ssP2, lsP2, yaP2, oneToSixP2, totalP2);
+		
+		if(totalP1 > totalP2) {
+			System.out.println("\nplayer1의 승리입니다!");
+		}else if(totalP1 < totalP2) {
+			System.out.println("\nplayer2의 승리입니다!");
+		}else {
+			System.out.println("\n무승부입니다.");
+		}
 	}
 	
 	private static void diceRoll(int[] dices) {
@@ -336,166 +610,417 @@ public class Yacht {
         }
 	}
 	
-	private static void print(int[] dices, int turn, int one, int two, int three, int four, int five, int six, int bonus, int ch, int fk, int fh, int ss, int ls, int ya, boolean oneB, Boolean twoB, Boolean threeB, Boolean fourB, Boolean fiveB, Boolean sixB, Boolean bonusB, Boolean chB, Boolean fkB, Boolean fhB, Boolean ssB, Boolean lsB, Boolean yaB, int oneToSix) {
+	private static void print(int[] dicesP1, int turn, int oneP1, int twoP1, int threeP1, int fourP1, int fiveP1, int sixP1, int bonusP1, int chP1, int fkP1, int fhP1, int ssP1, int lsP1, int yaP1, boolean oneBlP1, Boolean twoBlP1, Boolean threeBlP1, Boolean fourBlP1, Boolean fiveBlP1, Boolean sixBlP1, Boolean bonusBlP1, Boolean chBlP1, Boolean fkBlP1, Boolean fhBlP1, Boolean ssBlP1, Boolean lsBlP1, Boolean yaBlP1, int oneToSixP1, int totalP1,
+			int[] dicesP2, int oneP2, int twoP2, int threeP2, int fourP2, int fiveP2, int sixP2, int bonusP2, int chP2, int fkP2, int fhP2, int ssP2, int lsP2, int yaP2, boolean oneBlP2, Boolean twoBlP2, Boolean threeBlP2, Boolean fourBlP2, Boolean fiveBlP2, Boolean sixBlP2, Boolean bonusBlP2, Boolean chBlP2, Boolean fkBlP2, Boolean fhBlP2, Boolean ssBlP2, Boolean lsBlP2, Boolean yaBlP2, int oneToSixP2, int totalP2) {
 		System.out.println(" ================================== ");
 		System.out.println("|\t   Turn " + turn + "/12  \t\t   |");
 		System.out.println("|==================================|");
-		System.out.println("| Categorries\t |player1 |player2 |");
+		if(dicesP1[0] > 0) {
+			System.out.println("| Categorries\t |" + blue + "player1" + exit + " |player2 |");
+		}else if(dicesP2[0] > 0) {
+			System.out.println("| Categorries\t |player1 |" + blue + "player2 " + exit + "|");
+		}else{
+			System.out.println("| Categorries\t |player1 |player2 |");
+		}
 		System.out.println("|==================================|");
 		
 		//1 ~ 6
-		if(oneB == true) {
-			System.out.println("|1. Aces\t | " + blue + oneCal(dices, one, oneB) + exit + "\t     | " + blue + oneCal(dices, one, oneB) + exit + "\t\t   |");
-		} else {
-			System.out.println("|1. Aces\t | " + oneCal(dices, one, oneB) + "\t  | " + oneCal(dices, one, oneB) + "\t   |");
-		}
-		if(twoB== true) {
-			System.out.println("|2. Deuces\t | " +  blue + twoCal(dices, two, twoB) + exit + "\t\t  | " +  blue + twoCal(dices, two, twoB) + exit + "\t\t   |");
+		if(oneBlP1 == true && oneBlP2 == true) {
+			System.out.println("|1. Aces\t | " + blue + oneCal(dicesP1, oneP1, oneBlP1) + exit + "\t     | " + blue + oneCal(dicesP2, oneP2, oneBlP2) + exit + "\t\t   |");
+		}else if(oneBlP1 == true) {
+			System.out.println("|1. Aces\t | " + blue + oneCal(dicesP1, oneP1, oneBlP1) + exit + "\t     | " + oneCal(dicesP2, oneP2, oneBlP2) + "\t   |");
+		}else if(oneBlP2 == true) {
+			System.out.println("|1. Aces\t | " + oneCal(dicesP1, oneP1, oneBlP1) + "\t  | " + blue + oneCal(dicesP2, oneP2, oneBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|2. Deuces\t | " + twoCal(dices, two, twoB) + "\t  | " + twoCal(dices, two, twoB) + "\t   |");
+			System.out.println("|1. Aces\t | " + oneCal(dicesP1, oneP1, oneBlP1) + "\t  | " + oneCal(dicesP2, oneP2, oneBlP2) + "\t   |");
 		}
-		if(threeB== true) {
-			System.out.println("|3. Threes\t | " +  blue + threeCal(dices, three, threeB) + exit + "\t\t  | " +  blue + threeCal(dices, three, threeB) + exit + "\t\t   |");
+		
+		if(twoBlP1 == true && twoBlP2 == true && twoP1 >= 10 && twoP2 >= 10) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t    | " + blue + twoCal(dicesP2, twoP2, twoBlP2) + exit + "\t    |");
+		}else if(twoBlP1 == true && twoBlP2 == true && twoP1 >= 10 && twoP2 < 10) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t    | " + blue + twoCal(dicesP2, twoP2, twoBlP2) + exit + "\t     |");
+		}else if(twoBlP1 == true && twoBlP2 == true && twoP1 < 10 && twoP2 >= 10) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t     | " + blue + twoCal(dicesP2, twoP2, twoBlP2) + exit + "\t    |");
+		}else if(twoBlP1 == true && twoBlP2 == true) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t     | " + blue + twoCal(dicesP2, twoP2, twoBlP2) + exit + "\t     |");
+		}else if(twoBlP1 == true && twoP1 >= 10) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t    | " + twoCal(dicesP2, twoP2, twoBlP2) + "\t   |");
+		}else if(twoBlP1 == true) {
+			System.out.println("|2. Deuces\t | " + blue + twoCal(dicesP1, twoP1, twoBlP1) + exit + "\t     | " + twoCal(dicesP2, twoP2, twoBlP2) + "\t   |");
+		}else if(twoBlP2 == true) {
+			System.out.println("|2. Deuces\t | " + twoCal(dicesP1, twoP1, twoBlP1) + "\t  | " + blue + twoCal(dicesP2, twoP2, twoBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|3. Threes\t | " + threeCal(dices, three, threeB) + "\t  | " + threeCal(dices, three, threeB) + "\t   |");
+			System.out.println("|2. Deuces\t | " + twoCal(dicesP1, twoP1, twoBlP1) + "\t  | " + twoCal(dicesP2, twoP2, twoBlP2) + "\t   |");
 		}
-		if(fourB == true) {
-			System.out.println("|4. Fours\t | " +  blue + fourCal(dices, four, fourB) + exit + "\t\t  | " +  blue + fourCal(dices, four, fourB) + exit + "\t\t   |");
+		
+		if(threeBlP1 == true && threeBlP2 == true && threeP1 >= 10 && threeP2 >= 10) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t    | " + blue + threeCal(dicesP2, threeP2, threeBlP2) + exit + "\t    |");
+		}else if(threeBlP1 == true && threeBlP2 == true && threeP1 >= 10 && threeP2 < 10) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t    | " + blue + threeCal(dicesP2, threeP2, threeBlP2) + exit + "\t     |");
+		}else if(threeBlP1 == true && threeBlP2 == true && threeP1 < 10 && threeP2 >= 10) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t     | " + blue + threeCal(dicesP2, threeP2, threeBlP2) + exit + "\t    |");
+		}else if(threeBlP1 == true && threeBlP2 == true) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t     | " + blue + threeCal(dicesP2, threeP2, threeBlP2) + exit + "\t     |");
+		}else if(threeBlP1 == true && threeP1 >= 10) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t    | " + threeCal(dicesP2, threeP2, threeBlP2) + "\t   |");
+		}else if(threeBlP1 == true) {
+			System.out.println("|3. Threes\t | " + blue + threeCal(dicesP1, threeP1, threeBlP1) + exit + "\t     | " + threeCal(dicesP2, threeP2, threeBlP2) + "\t   |");
+		}else if(threeBlP2 == true) {
+			System.out.println("|3. Threes\t | " + threeCal(dicesP1, threeP1, threeBlP1) + "\t  | " + blue + threeCal(dicesP2, threeP2, threeBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|4. Fours\t | " + fourCal(dices, four, fourB) + "\t  | " + fourCal(dices, four, fourB) + "\t   |");
+			System.out.println("|3. Threes\t | " + threeCal(dicesP1, threeP1, threeBlP1) + "\t  | " + threeCal(dicesP2, threeP2, threeBlP2) + "\t   |");
 		}
-		if(fiveB == true) {
-			System.out.println("|5. Fives\t | " +  blue + fiveCal(dices, five, fiveB) + exit + "\t\t  | " +  blue + fiveCal(dices, five, fiveB) + exit + "\t\t   |");
+		
+		if(fourBlP1 == true && fourBlP2 == true && fourP1 >= 10 && fourP2 >= 10) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t    | " + blue + fourCal(dicesP2, fourP2, fourBlP2) + exit + "\t    |");
+		}else if(fourBlP1 == true && fourBlP2 == true && fourP1 >= 10 && fourP2 < 10) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t    | " + blue + fourCal(dicesP2, fourP2, fourBlP2) + exit + "\t     |");
+		}else if(fourBlP1 == true && fourBlP2 == true && fourP1 < 10 && fourP2 >= 10) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t     | " + blue + fourCal(dicesP2, fourP2, fourBlP2) + exit + "\t    |");
+		}else if(fourBlP1 == true && fourBlP2 == true) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t     | " + blue + fourCal(dicesP2, fourP2, fourBlP2) + exit + "\t     |");
+		}else if(fourBlP1 == true && fourP1 >= 10) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t    | " + fourCal(dicesP2, fourP2, fourBlP2) + "\t   |");
+		}else if(fourBlP1 == true) {
+			System.out.println("|4. Fours\t | " + blue + fourCal(dicesP1, fourP1, fourBlP1) + exit + "\t     | " + fourCal(dicesP2, fourP2, fourBlP2) + "\t   |");
+		}else if(fourBlP2 == true) {
+			System.out.println("|4. Fours\t | " + fourCal(dicesP1, fourP1, fourBlP1) + "\t  | " + blue + fourCal(dicesP2, fourP2, fourBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|5. Fives\t | " + fiveCal(dices, five, fiveB) + "\t  | " + fiveCal(dices, five, fiveB) + "\t   |");
+			System.out.println("|4. Fours\t | " + fourCal(dicesP1, fourP1, fourBlP1) + "\t  | " + fourCal(dicesP2, fourP2, fourBlP2) + "\t   |");
 		}
-		if(sixB == true) {
-			System.out.println("|6. Sixes\t | " +  blue + sixCal(dices, six, sixB) + exit + "\t\t  | " +  blue + sixCal(dices, six, sixB) + exit + "\t\t   |");
+		
+		if(fiveBlP1 == true && fiveBlP2 == true && fiveP1 >= 10 && fiveP2 >= 10) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t    | " + blue + fiveCal(dicesP2, fiveP2, fiveBlP2) + exit + "\t    |");
+		}else if(fiveBlP1 == true && fiveBlP2 == true && fiveP1 >= 10 && fiveP2 < 10) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t    | " + blue + fiveCal(dicesP2, fiveP2, fiveBlP2) + exit + "\t     |");
+		}else if(fiveBlP1 == true && fiveBlP2 == true && fiveP1 < 10 && fiveP2 >= 10) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t     | " + blue + fiveCal(dicesP2, fiveP2, fiveBlP2) + exit + "\t    |");
+		}else if(fiveBlP1 == true && fiveBlP2 == true) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t     | " + blue + fiveCal(dicesP2, fiveP2, fiveBlP2) + exit + "\t     |");
+		}else if(fiveBlP1 == true && fiveP1 >= 10) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t    | " + fiveCal(dicesP2, fiveP2, fiveBlP2) + "\t   |");
+		}else if(fiveBlP1 == true) {
+			System.out.println("|5. Fives\t | " + blue + fiveCal(dicesP1, fiveP1, fiveBlP1) + exit + "\t     | " + fiveCal(dicesP2, fiveP2, fiveBlP2) + "\t   |");
+		}else if(fiveBlP2 == true) {
+			System.out.println("|5. Fives\t | " + fiveCal(dicesP1, fiveP1, fiveBlP1) + "\t  | " + blue + fiveCal(dicesP2, fiveP2, fiveBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|6. Sixes\t | " + sixCal(dices, six, sixB) + "\t  | " + sixCal(dices, six, sixB) + "\t   |");
+			System.out.println("|5. Fives\t | " + fiveCal(dicesP1, fiveP1, fiveBlP1) + "\t  | " + fiveCal(dicesP2, fiveP2, fiveBlP2) + "\t   |");
+		}
+		
+		if(sixBlP1 == true && sixBlP2 == true && sixP1 >= 10 && sixP2 >= 10) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t    | " + blue + sixCal(dicesP2, sixP2, sixBlP2) + exit + "\t    |");
+		}else if(sixBlP1 == true && sixBlP2 == true && sixP1 >= 10 && sixP2 < 10) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t    | " + blue + sixCal(dicesP2, sixP2, sixBlP2) + exit + "\t     |");
+		}else if(sixBlP1 == true && sixBlP2 == true && sixP1 < 10 && sixP2 >= 10) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t     | " + blue + sixCal(dicesP2, sixP2, sixBlP2) + exit + "\t    |");
+		}else if(sixBlP1 == true && sixBlP2 == true) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t     | " + blue + sixCal(dicesP2, sixP2, sixBlP2) + exit + "\t     |");
+		}else if(sixBlP1 == true && sixP1 >= 10) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t    | " + sixCal(dicesP2, sixP2, sixBlP2) + "\t   |");
+		}else if(sixBlP1 == true) {
+			System.out.println("|6. Sixes\t | " + blue + sixCal(dicesP1, sixP1, sixBlP1) + exit + "\t     | " + sixCal(dicesP2, sixP2, sixBlP2) + "\t   |");
+		}else if(sixBlP2 == true) {
+			System.out.println("|6. Sixes\t | " + sixCal(dicesP1, sixP1, sixBlP1) + "\t  | " + blue + sixCal(dicesP2, sixP2, sixBlP2) + exit + "\t\t   |");
+		}else {
+			System.out.println("|6. Sixes\t | " + sixCal(dicesP1, sixP1, sixBlP1) + "\t  | " + sixCal(dicesP2, sixP2, sixBlP2) + "\t   |");
 		}
 		System.out.println("|==================================|");
 		
 		//보너스
-		if(bonusB == true) {
-			System.out.println("|Subtotal\t | " +  blue + oneToSix + "/63" + exit + "\t | " +  blue + oneToSix + "/63" + exit + "\t |");
+		if(bonusBlP1 == true && bonusBlP2 == true) {
+			System.out.println("|Subtotal\t | " + blue + oneToSixP1 + "/63" + exit + "\t | " + blue + oneToSixP2 + "/63" + exit + "\t |");
 			System.out.println("|----------------------------------|");
-			System.out.println("|+35 Bonus\t | " +  blue + "+" + bonusCal(bonusB) + exit + "\t\t  | " +  blue + "+" + bonusCal(bonusB) + exit + "\t   |");
-		}else if(oneToSix >= 10) {
-			System.out.println("|Subtotal\t | " + oneToSix + "/63  | " + oneToSix + "/63  |");
+			System.out.println("|+35 Bonus\t | " + blue + "+" + bonusCal(bonusBlP1) + exit + "\t\t  | " + blue + "+" + bonusCal(bonusBlP2) + exit + "\t   |");
+		}else if(bonusBlP1 == true && oneToSixP2 >= 10) {
+			System.out.println("|Subtotal\t | " + blue + oneToSixP1 + "/63" + exit + "\t | " +  oneToSixP2 + "/63" + "  |");
 			System.out.println("|----------------------------------|");
-			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusB) + "\t  | " + "+" + bonusCal(bonusB) + "\t   |");
+			System.out.println("|+35 Bonus\t | " + blue + "+" + bonusCal(bonusBlP1) + exit + "\t\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
+		}else if(bonusBlP1 == true && oneToSixP2 < 10) {
+			System.out.println("|Subtotal\t | " + blue + oneToSixP1 + "/63" + exit + "\t | " +  oneToSixP2 + "/63" + "   |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + blue + "+" + bonusCal(bonusBlP1) + exit + "\t\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
+		}else if(bonusBlP2 == true && oneToSixP1 >= 10) {
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63" + "  | " + blue + oneToSixP2 + "/63" + exit + "  |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + blue + "+" + bonusCal(bonusBlP2) + exit + "\t   |");
+		}else if(bonusBlP2 == true && oneToSixP1 < 10) {
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63" + "\t  | " + blue + oneToSixP2 + "/63" + exit + "  |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + blue + "+" + bonusCal(bonusBlP2) + exit + "\t   |");
+		}else if(oneToSixP1 >= 10 && oneToSixP2 >= 10) {
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63  | " + oneToSixP2 + "/63  |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
+		}else if(oneToSixP1 >= 10 && oneToSixP2 < 10) {
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63  | " + oneToSixP2 + "/63   |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
+		}else if(oneToSixP1 < 10 && oneToSixP2 >= 10) {
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63   | " + oneToSixP2 + "/63  |");
+			System.out.println("|----------------------------------|");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
 		}else {
-			System.out.println("|Subtotal\t | " + oneToSix + "/63" + "\t  | " + oneToSix + "/63   |");
+			System.out.println("|Subtotal\t | " + oneToSixP1 + "/63" + "\t  | " + oneToSixP2 + "/63   |");
 			System.out.println("|----------------------------------|");
-			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusB) + "\t  | " + "+" + bonusCal(bonusB) + "\t   |");
+			System.out.println("|+35 Bonus\t | " + "+" + bonusCal(bonusBlP1) + "\t  | " + "+" + bonusCal(bonusBlP2) + "\t   |");
 		}
 		
 		System.out.println("|==================================|");
 
 		//choice
-		if(chB == true) {
-			System.out.println("|7. Choice\t | " +  blue + chCal(dices, ch, chB) + exit + "\t\t  | " +  blue + chCal(dices, ch, chB) + exit + "\t\t   |");
+		if(chBlP1 == true && chBlP2 == true && chP1 >= 10 && chP2 >= 10) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t    | " + blue + chCal(dicesP2, chP2, chBlP2) + exit + "\t    |");
+		}else if(chBlP1 == true && chBlP2 == true && chP1 >= 10 && chP2 < 10) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t    | " + blue + chCal(dicesP2, chP2, chBlP2) + exit + "\t     |");
+		}else if(chBlP1 == true && chBlP2 == true && chP1 < 10 && chP2 >= 10) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t     | " + blue + chCal(dicesP2, chP2, chBlP2) + exit + "\t    |");
+		}else if(chBlP1 == true && chBlP2 == true) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t     | " + blue + chCal(dicesP2, chP2, chBlP2) + exit + "\t     |");
+		}else if(chBlP1 == true && chP1 >= 10) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t    | " + chCal(dicesP2, chP2, chBlP2) + "\t   |");
+		}else if(chBlP1 == true) {
+			System.out.println("|7. Choice\t | " + blue + chCal(dicesP1, chP1, chBlP1) + exit + "\t     | " + chCal(dicesP2, chP2, chBlP2) + "\t   |");
+		}else if(chBlP2 == true) {
+			System.out.println("|7. Choice\t | " + chCal(dicesP1, chP1, chBlP1) + "\t  | " + blue + chCal(dicesP2, chP2, chBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|7. Choice\t | " + chCal(dices, ch, chB) + "\t  | " + chCal(dices, ch, chB) + "\t   |");
+			System.out.println("|7. Choice\t | " + chCal(dicesP1, chP1, chBlP1) + "\t  | " + chCal(dicesP2, chP2, chBlP2) + "\t   |");
 		}
 		System.out.println("|==================================|");
 		
 		//특수 족보
-		if(fkB == true) {
-			System.out.println("|8. 4 of a Kind  | " +  blue + fkCal(dices, fk, fkB) + exit + "\t\t  | " +  blue + fkCal(dices, fk, fkB) + exit + "\t\t   |");
+		if(fkBlP1 == true && fkBlP2 == true && fkP1 >= 10 && fkP2 >= 10) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t    | " + blue + fkCal(dicesP2, fkP2, fkBlP2) + exit + "\t    |");
+		}else if(fkBlP1 == true && fkBlP2 == true && fkP1 >= 10 && fkP2 < 10) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t    | " + blue + fkCal(dicesP2, fkP2, fkBlP2) + exit + "\t     |");
+		}else if(fkBlP1 == true && fkBlP2 == true && fkP1 < 10 && fkP2 >= 10) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t     | " + blue + fkCal(dicesP2, fkP2, fkBlP2) + exit + "\t    |");
+		}else if(fkBlP1 == true && fkBlP2 == true) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t     | " + blue + fkCal(dicesP2, fkP2, fkBlP2) + exit + "\t     |");
+		}else if(fkBlP1 == true && fkP1 >= 10) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t    | " + fkCal(dicesP2, fkP2, fkBlP2) + "\t   |");
+		}else if(fkBlP1 == true) {
+			System.out.println("|8. 4 of a Kind  | " + blue + fkCal(dicesP1, fkP1, fkBlP1) + exit + "\t     | " + fkCal(dicesP2, fkP2, fkBlP2) + "\t   |");
+		}else if(fkBlP2 == true) {
+			System.out.println("|8. 4 of a Kind  | " + fkCal(dicesP1, fkP1, fkBlP1) + "\t  | " + blue + fkCal(dicesP2, fkP2, fkBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|8. 4 of a Kind  | " + fkCal(dices, fk, fkB) + "\t  | " + fkCal(dices, fk, fkB) + "\t   |");
+			System.out.println("|8. 4 of a Kind  | " + fkCal(dicesP1, fkP1, fkBlP1) + "\t  | " + fkCal(dicesP2, fkP2, fkBlP2) + "\t   |");
 		}
-		if(fhB == true) {
-			System.out.println("|9. Full House   | " +  blue + fhCal(dices, fh, fhB) + exit + "\t\t  | " +  blue + fhCal(dices, fh, fhB) + exit + "\t\t   |");
+		
+		if(fhBlP1 == true && fhBlP2 == true && fhP1 >= 10 && fhP2 >= 10) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t    | " + blue + fhCal(dicesP2, fhP2, fhBlP2) + exit + "\t    |");
+		}else if(fhBlP1 == true && fhBlP2 == true && fhP1 >= 10 && fhP2 < 10) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t    | " + blue + fhCal(dicesP2, fhP2, fhBlP2) + exit + "\t     |");
+		}else if(fhBlP1 == true && fhBlP2 == true && fhP1 < 10 && fhP2 >= 10) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t     | " + blue + fhCal(dicesP2, fhP2, fhBlP2) + exit + "\t    |");
+		}else if(fhBlP1 == true && fhBlP2 == true) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t     | " + blue + fhCal(dicesP2, fhP2, fhBlP2) + exit + "\t     |");
+		}else if(fhBlP1 == true && fhP1 >= 10) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t    | " + fhCal(dicesP2, fhP2, fhBlP2) + "\t   |");
+		}else if(fhBlP1 == true) {
+			System.out.println("|9. Full House   | " + blue + fhCal(dicesP1, fhP1, fhBlP1) + exit + "\t     | " + fhCal(dicesP2, fhP2, fhBlP2) + "\t   |");
+		}else if(fhBlP2 == true) {
+			System.out.println("|9. Full House   | " + fhCal(dicesP1, fhP1, fhBlP1) + "\t  | " + blue + fhCal(dicesP2, fhP2, fhBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|9. Full House   | " + fhCal(dices, fh, fhB) + "\t  | " + fhCal(dices, fh, fhB) + "\t   |");
+			System.out.println("|9. Full House   | " + fhCal(dicesP1, fhP1, fhBlP1) + "\t  | " + fhCal(dicesP2, fhP2, fhBlP2) + "\t   |");
 		}
-		if(ssB == true) {
-			System.out.println("|10. S. Straight | " +  blue + ssCal(dices, ss, ssB) + exit + "\t\t  | " +  blue + ssCal(dices, ss, ssB) + exit + "\t\t   |");
+		
+		if(ssBlP1 == true && ssBlP2 == true && ssP1 >= 10 && ssP2 >= 10) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t    | " + blue + ssCal(dicesP2, ssP2, ssBlP2) + exit + "\t    |");
+		}else if(ssBlP1 == true && ssBlP2 == true && ssP1 >= 10 && ssP2 < 10) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t    | " + blue + ssCal(dicesP2, ssP2, ssBlP2) + exit + "\t     |");
+		}else if(ssBlP1 == true && ssBlP2 == true && ssP1 < 10 && ssP2 >= 10) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t     | " + blue + ssCal(dicesP2, ssP2, ssBlP2) + exit + "\t    |");
+		}else if(ssBlP1 == true && ssBlP2 == true) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t     | " + blue + ssCal(dicesP2, ssP2, ssBlP2) + exit + "\t     |");
+		}else if(ssBlP1 == true && ssP1 >= 10) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t    | " + ssCal(dicesP2, ssP2, ssBlP2) + "\t   |");
+		}else if(ssBlP1 == true) {
+			System.out.println("|10. S. Straight | " + blue + ssCal(dicesP1, ssP1, ssBlP1) + exit + "\t     | " + ssCal(dicesP2, ssP2, ssBlP2) + "\t   |");
+		}else if(ssBlP2 == true) {
+			System.out.println("|10. S. Straight | " + ssCal(dicesP1, ssP1, ssBlP1) + "\t  | " + blue + ssCal(dicesP2, ssP2, ssBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|10. S. Straight | " + ssCal(dices, ss, ssB) + "\t  | " + ssCal(dices, ss, ssB) + "\t   |");
+			System.out.println("|10. S. Straight | " + ssCal(dicesP1, ssP1, ssBlP1) + "\t  | " + ssCal(dicesP2, ssP2, ssBlP2) + "\t   |");
 		}
-		if(lsB == true) {
-			System.out.println("|11. L. Straight | " +  blue + lsCal(dices, ls, lsB) + exit + "\t\t  | " +  blue + lsCal(dices, ls, lsB) + exit + "\t\t   |");
+		
+		if(lsBlP1 == true && lsBlP2 == true && lsP1 >= 10 && lsP2 >= 10) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t    | " + blue + lsCal(dicesP2, lsP2, lsBlP2) + exit + "\t    |");
+		}else if(lsBlP1 == true && lsBlP2 == true && lsP1 >= 10 && lsP2 < 10) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t    | " + blue + lsCal(dicesP2, lsP2, lsBlP2) + exit + "\t     |");
+		}else if(lsBlP1 == true && lsBlP2 == true && lsP1 < 10 && lsP2 >= 10) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t     | " + blue + lsCal(dicesP2, lsP2, lsBlP2) + exit + "\t    |");
+		}else if(lsBlP1 == true && lsBlP2 == true) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t     | " + blue + lsCal(dicesP2, lsP2, lsBlP2) + exit + "\t     |");
+		}else if(lsBlP1 == true && lsP1 >= 10) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t    | " + lsCal(dicesP2, lsP2, lsBlP2) + "\t   |");
+		}else if(lsBlP1 == true) {
+			System.out.println("|11. L. Straight | " + blue + lsCal(dicesP1, lsP1, lsBlP1) + exit + "\t     | " + lsCal(dicesP2, lsP2, lsBlP2) + "\t   |");
+		}else if(lsBlP2 == true) {
+			System.out.println("|11. L. Straight | " + lsCal(dicesP1, lsP1, lsBlP1) + "\t  | " + blue + lsCal(dicesP2, lsP2, lsBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|11. L. Straight | " + lsCal(dices, ls, lsB) + "\t  | " + lsCal(dices, ls, lsB) + "\t   |");
+			System.out.println("|11. L. Straight | " + lsCal(dicesP1, lsP1, lsBlP1) + "\t  | " + lsCal(dicesP2, lsP2, lsBlP2) + "\t   |");
 		}
-		if(yaB == true) {
-			System.out.println("|12. Yacht\t | " +  blue + yaCal(dices, ya, yaB) + exit + "\t\t  | " +  blue + yaCal(dices, ya, yaB) + exit + "\t\t   |");
+		
+		if(yaBlP1 == true && yaBlP2 == true && yaP1 >= 10 && yaP2 >= 10) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t    | " + blue + yaCal(dicesP2, yaP2, yaBlP2) + exit + "\t    |");
+		}else if(yaBlP1 == true && yaBlP2 == true && yaP1 >= 10 && yaP2 < 10) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t    | " + blue + yaCal(dicesP2, yaP2, yaBlP2) + exit + "\t     |");
+		}else if(yaBlP1 == true && yaBlP2 == true && yaP1 < 10 && yaP2 >= 10) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t     | " + blue + yaCal(dicesP2, yaP2, yaBlP2) + exit + "\t    |");
+		}else if(yaBlP1 == true && yaBlP2 == true) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t     | " + blue + yaCal(dicesP2, yaP2, yaBlP2) + exit + "\t     |");
+		}else if(yaBlP1 == true && yaP1 >= 10) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t    | " + yaCal(dicesP2, yaP2, yaBlP2) + "\t   |");
+		}else if(yaBlP1 == true) {
+			System.out.println("|12. Yacht\t | " + blue + yaCal(dicesP1, yaP1, yaBlP1) + exit + "\t     | " + yaCal(dicesP2, yaP2, yaBlP2) + "\t   |");
+		}else if(yaBlP2 == true) {
+			System.out.println("|12. Yacht\t | " + yaCal(dicesP1, yaP1, yaBlP1) + "\t  | " + blue + yaCal(dicesP2, yaP2, yaBlP2) + exit + "\t\t   |");
 		}else {
-			System.out.println("|12. Yacht\t | " + yaCal(dices, ya, yaB) + "\t  | " + yaCal(dices, ya, yaB) + "\t   |");
+			System.out.println("|12. Yacht\t | " + yaCal(dicesP1, yaP1, yaBlP1) + "\t  | " + yaCal(dicesP2, yaP2, yaBlP2) + "\t   |");
 		}
 		
 		//합계 출력
 		System.out.println("|==================================|");
-		System.out.println("| Total\t\t | " + totalCal(one, two, three, four, five, six, bonus, ch, fk, fh, ss, ls, ya) + "\t  | " + totalCal(one, two, three, four, five, six, bonus, ch, fk, fh, ss, ls, ya) + "\t   |");
+		System.out.println("| Total\t\t | " + totalP1 + "\t  | " + totalP2 + "\t   |");
 		System.out.println(" ================================== ");
 	}
 	
 	
-	/*
-	private static void insertDice(int[] dices, int one, int two, int three, int four, int five, int six, int ch, int fk, int fh, int ss, int ls, int ya) {
-		int menu = 0;
+	private static void insertDice(int[] dices, int one, int two, int three, int four, int five, int six, int ch, int fk, int fh, int ss, int ls, int ya, boolean oneBl, boolean twoBl, boolean threeBl, boolean fourBl, boolean fiveBl, boolean sixBl, boolean chBl, boolean fkBl, boolean fhBl, boolean ssBl, boolean lsBl, boolean yaBl) {
+		//while문 조건용 변수
+		boolean validInput = false;
 		
-		System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
-		menu = scanner.nextInt();
-		
-		switch (menu) {
-		case 1: {
-			one = oneCal(dices, one);
-			break;
+		//족보에 무사히 값이 들어가면 while문 종료
+		while(validInput == false) {
+			String menu = "0";
+			
+			System.out.print("1~12 중 어디에 넣을 건지를 선택하세요 : ");
+			menu = scanner.next();
+			scanner.nextLine();
+			
+			switch (menu) {
+			case "1": {
+				if(oneBl == true) { //족보에 이미 값이 들어가 있으면
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue; //whlie문 다시 시작
+				}
+				one = oneCal(dices, one, oneBl);
+				oneBl = true;
+				validInput = true; //while문 빠져나오는 용
+				break;
+			}
+			case "2": {
+				if(twoBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				two = twoCal(dices, two, twoBl);
+				twoBl = true;
+				validInput = true;
+				break;
+			}
+			case "3": {
+				if(threeBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				three = threeCal(dices, three, threeBl);
+				threeBl = true;
+				validInput = true;
+				break;
+			}
+			case "4": {
+				if(fourBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				four = fourCal(dices, four, fourBl);
+				fourBl = true;
+				validInput = true;
+				break;
+			}
+			case "5": {
+				if(fiveBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				five = fiveCal(dices, five, fiveBl);
+				fiveBl = true;
+				validInput = true;
+				break;
+			}
+			case "6": {
+				if(sixBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				six = sixCal(dices, six, sixBl);
+				sixBl = true;
+				validInput = true;
+				break;
+			}
+			case "7": {
+				if(chBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				ch = chCal(dices, ch, chBl);
+				chBl = true;
+				validInput = true;
+				break;
+			}
+			case "8": {
+				if(fkBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				fk = fkCal(dices, fk, fkBl);
+				fkBl = true;
+				validInput = true;
+				break;
+			}
+			case "9": {
+				if(fhBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				fh = fhCal(dices, fh, fhBl);
+				fhBl = true;
+				validInput = true;
+				break;
+			}
+			case "10": {
+				if(ssBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				ss = ssCal(dices, ss, ssBl);
+				ssBl = true;
+				validInput = true;
+				break;
+			}
+			case "11": {
+				if(lsBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				ls = lsCal(dices, ls, lsBl);
+				lsBl = true;
+				validInput = true;
+				break;
+			}
+			case "12": {
+				if(yaBl == true) {
+					System.out.println("이미 등록되어 있습니다. 다른 족보를 선택해주세요.");
+					continue;
+				}
+				ya = yaCal(dices, ya, yaBl);
+				yaBl = true;
+				validInput = true;
+				break;
+			}
 		}
-		case 2: {
-			two = twoCal(dices, two);
-			break;
-		}
-		case 3: {
-			threeCal(dices, three);
-			break;
-		}
-		case 4: {
-			fourCal(dices, four);
-			break;
-		}
-		case 5: {
-			fiveCal(dices, five);
-			break;
-		}
-		case 6: {
-			sixCal(dices, six);
-			break;
-		}
-		case 7: {
-			chCal(dices, ch);
-			break;
-		}
-		case 8: {
-			fkCal(dices, fk);
-			break;
-		}
-		case 9: {
-			fhCal(dices, fh);
-			break;
-		}
-		case 10: {
-			ssCal(dices, ss);
-			break;
-		}
-		case 11: {
-			lsCal(dices, ls);
-			break;
-		}
-		case 12: {
-			yaCal(dices, ya);
-			break;
-		}
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + menu);
 		}
 	}
-	*/
 	
 	private static int oneCal(int[] dices, int one, boolean oneB) {
         // 숫자 1의 개수를 세기 위한 변수 선언
@@ -636,6 +1161,10 @@ public class Yacht {
         	return fk;
         }
         
+        if(dices[0] == 0) {
+        	return 0;
+        }
+        
         // 빈도 계산
         for (int num : dices) {
             count[num - 1]++;
@@ -666,6 +1195,10 @@ public class Yacht {
         
         if(fhB == true) {
         	return fh;
+        }
+        
+        if(dices[0] == 0) {
+        	return 0;
         }
         
         // 빈도 계산
@@ -780,6 +1313,10 @@ public class Yacht {
         	return ya;
         }
         
+        if(dices[0] == 0) {
+        	return 0;
+        }
+        
         // 빈도 계산
         for (int num : dices) {
             count[num - 1]++;
@@ -806,5 +1343,82 @@ public class Yacht {
 					+ ch + fk + fh + ss + ls + ya;
 		
 		return total;
+	}
+	
+	private static void printRule(){		
+		System.out.println("1. 주사위 5개를 던진다.\n");
+		System.out.println("2. 이 중 원하는 주사위들은 남겨두고, 나머지 주사위들을 다시 던진다. \n다시 던지기는 한 라운드에 2번까지 가능하며, 앞에서 던지지 않았던 주사위도 원한다면 다시 던질 수 있다.\n");
+		System.out.println("3. 주사위 던지기가 끝난 후 나온 최종 조합으로, 아래 제시된 족보 중 아직까지 기록되지 않은 하나를 반드시 선택하여, 점수판에 기록한다.\n");
+		System.out.println("4. 만약 조건에 만족하지 않는 족보를 선택하는 경우, 선택한 족보의 점수칸에 0점으로 기록된다.\n");
+		System.out.println("5. 모든 플레이어가 점수판을 모두 채우면 게임이 종료되고, 점수 총합이 가장 높은 플레이어가 승리한다.\n\n");
+		
+		System.out.println(" ======================================================================= ");
+		System.out.println("|\t\t\t\t족보\t\t\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 이름\t\t| 설명\t\t\t\t| 예시\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Aces\t\t| " + "1이 나온 주사위 눈의 총합. 최대 5점.\t" + "|[1][1][1][5][6] => 3점\t|");
+		System.out.println("| Deuces\t| " + "2가 나온 주사위 눈의 총합. 최대 10점.\t" + "|[2][2][2][5][6] => 6점\t|");
+		System.out.println("| Threes\t| " + "3이 나온 주사위 눈의 총합. 최대 15점.\t" + "|[3][3][3][5][6] => 9점\t|");
+		System.out.println("| Fours\t\t| " + "4가 나온 주사위 눈의 총합. 최대 20점.\t" + "|[1][2][4][4][4] => 12점\t|");
+		System.out.println("| Fives\t\t| " + "5가 나온 주사위 눈의 총합. 최대 25점.\t" + "|[1][2][5][5][5] => 15점\t|");
+		System.out.println("| Sixes\t\t| " + "6이 나온 주사위 눈의 총합. 최대 30점.\t" + "|[1][2][6][6][6] => 18점\t|");
+		System.out.println(" ======================================================================= ");
+		System.out.println("상단 항목의 점수 합계가 63점 이상일 때, 보너스 점수 35점을 추가로 얻는다.\n");
+		
+		System.out.println(" ======================================================================= ");
+		System.out.println("|\t\t\t\t족보\t\t\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 이름\t\t| 설명\t\t\t\t| 예시\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Choice\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|[3][4][5][6][6] => 24점\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| 4 of a Kind\t| " + "동일한 주사위 눈이 4개 이상일 때,\t" + "|[5][6][6][6][6] => 29점\t|");
+		System.out.println("|\t\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("|\t\t| " + "주사위를 3개, 2개로 묶었을 때 각각의\t" + "|\t\t\t|");
+		System.out.println("| Full House\t| " + "묶음 안에서 주사위 눈이 서로 동일할 때,\t" + "|[5][5][6][6][6] => 28점\t|");
+		System.out.println("|\t\t| " + "주사위 눈 5개의 총합. 최대 30점.\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| S. Straight\t| " + "이어지는 주사위 눈이 4개 이상일 때.\t" + "|[1][2][3][4][6] => 15점\t|");
+		System.out.println("|\t\t| " + "고정 15점.\t\t\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| L. Straight\t| " + "이어지는 주사위 눈이 5개일 때.\t" + "|[1][2][3][4][5] => 30점\t|");
+		System.out.println("|\t\t| " + "고정 30점.\t\t\t" + "|\t\t\t|");
+		System.out.println("|=======================================================================|");
+		System.out.println("| Yacht\t\t| " + "동일한 주사위 눈이 5개일 때.\t\t" + "|[1][1][1][1][1] => 50점\t|");
+		System.out.println("|\t\t| " + "고정 50점.\t\t\t" + "|\t\t\t|");
+		System.out.println(" ======================================================================= ");
+		System.out.println();
+	}
+	
+	private static void print(int turn, int oneP1, int twoP1, int threeP1, int fourP1, int fiveP1, int sixP1, int bonusP1, int chP1, int fkP1, int fhP1, int ssP1, int lsP1, int yaP1, int oneToSixP1, int totalP1,
+			int oneP2, int twoP2, int threeP2, int fourP2, int fiveP2, int sixP2, int bonusP2, int chP2, int fkP2, int fhP2, int ssP2, int lsP2, int yaP2, int oneToSixP2, int totalP2) {
+		System.out.println(" ================================== ");
+		System.out.println("|\t   Turn " + turn + "/12  \t\t   |");
+		System.out.println("|==================================|");
+		System.out.println("| Categorries\t |player1 |player2 |");
+		System.out.println("|==================================|");
+		System.out.println("|1. Aces\t | " + oneP1 + "\t  | " + oneP2 + "\t   |");
+		System.out.println("|2. Deuces\t | " + twoP1 + "\t  | " + twoP2 + "\t   |");
+		System.out.println("|3. Threes\t | " + threeP1 + "\t  | " + threeP2 + "\t   |");
+		System.out.println("|4. Fours\t | " + fourP1 + "\t  | " + fourP2 + "\t   |");
+		System.out.println("|5. Fives\t | " + fiveP1 + "\t  | " + fiveP2 + "\t   |");
+		System.out.println("|6. Sixes\t | " + sixP1 + "\t  | " + sixP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|Subtotal\t | " + oneToSixP1 + "/63" + "  | " + oneToSixP2 + "/63  |");
+		System.out.println("|----------------------------------|");
+		System.out.println("|+35 Bonus\t | " + "+" + bonusP1 + "\t  | " + "+" + bonusP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|7. Choice\t | " + chP1 + "\t  | " + chP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("|8. 4 of a Kind  | " + fkP1 + "\t  | " + fkP2 + "\t   |");
+		System.out.println("|9. Full House   | " + fhP1 + "\t  | " + fhP2 + "\t   |");
+		System.out.println("|10. S. Straight | " + ssP1 + "\t  | " + ssP2 + "\t   |");
+		System.out.println("|11. L. Straight | " + lsP1 + "\t  | " + lsP2 + "\t   |");
+		System.out.println("|12. Yacht\t | " + yaP1 + "\t  | " + yaP2 + "\t   |");
+		System.out.println("|==================================|");
+		System.out.println("| Total\t\t | " + totalP1 + "\t  | " + totalP2 + "\t   |");
+		System.out.println(" ================================== ");
 	}
 }
