@@ -1,4 +1,4 @@
-package test;
+package 윤호.test;
 
 public class SpeedQuizList{
 	public static SpeedQuiz[] sqList = {

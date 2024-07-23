@@ -1,4 +1,4 @@
-package test;
+package 윤호.test;
 
 import java.io.ObjectOutputStream;
 import java.io.Serializable;

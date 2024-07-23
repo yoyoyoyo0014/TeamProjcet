@@ -119,6 +119,7 @@ public class Room {
 				omok = new Omok(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
+				
 		}
 
 	}

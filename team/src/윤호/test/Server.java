@@ -1,4 +1,4 @@
-package test;
+package 윤호.test;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
