@@ -33,82 +33,13 @@ public class Yacht2 {
 		while (turn <= 12) {
 
 			// player1의 차례
-			{
-				// 주사위 굴리기
+			playGame(p1);
 
-				diceRoll(p1.dices);
-
-				// 화면 출력
-				print();
-
-				// 배열의 내용을 출력
-				System.out.println("player1의 차례입니다");
-				System.out.println("주사위 결과:");
-				for (int result : p1.dices) {
-					System.out.print("[" + result + "]");
-				}
-				System.out.println();
-
-				// 주사위 다시 굴리기(최대 2회)
-				for (int r = 2; r > 0;) {
-					// 주사위를 다시 굴리기
-					r = diceReroll(p1.dices, r);
-
-					// r = n;
-
-					print();
-					// 배열의 내용을 출력
-					System.out.println("다시 굴린 주사위 결과:");
-					for (int result : p1.dices) {
-						System.out.print("[" + result + "]");
-					}
-					System.out.println();
-
-					r--;
-				}
-
-				recPoint(p1);
-			}
 			// player2의 차례
-			{
-				// 주사위 굴리기
-				diceRoll(p2.dices);
+			playGame(p2);
 
-				// 화면 출력
-				print();
-				// 배열의 내용을 출력
-				System.out.println("player2의 차례입니다");
-				System.out.println("주사위 결과:");
-				for (int result : p2.dices) {
-					System.out.print("[" + result + "]");
-				}
-				System.out.println();
-
-				// 주사위 다시 굴리기(최대 2회)
-				for (int r = 2; r > 0;) {
-					// 주사위를 다시 굴리기
-					r = diceReroll(p2.dices, r);
-
-					// r = n;
-
-					print();
-					// 배열의 내용을 출력
-					System.out.println("다시 굴린 주사위 결과:");
-					for (int result : p2.dices) {
-						System.out.print("[" + result + "]");
-					}
-					System.out.println();
-
-					r--;
-				}
-
-				// player2 차례
-				recPoint(p2);
-				
-				System.out.println("-------------------------------------------------------------------\n");
-				turn++;
-			}
-
+			System.out.println("-------------------------------------------------------------------\n");
+			turn++;
 		}
 //		turn = 12;
 
@@ -202,7 +133,46 @@ public class Yacht2 {
 		}
 	}
 
-	private void recPoint(YachtVariable yv) {
+	public void playGame(YachtVariable yv) {
+
+		{
+			// 주사위 굴리기
+			diceRoll(yv.dices);
+
+			// 화면 출력
+			print();
+
+			// 배열의 내용을 출력
+			System.out.println("player1의 차례입니다");
+			System.out.println("주사위 결과:");
+			for (int result : yv.dices) {
+				System.out.print("[" + result + "]");
+			}
+			System.out.println();
+
+			// 주사위 다시 굴리기(최대 2회)
+			for (int r = 2; r > 0;) {
+				// 주사위를 다시 굴리기
+				r = diceReroll(yv.dices, r);
+
+				// r = n;
+
+				print();
+				// 배열의 내용을 출력
+				System.out.println("다시 굴린 주사위 결과:");
+				for (int result : yv.dices) {
+					System.out.print("[" + result + "]");
+				}
+				System.out.println();
+
+				r--;
+			}
+
+			recPoint(yv);
+		}
+	}
+
+	public void recPoint(YachtVariable yv) {
 
 		// while문 조건용 변수
 		yv.validInput = false;
