@@ -218,7 +218,7 @@ public class Client {
 				gameName = Type.omok;
 				break;
 			case 3:
-				gameName = "";
+				gameName = Type.Typing;
 				break;
 			case 4:
 				gameName = "";

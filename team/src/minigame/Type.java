@@ -21,6 +21,7 @@ public class Type {
 	// 게임을 구분하기 위한 태그
 	final static String baseBall = "BASEBALL"; // 야구게임
 	final static String omok = "OMOK"; // 야구게임
+	final static String Typing = "TYPING"; // 타자 게임
 
 	// 게임 관련 태그
 	final static String full = "FULL"; // 방 인원이 꽉 찼음
