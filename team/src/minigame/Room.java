@@ -12,6 +12,7 @@ public class Room {
 	// 게임 객체 생성
 	private Baseball baseball;
 	private Omok omok;
+	private Typing typing;
 	// .. private otherGame otherGame
 
 	private String isPlaying = Type.start;
@@ -36,6 +37,9 @@ public class Room {
 			case Type.omok:
 				msg = omok.getCurrentTurn();
 				break;
+			case Type.Typing:
+				msg = typing.getCurrentTurn();
+				break;
 		}
 		return msg;
 	}
@@ -51,6 +55,9 @@ public class Room {
 			case Type.omok:
 				msg = omok.getLoser();
 				break;
+			case Type.Typing:
+				msg = typing.getLoser();
+				break;
 		}
 		return msg;
 	}
@@ -65,6 +72,9 @@ public class Room {
 				// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getWinner();
+				break;
+			case Type.Typing:
+				msg = typing.getWinner();
 				break;
 		}
 		return msg;
@@ -98,6 +108,18 @@ public class Room {
 				}
 				tmp.setMsg(omok.getResult());
 				break;
+			case Type.Typing:
+//				게임 이닛, 차례 정하고 초기화면 받기
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					typing.run(message);
+				}
+				// word list를 객체로 넘겨줌. 
+				tmp.setOptStr(typing.getWords());
+				tmp.setMsg(typing.getResult());
+				break;
 
 //			case Tag.otherGame:
 //				break;
@@ -117,6 +139,10 @@ public class Room {
 				break;
 			case Type.omok:
 				omok = new Omok(roomManager.getUser().getId(),
+						player.getUser().getId());
+				break;
+			case Type.Typing:
+				typing = new Typing(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
 				

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import lombok.NonNull;
@@ -24,8 +26,7 @@ public class Client {
 
 	public void run() {
 		try {
-			ois = new ObjectInputStream(
-					socket.getInputStream());
+			ois = new ObjectInputStream(socket.getInputStream());
 
 			while (true) {
 				Message msg = (Message) ois.readObject();
@@ -45,25 +46,25 @@ public class Client {
 	private void readMessage(Message message) {
 		// TODO Auto-generated method stub
 		String tag = message.getType();
-//		System.out.println(message);
+		// System.out.println(message);
 
 		switch (tag) {
-			case Type.alert:
+			case Type.alert :
 				System.out.println(message.getMsg());
 				break;
-			case Type.login:
+			case Type.login :
 				if (message.getMsg() != null) {
 					id = Type.blank; // id 초기화
 					System.out.println(message.getMsg());
 				}
 				inputUserLogin();
 				break;
-			case Type.menu:
+			case Type.menu :
 				// System.out.println("<로그인 성공>");
 				runRoomMenu();
 				break;
 
-			case Type.roomList:
+			case Type.roomList :
 				if (message.getMsg() == null) {
 					System.out.println("<생성된 방이 없습니다.>");
 					printPrev();
@@ -78,13 +79,13 @@ public class Client {
 				runRoomList(message.getMsg());
 				break;
 
-			case Type.start:
-//				gameStart(message);
-//				break;
-			case Type.playing:
+			case Type.start :
+				// gameStart(message);
+				// break;
+			case Type.playing :
 				gamePlay(message);
 				break;
-			case Type.end:
+			case Type.end :
 				System.out.println(message.getMsg());
 				if (message.getOpt1().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
@@ -95,7 +96,7 @@ public class Client {
 				printPrev();
 				runRoomMenu();
 				return;
-			default:
+			default :
 
 		}
 
@@ -104,29 +105,41 @@ public class Client {
 	private void gamePlay(Message message) {
 		System.out.print(message.getMsg());
 		if (id.equals(message.getOpt1())) {
-			String input = sc.nextLine();
 			Message msg = new Message();
 			msg.setType(Type.playing);
-			msg.setMsg(input);
+			if (message.getOptStr() != null) {
+				List<String> words = message.getOptStr();
+				List<String> answer = new ArrayList<String>();
+				System.out.println("게임을 시작하려면 Enter를 눌러주세요");
+				sc.nextLine();
+				for (int i = 0; i < 10; i++) {
+					System.out.println("" + words.get(i));
+					answer.add(sc.nextLine());
+				}
+				msg.setOptStr(answer);
+			} else {
+				String input = sc.nextLine();
+				msg.setMsg(input);
+			}
 			send(msg);
 		} else {
 			System.out.println("<상대방의 차례입니다.>");
 		}
 	}
 
-//	private void gameStart(Message message) {
-//
-//		System.out.print(message.getMsg());
-//		if (id.equals(message.getOpt1())) {
-//			String input = sc.nextLine();
-//			Message msg = new Message();
-//			msg.setType(Type.playing);
-//			msg.setMsg(input);
-//			send(msg);
-//		} else {
-//			System.out.println("<상대방의 차례입니다.>");
-//		}
-//	}
+	// private void gameStart(Message message) {
+	//
+	// System.out.print(message.getMsg());
+	// if (id.equals(message.getOpt1())) {
+	// String input = sc.nextLine();
+	// Message msg = new Message();
+	// msg.setType(Type.playing);
+	// msg.setMsg(input);
+	// send(msg);
+	// } else {
+	// System.out.println("<상대방의 차례입니다.>");
+	// }
+	// }
 
 	private void runRoomList(String message) {
 
@@ -151,25 +164,25 @@ public class Client {
 		printRoomMenu();
 		int menu = sc.nextInt();
 		switch (menu) {
-			case 1: // 방 만들기
+			case 1 : // 방 만들기
 				insertRoom();
 				break;
-			case 2: // 방 검색 및 참여
+			case 2 : // 방 검색 및 참여
 				serarchRoom();
 				break;
-			case 3: // 전적 조회
+			case 3 : // 전적 조회
 				// 개인 성적 조회
 				// 전체 성적(랭크) 조회
 				// checkScore();
 				break;
-			case 4: // 회원 정보 변경 <구현 예정>
+			case 4 : // 회원 정보 변경 <구현 예정>
 				// updateUser()
 				// 아이디, 비밀번호, 새비밀번호
 				// 계정 삭제
-			case 5:
+			case 5 :
 				// exit(); 종료, 클라이언트 연결끊기 <구현 예정>
 				break;
-			default:
+			default :
 				break;
 		}
 
@@ -211,19 +224,19 @@ public class Client {
 			return;
 		}
 		switch (gameNum) {
-			case 1:
+			case 1 :
 				gameName = Type.baseBall;
 				break;
-			case 2:
+			case 2 :
 				gameName = Type.omok;
 				break;
-			case 3:
+			case 3 :
 				gameName = Type.Typing;
 				break;
-			case 4:
+			case 4 :
 				gameName = "";
 				break;
-			default:
+			default :
 				printWrongMenu();
 				printPrev();
 				runRoomMenu();

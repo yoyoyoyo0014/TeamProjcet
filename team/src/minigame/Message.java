@@ -1,6 +1,7 @@
 package minigame;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public class Message implements Serializable {
 	private String msg;
 
 	private String opt1, opt2; // , ... 필요시 더 생성
+	private List<String> optStr;
 
 }
