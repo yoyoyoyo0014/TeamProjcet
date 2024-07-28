@@ -94,7 +94,7 @@ public class Typing implements Program {
 		centens();
 		Collections.shuffle(words);
 
-		start();
+		timeReset();
 	}
 
 	private void start() {
@@ -125,9 +125,10 @@ public class Typing implements Program {
 		// (수정 3) 전역 변수로 뺏습니다.
 		// now, formatter, formaterdNow, after, formatter2, formatedAfter
 
-		now = LocalDateTime.now();
-		formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		formatedNow = now.format(formatter);
+		// (수정 3-5) timeReset 메소드로 따로 만들었습니다.
+		// now = LocalDateTime.now();
+		// formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		// formatedNow = now.format(formatter);
 
 		// (수정 4) 해당 for문은 Client로 넘겼습니다.
 		// for (int i = 0; i < 10; i++) {
@@ -234,9 +235,9 @@ public class Typing implements Program {
 
 	public void run(Message message) {
 
-		start();
 		answer = message.getOptStr();
 		calScore(currentTurn);
+		timeReset();
 		
 
 		if (turn == 2) {
@@ -246,6 +247,14 @@ public class Typing implements Program {
 			turnNext();
 		}
 
+	}
+
+	private void timeReset() {
+		
+		now = LocalDateTime.now();
+		formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		formatedNow = now.format(formatter);
+		
 	}
 
 	private void victory() {
