@@ -143,47 +143,7 @@ public class Server implements Program {
 					readMessage(msg);
 				}
 			} catch (IOException e) {
-				if (cUserList.size() != 0) {
-					for (ConnectedUser tmp : cUserList) {
-						String userId = cUser.getUser().getId();
-						if (tmp.getUser().getId().equals(userId)) {
-							Message msg = new Message();
-							msg.setType(Type.alert);
-							msg.setMsg("[<" + userId + ">님이 나갔습니다.]");
-							System.out.println("[<" + userId + ">님이 나갔습니다.]");
-
-							sendAll(msg);
-							cUserList.remove(tmp);
-
-							/*
-							 * 게임 도중에 나갔다면 승자 판별 구현 예정.
-							 */
-
-							if (userRoom != null) {
-								if (userRoom.getIsPlaying() == Type.playing) {
-									msg = new Message();
-
-									msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
-									msg.setType(Type.end);
-									msg.setOpt1("exit");
-
-									send(userRoom.getPlayer().getOos(), msg);
-									send(userRoom.getRoomManager().getOos(), msg);
-
-								}
-								roomList.remove(userRoom);
-								userRoom = null;
-							}
-							break;
-						}
-					}
-
-					// userList에서 접속한 사용자 제거
-					cUserList.remove(cUser);
-					userCount--;
-				} else {
-					System.out.println("[클라이언트 접속 종료]");
-				}
+				playerExit();	
 			} catch (ClassNotFoundException e) {
 				// (Message)ois.readObject(); 관련 에러
 				e.printStackTrace();
@@ -191,6 +151,52 @@ public class Server implements Program {
 
 		});
 		t.start();
+
+	}
+
+	private void playerExit() {
+		
+		if (cUserList.size() != 0) {
+			for (ConnectedUser tmp : cUserList) {
+				String userId = cUser.getUser().getId();
+				if (tmp.getUser().getId().equals(userId)) {
+					Message msg = new Message();
+					msg.setType(Type.alert);
+					msg.setMsg("[<" + userId + ">님이 나갔습니다.]");
+					System.out.println("[<" + userId + ">님이 나갔습니다.]");
+
+					sendAll(msg);
+					cUserList.remove(tmp);
+
+					/*
+					 * 게임 도중에 나갔다면 승자 판별 구현 예정.
+					 */
+
+					if (userRoom != null) {
+						if (userRoom.getIsPlaying() == Type.playing) {
+							msg = new Message();
+
+							msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
+							msg.setType(Type.end);
+							msg.setOpt1("exit");
+
+							send(userRoom.getPlayer().getOos(), msg);
+							send(userRoom.getRoomManager().getOos(), msg);
+
+						}
+						roomList.remove(userRoom);
+						userRoom = null;
+					}
+					break;
+				}
+			}
+
+			// userList에서 접속한 사용자 제거
+			cUserList.remove(cUser);
+			userCount--;
+		} else {
+			System.out.println("[클라이언트 접속 종료]");
+		}
 
 	}
 
@@ -229,6 +235,10 @@ public class Server implements Program {
 				break;
 			case Type.playing:
 				runGame(userRoom, message);
+				break;
+			case Type.exit:
+				playerExit();
+				break;
 			default:
 
 		}

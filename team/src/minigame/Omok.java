@@ -108,7 +108,7 @@ public class Omok implements Program {
 	}
 
 	public void resetBoard() {
-		System.out.println(row_init);
+//		System.out.println(row_init);
 		gameResult += row_init + "\n";
 		for (int i = 0x0; i < BOARD_SIZE; i++) {
 //			System.out.printf(" %X %s\n", i, list.get(i));

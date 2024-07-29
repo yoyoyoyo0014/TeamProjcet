@@ -40,5 +40,8 @@ public class Type {
 	final static String rank = "RANK"; // 전적조회(전체회원)
 	final static String search = "SEARCH"; // 전적조회(개인랭크)
 	final static String cuser = "CUSER"; // 접속유저 리스트
+	
+	// 종료
+	final static String exit = "EXIT"; // 종료 
 
 }

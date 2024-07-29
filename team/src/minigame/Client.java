@@ -24,11 +24,17 @@ public class Client {
 	// 로그인 시 입력받은 id
 	private String id;
 
+	private boolean isExit = false;
+
 	public void run() {
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
 
 			while (true) {
+				if (isExit) {
+					System.out.println("종료합니다.");
+					break;
+				}
 				Message msg = (Message) ois.readObject();
 				readMessage(msg);
 			}
@@ -49,22 +55,22 @@ public class Client {
 		// System.out.println(message);
 
 		switch (tag) {
-			case Type.alert :
+			case Type.alert:
 				System.out.println(message.getMsg());
 				break;
-			case Type.login :
+			case Type.login:
 				if (message.getMsg() != null) {
 					id = Type.blank; // id 초기화
 					System.out.println(message.getMsg());
 				}
 				inputUserLogin();
 				break;
-			case Type.menu :
+			case Type.menu:
 				// System.out.println("<로그인 성공>");
 				runRoomMenu();
 				break;
 
-			case Type.roomList :
+			case Type.roomList:
 				if (message.getMsg() == null) {
 					System.out.println("<생성된 방이 없습니다.>");
 					printPrev();
@@ -79,31 +85,30 @@ public class Client {
 				runRoomList(message.getMsg());
 				break;
 
-			case Type.start :
+			case Type.start:
 				// gameStart(message);
 				// break;
-			case Type.playing :
+			case Type.playing:
 				gamePlay(message);
 				break;
-			case Type.end :
+			case Type.end:
 				System.out.println(message.getMsg());
-				
-				if(message.getOpt1().equals("exit")) {
+
+				if (message.getOpt1().equals("exit")) {
 					System.out.println("게임이 비정상적으로 종료되었습니다.");
-				}
-				else if (message.getOpt1().equals(id)) {
+				} else if (message.getOpt1().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
 
 				} else {
 					System.out.println("<당신이 패배하였습니다.>");
 				}
-				
+
 				System.out.println("방을 나갑니다. Enter를 눌러주세요.");
 				sc.nextLine();
 				printPrev();
 				runRoomMenu();
 				return;
-			default :
+			default:
 
 		}
 
@@ -171,25 +176,29 @@ public class Client {
 		printRoomMenu();
 		int menu = sc.nextInt();
 		switch (menu) {
-			case 1 : // 방 만들기
+			case 1: // 방 만들기
 				insertRoom();
 				break;
-			case 2 : // 방 검색 및 참여
+			case 2: // 방 검색 및 참여
 				serarchRoom();
 				break;
-			case 3 : // 전적 조회
+			case 3: // 전적 조회
 				// 개인 성적 조회
 				// 전체 성적(랭크) 조회
 				// checkScore();
 				break;
-			case 4 : // 회원 정보 변경 <구현 예정>
+			case 4: // 회원 정보 변경 <구현 예정>
 				// updateUser()
 				// 아이디, 비밀번호, 새비밀번호
 				// 계정 삭제
-			case 5 :
+			case 5:
 				// exit(); 종료, 클라이언트 연결끊기 <구현 예정>
+				Message msg = new Message();
+				msg.setType(Type.exit);
+				send(msg);
+				isExit = true;
 				break;
-			default :
+			default:
 				break;
 		}
 
@@ -213,9 +222,10 @@ public class Client {
 		System.out.println("<방 만들기>");
 		System.out.println("1. 야구");
 		System.out.println("2. 오목");
-		System.out.println("3. 타자연습<미구현>");
+		System.out.println("3. Typing");
 		System.out.println("4. Yacht<미구현>");
-		System.out.println("5. 이전으로 ");
+		System.out.println("5. SpeedQuiz<미구현>");
+		System.out.println("6. 이전으로 ");
 		System.out.println("-----------------------");
 		System.out.print("게임 선택 : ");
 
@@ -223,27 +233,27 @@ public class Client {
 		try {
 			gameNum = sc.nextInt();
 		} catch (InputMismatchException e) {
-			gameNum = 5;
+			gameNum = 6;
 		}
 
-		if (gameNum == 5) { // 이전으로
+		if (gameNum == 6) { // 이전으로
 			runRoomMenu();
 			return;
 		}
 		switch (gameNum) {
-			case 1 :
+			case 1:
 				gameName = Type.baseBall;
 				break;
-			case 2 :
+			case 2:
 				gameName = Type.omok;
 				break;
-			case 3 :
+			case 3:
 				gameName = Type.Typing;
 				break;
-			case 4 :
+			case 4:
 				gameName = "";
 				break;
-			default :
+			default:
 				printWrongMenu();
 				printPrev();
 				runRoomMenu();
@@ -280,7 +290,7 @@ public class Client {
 		System.out.println("2. 방 검색하기");
 		System.out.println("3. 전적 조회<구현예정>");
 		System.out.println("4. 회원 정보 변경<구현예정>");
-		System.out.println("5. 종료<구현예정>");
+		System.out.println("5. 종료");
 		System.out.println("-----------------------");
 		System.out.print("메뉴 선택 : ");
 
