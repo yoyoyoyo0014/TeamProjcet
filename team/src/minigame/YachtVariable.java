@@ -32,7 +32,7 @@ public class YachtVariable {
 		boolean ssBl = false;
 		boolean lsBl = false;
 		boolean yaBl = false;
-	
+		int r =0;
 		
 		boolean bonusBl = false;
 		boolean validInput = false;
