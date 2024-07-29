@@ -22,6 +22,7 @@ public class Yacht {
 	static YachtVariable p2 = new YachtVariable();
 
 	static int turn = 1;
+	static int reRollCount = 0;
 
 	private String currentTurn;
 	private static String player1;
@@ -68,7 +69,7 @@ public class Yacht {
 		}
 
 		// 사용자 입력 받기
-		gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - yv.r) + "번): \n";
+		gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - yv.reRollCount) + "번): \n";
 	}
 
 	private void start() {
@@ -112,15 +113,15 @@ public class Yacht {
 			if (p1.dices[0] == 0) {
 				printTest(p1);
 			}
-			else if (p1.r < 2) {
+			else if (p1.reRollCount < 2) {
 				diceReroll(p1, message);
-				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.r) + "번): ";
+				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.reRollCount) + "번): \n";
 			}
 
-			if (p1.r == 2) {
-				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : \n";
-				p1.r++;
-			} else if (p1.r == 3) {
+			if (p1.reRollCount == 2) {
+				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : ";
+				p1.reRollCount++;
+			} else if (p1.reRollCount == 3) {
 				recPoint(p1, message);
 				print();
 
@@ -132,22 +133,22 @@ public class Yacht {
 			if (p2.dices[0] == 0) {
 				printTest(p2);
 			}
-			else if (p2.r < 2) {
+			else if (p2.reRollCount < 2) {
 				diceReroll(p2, message);
 
-				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.r) + "번): ";
+				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.reRollCount) + "번): \n";
 			}
-			if (p2.r == 2) {
-				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : \n";
-				p2.r++;
-			} else if (p2.r == 3) {
+			if (p2.reRollCount == 2) {
+				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : ";
+				p2.reRollCount++;
+			} else if (p2.reRollCount == 3) {
 				recPoint(p2, message);
 				print();
 				turnNext();
 
 //				total 초기화 이슈
-				p1 = new YachtVariable();
-				p2 = new YachtVariable();
+				p1.reRollCount = 0;
+				p2.reRollCount = 0;
 				turn++;
 			}
 		}
@@ -163,7 +164,7 @@ public class Yacht {
 		while (yv.validInput == false) {
 			String SelHR = "0";
 
-			gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
+			//gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
 			SelHR = msg.getMsg();
 
 			switch (SelHR) {
@@ -367,7 +368,7 @@ public class Yacht {
 			gameResult += "[" + result + "] ";
 		}
 
-		yv.r++;
+		yv.reRollCount++;
 
 		// r++;
 
