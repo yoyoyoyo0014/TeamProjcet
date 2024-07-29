@@ -14,6 +14,7 @@ public class Room {
 	private Omok omok;
 	private Typing typing;
 	private Yacht yacht;
+	private SpeedQuiz speedGame;
 	// .. private otherGame otherGame
 
 	private String isPlaying = Type.start;
@@ -65,6 +66,9 @@ public class Room {
 			case Type.yacht:
 				msg = yacht.getLoser();
 				break;
+			case Type.speedGame:
+				msg = yacht.getLoser();
+				break;
 		}
 		return msg;
 	}
@@ -84,6 +88,9 @@ public class Room {
 				msg = typing.getWinner();
 				break;
 			case Type.yacht:
+				msg = yacht.getWinner();
+				break;
+			case Type.speedGame:
 				msg = yacht.getWinner();
 				break;
 		}
@@ -140,6 +147,16 @@ public class Room {
 				}
 				tmp.setMsg(yacht.getResult());
 				break;
+			case Type.speedGame:
+				
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					speedGame.run(message);
+				}
+				tmp.setMsg(yacht.getResult());
+				break;
 
 //			case Tag.otherGame:
 //				break;
@@ -167,6 +184,11 @@ public class Room {
 				break;
 			case Type.yacht:
 				yacht = new Yacht(roomManager.getUser().getId(),
+						player.getUser().getId());
+				break;
+
+			case Type.speedGame:
+				speedGame = new SpeedQuiz(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
 				

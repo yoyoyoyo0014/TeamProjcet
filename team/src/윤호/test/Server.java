@@ -158,9 +158,10 @@ public class Server {
 		
 		try {
 			synchronized (oos) {
-				oos.writeUTF(msg.spduser.id);
-				oos.writeUTF(msg.spduser.chat);
-				oos.writeInt(msg.spduser.roomNum);
+				oos.writeObject(msg);
+//				oos.writeUTF(msg.spduser.id);
+//				oos.writeUTF(msg.spduser.chat);
+//				oos.writeInt(msg.spduser.roomNum);
 				oos.flush();
 			}
 		} catch (IOException e) {
