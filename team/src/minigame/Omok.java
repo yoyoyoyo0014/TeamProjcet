@@ -2,6 +2,7 @@ package minigame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -13,8 +14,6 @@ import program.Program;
 public class Omok implements Program {
 
 	private List<String> list = new ArrayList<>();
-	private static Scanner sc = new Scanner(System.in);
-
 	private final static String row_init = "   0 1 2 3 4 5 6 7 8 9 A B C D E F";
 	private final static String row = "□ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □";
 
@@ -81,17 +80,16 @@ public class Omok implements Program {
 		// 흑돌, 백돌 초기화
 		stoneInit(twhiteStone);
 		stoneInit(tblackStone);
-		
+
 		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> : ";
 	}
-	
 
 //	public static void clearConsoleScreen() {
 //		for (int i = 0; i < 20; i++) {
 //			System.out.println();
 //		}
 //	}
-	
+
 	public void turnNext() {
 
 		if (currentTurn.equals(player1)) {
@@ -113,7 +111,7 @@ public class Omok implements Program {
 		System.out.println(row_init);
 		gameResult += row_init + "\n";
 		for (int i = 0x0; i < BOARD_SIZE; i++) {
-			System.out.printf(" %X %s\n", i, list.get(i));
+//			System.out.printf(" %X %s\n", i, list.get(i));
 			gameResult += " " + Integer.toHexString(i) + " " + list.get(i) + "\n";
 		}
 	}
@@ -215,49 +213,48 @@ public class Omok implements Program {
 		List<String> select = new ArrayList<String>();
 		int sel_r, sel_c;
 
-		select = Arrays.asList(msg.getMsg().split(" "));
+		select = Arrays.asList(msg.getMsg().trim().split(" "));
+
 		if (select.get(0).equals("exit")) {
 			// 종료희망 => 종료 예정
+			gameResult += "<" + currentTurn + "님이 게임을 종료합니다>\n";
+
+			turnNext();
+			victory();
+
+			return;
 		}
 
-		int row = 0;
-		int col = 1;
+		try {
+			int row = 0;
+			int col = 1;
+			// 16진수 값을 정수로 변환하여 저장
+			sel_r = Integer.parseInt(select.get(row), 16);
+			sel_c = Integer.parseInt(select.get(col), 16);
+		} catch (InputMismatchException e) {
+			gameResult += "올바르지 않은 입력입니다." + currentTurn + "패배<반칙패>\n";
 
-		// 띄어쓰기 처리
-		// "7 7"이 아닌 " 7 7"과 같이 들어올 경우 처리
-		if (select.get(0).equals("")) {
-			row++;
-			col++;
+			turnNext();
+			victory();
+
+			return;
 		}
-
-		// 16진수 값을 정수로 변환하여 저장
-		sel_r = Integer.parseInt(select.get(row), 16);
-		sel_c = Integer.parseInt(select.get(col), 16);
-
 		// 범위를 벗어난 숫자 입력. 반칙패로 규정
 		// 재선택으로 구현 예정
 		if (!isValidNum(sel_r) || !isValidNum(sel_c)) {
-			System.out.println("올바르지 않은 위치입니다." + currentTurn + " 패배<반칙패>");
-			if (player1.equals(currentTurn)) {
-				winner = player1;
-				loser = player2;
-			} else {
-				loser = player1;
-				winner = player2;
-			}
+			gameResult += "올바르지 않은 위치입니다." + currentTurn + " 패배<반칙패>\n";
+			turnNext();
+			victory();
+			return;
 		}
 
 		// 흑돌이나 백돌에 이미 등록된 위치라면 반칙패 처리
 		// 재선택으로 구현 예정
 		if (twhiteStone.get(sel_r).get(sel_c) != 0 || tblackStone.get(sel_r).get(sel_c) != 0) {
-			System.out.println("이미 선택한 위치입니다. " + currentTurn + " 패배<반칙패>");
-			if (player1.equals(currentTurn)) {
-				winner = player1;
-				loser = player2;
-			} else {
-				loser = player1;
-				winner = player2;
-			}
+			gameResult += "이미 선택한 위치입니다. " + currentTurn + " 패배<반칙패>\n";
+			turnNext();
+			victory();
+			return;
 		}
 
 		// c는 board에 둔 돌을 업데이트 함.
@@ -276,26 +273,30 @@ public class Omok implements Program {
 
 		list.set(sel_c, new String(c));
 
-//		clearConsoleScreen();
 		resetBoard();
 
-//		System.out.printf("선택한 위치: %X %X\n", sel_r, sel_c);
-		gameResult += "선택한 위치: (" + Integer.toHexString(sel_r).toUpperCase()+ " , " + Integer.toHexString(sel_c).toUpperCase() + ")\n";
+		gameResult += "선택한 위치: (" + Integer.toHexString(sel_r).toUpperCase() + " , " + Integer.toHexString(sel_c).toUpperCase() + ")\n";
 		if (isEnd) {
-			System.out.println("게임이 종료되었습니다. 승자는 <" + currentTurn + ">입니다.");
-			if (player1.equals(currentTurn)) {
-				winner = player1;
-				loser = player2;
-			} else {
-				loser = player1;
-				winner = player2;
-			}
+			victory();
 			return;
 		}
-		
+
 		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> : ";
-		
+
 		turnNext();
+	}
+
+	private void victory() {
+
+		if (player1.equals(currentTurn)) {
+			winner = player1;
+			loser = player2;
+		} else {
+			loser = player1;
+			winner = player2;
+		}
+		gameResult += "승자는 <" + winner + "님입니다>\n";
+
 	}
 
 	@Override
@@ -313,13 +314,7 @@ public class Omok implements Program {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
-	}
 
-//	public static void main(String[] args) {
-//		// test용 Main
-//		Omok gm = new Omok();
-//		gm.run();
-//	}
+	}
 
 }
