@@ -10,7 +10,7 @@ import minigame.db.service.ScoreServiceImp;
 @NoArgsConstructor
 public class ScoreController { // 인터페이스로 선언.
 
-	private UserServiceImp memberService = new UserServiceImp();
+	private UserServiceImp userService = new UserServiceImp();
 	private ScoreServiceImp scoreService = new ScoreServiceImp();
 	private GameServiceImp gameService = new GameServiceImp();
 

@@ -50,7 +50,7 @@ public class Server implements Program {
 			ObjectOutputStream tOos = cUserList.get(i).getOos();
 			if (tOos == null) {
 				return;
-			} 
+			}
 			// client 본인이거나 접속은 했으나 로그인을 안했다면 전송하지 않음.
 			if (tOos.equals(oos) || cUserList.get(i).getUser() == null) {
 				continue;
@@ -127,8 +127,8 @@ public class Server implements Program {
 		totalUser.add(new User("zxc", "1234"));
 		totalUser.add(new User("wer", "1234"));
 
-		//new Thread().sleep(1000);
-		
+		// new Thread().sleep(1000);
+
 		Thread t = new Thread(() -> {
 			try {
 				oos = new ObjectOutputStream(socket.getOutputStream());
@@ -151,11 +151,34 @@ public class Server implements Program {
 							msg.setType(Type.alert);
 							msg.setMsg("[<" + userId + ">님이 나갔습니다.]");
 							System.out.println("[<" + userId + ">님이 나갔습니다.]");
+
 							sendAll(msg);
 							cUserList.remove(tmp);
+
+							/*
+							 * 게임 도중에 나갔다면 승자 판별 구현 예정.
+							 */
+
+							if (userRoom != null) {
+								if (userRoom.getIsPlaying() == Type.playing) {
+									msg = new Message();
+
+									msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
+									msg.setType(Type.end);
+									msg.setOpt1("exit");
+
+									send(userRoom.getPlayer().getOos(), msg);
+									send(userRoom.getRoomManager().getOos(), msg);
+
+								}
+								roomList.remove(userRoom);
+								userRoom = null;
+							}
 							break;
 						}
 					}
+
+					// userList에서 접속한 사용자 제거
 					cUserList.remove(cUser);
 					userCount--;
 				} else {
@@ -272,6 +295,8 @@ public class Server implements Program {
 					// 승자가 정해짐
 					// 승패 기록
 					// 방 폭파시키기
+
+					// [DB 등록 필요]
 					String gameTitle = currentRoom.getGameTitle();
 					String winner = currentRoom.getWinner();
 					String loser = currentRoom.getLoser();
@@ -300,6 +325,7 @@ public class Server implements Program {
 		return null;
 	}
 
+	// [DB 등록 필요]
 	private Game getUserGameInfo(User user, String gameTitle) {
 		// user의 게임 성적 정보를 받아온다.
 
@@ -317,7 +343,7 @@ public class Server implements Program {
 		// 처음한 게임이라면 게임의 객체를 생성하고 반환한다.
 		if (!isExist) {
 			user.getGames().add(tGame);
-			return user.getGames().get(user.getGames().size()-1);
+			return user.getGames().get(user.getGames().size() - 1);
 		}
 		return null;
 	}

@@ -87,12 +87,19 @@ public class Client {
 				break;
 			case Type.end :
 				System.out.println(message.getMsg());
-				if (message.getOpt1().equals(id)) {
+				
+				if(message.getOpt1().equals("exit")) {
+					System.out.println("게임이 비정상적으로 종료되었습니다.");
+				}
+				else if (message.getOpt1().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
 
 				} else {
 					System.out.println("<당신이 패배하였습니다.>");
 				}
+				
+				System.out.println("방을 나갑니다. Enter를 눌러주세요.");
+				sc.nextLine();
 				printPrev();
 				runRoomMenu();
 				return;
