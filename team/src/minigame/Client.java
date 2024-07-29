@@ -241,7 +241,7 @@ public class Client {
 				gameName = Type.Typing;
 				break;
 			case 4 :
-				gameName = "";
+				gameName = Type.yacht;
 				break;
 			default :
 				printWrongMenu();
