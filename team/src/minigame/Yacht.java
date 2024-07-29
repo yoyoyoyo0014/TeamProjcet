@@ -114,11 +114,11 @@ public class Yacht {
 			}
 			else if (p1.r < 2) {
 				diceReroll(p1, message);
-				gameResult += "다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.r) + "번): ";
+				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.r) + "번): ";
 			}
 
 			if (p1.r == 2) {
-				gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
+				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : \n";
 				p1.r++;
 			} else if (p1.r == 3) {
 				recPoint(p1, message);
@@ -135,10 +135,10 @@ public class Yacht {
 			else if (p2.r < 2) {
 				diceReroll(p2, message);
 
-				gameResult += "다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.r) + "번): ";
+				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.r) + "번): ";
 			}
 			if (p2.r == 2) {
-				gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
+				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : \n";
 				p2.r++;
 			} else if (p2.r == 3) {
 				recPoint(p2, message);
@@ -348,7 +348,7 @@ public class Yacht {
 
 		for (int i = 0; i < RerollDices.length; i++) {
 			if (RerollDices[i] != 0) {
-				gameResult += RerollDices[i] + "번 \n";
+				gameResult += RerollDices[i] + "번 ";
 			}
 		}
 		gameResult += "주사위를 다시 돌립니다.\n";
