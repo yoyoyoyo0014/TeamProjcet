@@ -82,7 +82,8 @@ public class Client {
 					runRoomMenu();
 					break;
 				}
-				runRoomList(message.getMsg());
+				// message.getOpt1() : room의 갯수
+				runRoomList(message.getMsg(), Integer.parseInt(message.getOpt1()));
 				break;
 
 			case Type.start:
@@ -124,14 +125,14 @@ public class Client {
 				List<String> answer = new ArrayList<String>();
 				System.out.println("게임을 시작하려면 Enter를 눌러주세요");
 				sc.nextLine();
-				
+
 				for (int i = 0; i < 10; i++) {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
-					if(answer.get(i).equals("exit")){
+					if (answer.get(i).equals("exit")) {
 						msg.setOpt1("exit");
 						send(msg);
-						return;		
+						return;
 					}
 				}
 				msg.setOptStr(answer);
@@ -159,55 +160,76 @@ public class Client {
 	// }
 	// }
 
-	private void runRoomList(String message) {
+	private void runRoomList(String message, int num) {
 
 		System.out.println("<방 목록>");
 		System.out.println(message);
 		System.out.println("(-1). 이전으로");
 		System.out.print("방 번호 입력 : ");
 		sc.nextLine();
-		String menu = sc.nextLine();
-		if (menu.equals("-1")) {
+		int menu;
+		try {
+			menu = sc.nextInt();
+		} catch (InputMismatchException e) {
+			sc.nextLine();
+			System.out.println("번호를 잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			menu = -1;
+		}
+		if (menu == -1) {
 			runRoomMenu();
 			return;
 		}
+		if (menu > num || menu <= 0) {
+			System.err.println("잘못된 방 번호를 입력하셨습니다. 이전으로 돌아갑니다.");
+			runRoomMenu();
+			return;
+		}
+
 		Message msg = new Message();
 		msg.setType(Type.roomList);
-		msg.setMsg(menu);
+		msg.setMsg("" + menu);
 		send(msg);
 	}
 
 	private void runRoomMenu() {
 
 		printRoomMenu();
-		int menu = sc.nextInt();
-		switch (menu) {
-			case 1: // 방 만들기
-				insertRoom();
-				break;
-			case 2: // 방 검색 및 참여
-				serarchRoom();
-				break;
-			case 3: // 전적 조회
-				// 개인 성적 조회
-				// 전체 성적(랭크) 조회
-				// checkScore();
-				break;
-			case 4: // 회원 정보 변경 <구현 예정>
-				// updateUser()
-				// 아이디, 비밀번호, 새비밀번호
-				// 계정 삭제
-			case 5:
-				// exit(); 종료, 클라이언트 연결끊기 <구현 예정>
-				Message msg = new Message();
-				msg.setType(Type.exit);
-				send(msg);
-				isExit = true;
-				break;
-			default:
-				break;
+		try {
+			int menu = sc.nextInt();
+			switch (menu) {
+				case 1: // 방 만들기
+					insertRoom();
+					break;
+				case 2: // 방 검색 및 참여
+					serarchRoom();
+					break;
+				case 3: // 전적 조회
+					// 개인 성적 조회
+					// 전체 성적(랭크) 조회
+					// checkScore();
+					break;
+				case 4: // 회원 정보 변경 <구현 예정>
+					// updateUser()
+					// 아이디, 비밀번호, 새비밀번호
+					// 계정 삭제
+				case 5:
+					// exit(); 종료, 클라이언트 연결끊기 <구현 예정>
+					Message msg = new Message();
+					msg.setType(Type.exit);
+					send(msg);
+					isExit = true;
+					break;
+				default:
+					System.out.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+					runRoomMenu();
+					break;
+			}
+		} catch (InputMismatchException e) {
+			System.out.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			sc.nextLine();
+			runRoomMenu();
+			return;
 		}
-
 	}
 
 	private void serarchRoom() {
@@ -239,6 +261,7 @@ public class Client {
 		try {
 			gameNum = sc.nextInt();
 		} catch (InputMismatchException e) {
+			System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
 			gameNum = 6;
 		}
 
@@ -256,8 +279,11 @@ public class Client {
 			case 3:
 				gameName = Type.Typing;
 				break;
-			case 4 :
+			case 4:
 				gameName = Type.yacht;
+				break;
+			case 5:
+				gameName = Type.speedGame;
 				break;
 			default:
 				printWrongMenu();
@@ -316,25 +342,43 @@ public class Client {
 		// ID와 Password를 입력해서 서버에 전송
 
 		printLoginMenu();
-		int menu = sc.nextInt();
-
-		if (menu == 3) {
-			return; // 종료(구현예정)
+		int menu;
+		try {
+			menu = sc.nextInt();
+		} catch (InputMismatchException e) {
+			System.out.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			sc.nextLine();
+			inputUserLogin();
+			return;
 		}
 
-		System.out.print("아이디 : ");
-		id = sc.next();
-		System.out.print("비밀번호 : ");
-		String password = sc.next();
+		switch (menu) {
+			case 1:
+			case 2:
 
-		Message message = new Message();
-		message.setMsg(id + " " + password);
-		if (menu == 1) {
-			message.setType(Type.login);
-		} else {
-			message.setType(Type.join);
+				System.out.print("아이디 : ");
+				id = sc.next();
+				System.out.print("비밀번호 : ");
+				String password = sc.next();
+
+				Message message = new Message();
+				message.setMsg(id + " " + password);
+
+				if (menu == 1) {
+					message.setType(Type.login);
+				} else {
+					message.setType(Type.join);
+				}
+				send(message);
+				break;
+			case 3:
+				isExit = true;
+				return; // 종료
+			default:
+				System.out.println("메뉴를 잘 못 입력했습니다.");
+				inputUserLogin();
+				return;
 		}
-		send(message);
 	}
 
 	public void send(Message msg) {

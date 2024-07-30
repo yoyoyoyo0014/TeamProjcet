@@ -158,6 +158,11 @@ public class Server implements Program {
 		
 		if (cUserList.size() != 0) {
 			for (ConnectedUser tmp : cUserList) {
+				// 접속은 했지만 로그인은 안한 상태에서 종료
+				if(cUser.getUser() == null) {
+					System.out.println("[클라이언트 접속 종료]");
+					break;
+				}
 				String userId = cUser.getUser().getId();
 				if (tmp.getUser().getId().equals(userId)) {
 					Message msg = new Message();
@@ -194,8 +199,6 @@ public class Server implements Program {
 			// userList에서 접속한 사용자 제거
 			cUserList.remove(cUser);
 			userCount--;
-		} else {
-			System.out.println("[클라이언트 접속 종료]");
 		}
 
 	}
@@ -386,6 +389,7 @@ public class Server implements Program {
 
 			message.setMsg(msg);
 		}
+		message.setOpt1(""+roomList.size());
 		message.setType(Type.roomList);
 
 		send(oos, message);

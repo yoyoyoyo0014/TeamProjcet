@@ -2,16 +2,18 @@ package minigame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import lombok.Data;
 import program.Program;
 
 @Data
 public class Omok implements Program {
+	
+	public static final String yellow   = "\u001B[33m" ;
+  public static final String blue     = "\u001B[34m" ;
+  public static final String exit     = "\u001B[0m";
 
 	private List<String> list = new ArrayList<>();
 	private final static String row_init = "   0 1 2 3 4 5 6 7 8 9 A B C D E F";
@@ -112,7 +114,10 @@ public class Omok implements Program {
 		gameResult += row_init + "\n";
 		for (int i = 0x0; i < BOARD_SIZE; i++) {
 //			System.out.printf(" %X %s\n", i, list.get(i));
-			gameResult += " " + Integer.toHexString(i) + " " + list.get(i) + "\n";
+			String tmp = list.get(i).replace("B", blue +"●"+ exit);
+			tmp = tmp.replace("W", yellow +"●" + exit);
+			gameResult += " " + Integer.toHexString(i) + " " + tmp + "\n";
+			// ●
 		}
 	}
 
@@ -231,7 +236,7 @@ public class Omok implements Program {
 			// 16진수 값을 정수로 변환하여 저장
 			sel_r = Integer.parseInt(select.get(row), 16);
 			sel_c = Integer.parseInt(select.get(col), 16);
-		} catch (InputMismatchException e) {
+		} catch (Exception e) {
 			gameResult += "올바르지 않은 입력입니다." + currentTurn + "패배<반칙패>\n";
 
 			turnNext();
