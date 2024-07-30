@@ -35,7 +35,7 @@ public class Room {
 			case Type.baseBall:
 				msg = baseball.getCurrentTurn();
 				break;
-				// case Tag.otherGame :
+			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getCurrentTurn();
 				break;
@@ -45,10 +45,13 @@ public class Room {
 			case Type.yacht:
 				msg = yacht.getCurrentTurn();
 				break;
+			case Type.speedGame:
+				msg = speedGame.getCurrentTurn();
+				break;
 		}
 		return msg;
 	}
-	
+
 	public String getLoser() {
 		String msg = null;
 
@@ -56,7 +59,7 @@ public class Room {
 			case Type.baseBall:
 				msg = baseball.getLoser();
 				break;
-				// case Tag.otherGame :
+			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getLoser();
 				break;
@@ -67,12 +70,12 @@ public class Room {
 				msg = yacht.getLoser();
 				break;
 			case Type.speedGame:
-				msg = yacht.getLoser();
+				msg = speedGame.getLoser();
 				break;
 		}
 		return msg;
 	}
-	
+
 	public String getWinner() {
 		String msg = null;
 
@@ -80,7 +83,7 @@ public class Room {
 			case Type.baseBall:
 				msg = baseball.getWinner();
 				break;
-				// case Tag.otherGame :
+			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getWinner();
 				break;
@@ -91,7 +94,7 @@ public class Room {
 				msg = yacht.getWinner();
 				break;
 			case Type.speedGame:
-				msg = yacht.getWinner();
+				msg = speedGame.getWinner();
 				break;
 		}
 		return msg;
@@ -133,7 +136,7 @@ public class Room {
 				} else {
 					typing.run(message);
 				}
-				// word list를 객체로 넘겨줌. 
+				// word list를 객체로 넘겨줌.
 				tmp.setOptStr(typing.getWords());
 				tmp.setMsg(typing.getResult());
 				break;
@@ -148,14 +151,14 @@ public class Room {
 				tmp.setMsg(yacht.getResult());
 				break;
 			case Type.speedGame:
-				
+
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
 					isPlaying = Type.playing;
 				} else {
 					speedGame.run(message);
 				}
-				tmp.setMsg(yacht.getResult());
+				tmp.setMsg(speedGame.getResult());
 				break;
 
 //			case Tag.otherGame:
@@ -191,7 +194,7 @@ public class Room {
 				speedGame = new SpeedQuiz(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
-				
+
 		}
 
 	}
@@ -201,7 +204,5 @@ public class Room {
 		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:"
 				+ roomManager.getUser().getId() + ">";
 	}
-
-
 
 }

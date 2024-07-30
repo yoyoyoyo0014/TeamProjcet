@@ -31,6 +31,7 @@ public class Type {
 	final static String playing = "PLAYING"; // 게임 진행중
 	final static String end = "END"; // 게임 끝.
 	final static String Turn = "TURN"; // 내 차례
+	final static String allTurn = "ALLTURN"; // 모두가 입력을 받음.
 
 	// 기타 태그
 	final static String blank = ""; // 공백

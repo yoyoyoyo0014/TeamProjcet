@@ -1,8 +1,5 @@
 package 윤호.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SpeedQuiz {
 	public static SpeedQuiz[] sqList = {
 			new SpeedQuiz("대한민국 1세대 리그 오브 레전드 팀 중 하나인 CJ 엔투스 프로스트 멤버 중 1명으로 "

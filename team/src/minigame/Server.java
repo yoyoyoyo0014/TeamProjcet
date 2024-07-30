@@ -143,7 +143,7 @@ public class Server implements Program {
 					readMessage(msg);
 				}
 			} catch (IOException e) {
-				playerExit();	
+				playerExit();
 			} catch (ClassNotFoundException e) {
 				// (Message)ois.readObject(); 관련 에러
 				e.printStackTrace();
@@ -155,11 +155,11 @@ public class Server implements Program {
 	}
 
 	private void playerExit() {
-		
+
 		if (cUserList.size() != 0) {
 			for (ConnectedUser tmp : cUserList) {
 				// 접속은 했지만 로그인은 안한 상태에서 종료
-				if(cUser.getUser() == null) {
+				if (cUser.getUser() == null) {
 					System.out.println("[클라이언트 접속 종료]");
 					break;
 				}
@@ -237,7 +237,12 @@ public class Server implements Program {
 				}
 				break;
 			case Type.playing:
-				runGame(userRoom, message);
+				if (userRoom != null) {
+					runGame(userRoom, message);
+				} else {
+
+				}
+
 				break;
 			case Type.exit:
 				playerExit();
@@ -291,18 +296,27 @@ public class Server implements Program {
 				currTurn = currentRoom.getCurrentTurn();
 				msg.setType(Type.playing);
 				msg.setOpt1(currTurn);
-
+				send(currentRoom.getPlayer().getOos(), msg);
+				send(currentRoom.getRoomManager().getOos(), msg);
 				break;
 			case Type.playing:
-
+				if(!userRoom.getIsPlaying().equals("end")) {
 				msg = currentRoom.gameRun(message);
-
+				}
 				if (currentRoom.getWinner() == null) {
 
 					currTurn = currentRoom.getCurrentTurn();
 
 					msg.setType(Type.playing);
 					msg.setOpt1(currTurn);
+					
+					if(currTurn.equals(Type.allTurn)) {
+						send(oos, msg);
+					}
+					else{
+					send(currentRoom.getPlayer().getOos(), msg);
+					send(currentRoom.getRoomManager().getOos(), msg);
+					}
 
 				} else {
 					// 승자가 정해짐
@@ -310,23 +324,35 @@ public class Server implements Program {
 					// 방 폭파시키기
 
 					// [DB 등록 필요]
-					String gameTitle = currentRoom.getGameTitle();
-					String winner = currentRoom.getWinner();
-					String loser = currentRoom.getLoser();
-					msg.setType(Type.end);
-					msg.setOpt1(winner);
+					String gameTitle;
+					String winner;
+					String loser;
+//					if (currentRoom.getIsPlaying().equals(Type.playing)) {
+					gameTitle = currentRoom.getGameTitle();
+					winner = currentRoom.getWinner();
+					loser = currentRoom.getLoser();
+						recordScore(gameTitle, winner, loser);
+						if (!currentRoom.getIsPlaying().equals("end")) {
+							msg.setType(Type.end);
+							msg.setOpt1(winner);
+							send(currentRoom.getPlayer().getOos(), msg);
+							send(currentRoom.getRoomManager().getOos(), msg);
+							currentRoom.setIsPlaying("end");
+							roomList.remove(userRoom);
+					}
+						if (userRoom != null) {
+							userRoom = null;
+						}
+//					}
 
-					recordScore(gameTitle, winner, loser);
-					roomList.remove(userRoom);
-					userRoom = null;
+					return;
 				}
 
 				break;
 
 		}
 
-		send(currentRoom.getPlayer().getOos(), msg);
-		send(currentRoom.getRoomManager().getOos(), msg);
+		
 	}
 
 	public User getUserInfo(String userId) {
@@ -389,7 +415,7 @@ public class Server implements Program {
 
 			message.setMsg(msg);
 		}
-		message.setOpt1(""+roomList.size());
+		message.setOpt1("" + roomList.size());
 		message.setType(Type.roomList);
 
 		send(oos, message);

@@ -93,8 +93,9 @@ public class Client {
 				gamePlay(message);
 				break;
 			case Type.end:
-				System.out.println(message.getMsg());
-
+				if (message.getMsg() != null) {
+					System.out.println(message.getMsg());
+				}
 				if (message.getOpt1().equals("exit")) {
 					System.out.println("게임이 비정상적으로 종료되었습니다.");
 				} else if (message.getOpt1().equals(id)) {
@@ -116,8 +117,10 @@ public class Client {
 	}
 
 	private void gamePlay(Message message) {
+
 		System.out.print(message.getMsg());
-		if (id.equals(message.getOpt1())) {
+
+		if (id.equals(message.getOpt1()) || message.getOpt1().equals(Type.allTurn)) {
 			Message msg = new Message();
 			msg.setType(Type.playing);
 			if (message.getOptStr() != null) {
@@ -129,8 +132,8 @@ public class Client {
 				for (int i = 0; i < 10; i++) {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
-					if (answer.get(i).equals("exit")) {
-						msg.setOpt1("exit");
+					if (answer.get(i).equals(Type.exit)) {
+						msg.setOpt1(Type.exit);
 						send(msg);
 						return;
 					}
@@ -166,14 +169,13 @@ public class Client {
 		System.out.println(message);
 		System.out.println("(-1). 이전으로");
 		System.out.print("방 번호 입력 : ");
-		sc.nextLine();
 		int menu;
 		try {
 			menu = sc.nextInt();
 		} catch (InputMismatchException e) {
-			sc.nextLine();
 			System.out.println("번호를 잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
 			menu = -1;
+			sc.nextLine();
 		}
 		if (menu == -1) {
 			runRoomMenu();
@@ -185,6 +187,7 @@ public class Client {
 			return;
 		}
 
+		sc.nextLine();
 		Message msg = new Message();
 		msg.setType(Type.roomList);
 		msg.setMsg("" + menu);
@@ -382,6 +385,7 @@ public class Client {
 	}
 
 	public void send(Message msg) {
+		msg.setPName(id);
 
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(

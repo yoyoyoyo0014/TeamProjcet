@@ -16,6 +16,8 @@ public class Message implements Serializable {
 	private String Type;
 	private String msg;
 
+	private String pName;
+
 	private String opt1, opt2; // , ... 필요시 더 생성
 	private List<String> optStr;
 	public speedUser spduser;
