@@ -28,6 +28,7 @@ drop table if exists score;
 create table if not exists score(
 	sc_key int auto_increment primary key,
     sc_win int not null default 0,
+    sc_draw int not null default 0,
     sc_lose int not null default 0,
     sc_us_key int not null,
     sc_gm_key int not null,
