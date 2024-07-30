@@ -16,6 +16,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Client {
 
+	static final String black = "\u001B[30m";
+	static final String red = "\u001B[31m";
+	static final String green = "\u001B[32m";
+	static final String yellow = "\u001B[33m";
+	static final String blue = "\u001B[34m";
+	static final String purple = "\u001B[35m";
+	static final String cyan = "\u001B[36m";
+	static final String white = "\u001B[37m";
+
+	static final String exit = "\u001B[0m";
+
 	@NonNull
 	private Socket socket;
 	private static Scanner sc = new Scanner(System.in);
@@ -166,14 +177,15 @@ public class Client {
 	private void runRoomList(String message, int num) {
 
 		System.out.println("<방 목록>");
-		System.out.println(message);
-		System.out.println("(-1). 이전으로");
-		System.out.print("방 번호 입력 : ");
+		System.out.println("====================================");
+		System.out.print(message);
+		System.out.println("====================================");
+		System.out.print(">> 방 번호 입력 |이전으로:-1| : ");
 		int menu;
 		try {
 			menu = sc.nextInt();
 		} catch (InputMismatchException e) {
-			System.out.println("번호를 잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			System.err.println("번호를 잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
 			menu = -1;
 			sc.nextLine();
 		}
@@ -223,12 +235,12 @@ public class Client {
 					isExit = true;
 					break;
 				default:
-					System.out.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+					System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
 					runRoomMenu();
 					break;
 			}
 		} catch (InputMismatchException e) {
-			System.out.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			System.err.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
 			sc.nextLine();
 			runRoomMenu();
 			return;
@@ -249,26 +261,26 @@ public class Client {
 		// 새로 만드는 게임을 이곳에서 추가하면 됩니다.
 		// 선택된 게임의 Tag를 통해 gameName을 설정합니다.
 		// roomTitle은 방의 제목입니다.
-		System.out.println("-----------------------");
-		System.out.println("<방 만들기>");
-		System.out.println("1. 야구");
-		System.out.println("2. 오목");
-		System.out.println("3. Typing");
-		System.out.println("4. Yacht<미구현>");
-		System.out.println("5. SpeedQuiz<미구현>");
-		System.out.println("6. 이전으로 ");
-		System.out.println("-----------------------");
-		System.out.print("게임 선택 : ");
+		System.out.println("====================================");
+		System.out.println(" <방 만들기> ");
+		System.out.println(" 1. 야구");
+		System.out.println(" 2. 오목");
+		System.out.println(" 3. Typing");
+		System.out.println(" 4. Yacht <미구현>");
+		System.out.println(" 5. SpeedQuiz <미구현>");
+		System.out.println("====================================");
+		System.out.print("게임 선택 |이전으로:-1| : ");
 
 		int gameNum;
 		try {
 			gameNum = sc.nextInt();
 		} catch (InputMismatchException e) {
 			System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
-			gameNum = 6;
+			gameNum = -1;
+			sc.nextLine();
 		}
 
-		if (gameNum == 6) { // 이전으로
+		if (gameNum == -1) { // 이전으로
 			runRoomMenu();
 			return;
 		}
@@ -280,7 +292,7 @@ public class Client {
 				gameName = Type.omok;
 				break;
 			case 3:
-				gameName = Type.Typing;
+				gameName = Type.typing;
 				break;
 			case 4:
 				gameName = Type.yacht;
@@ -310,7 +322,7 @@ public class Client {
 	}
 
 	private void printWrongMenu() {
-		System.out.println("잘못된 메뉴를 선택하였습니다.");
+		System.err.println("잘못된 메뉴를 선택하였습니다.");
 	}
 
 	private void printPrev() {
@@ -319,25 +331,25 @@ public class Client {
 
 	private void printRoomMenu() {
 		// TODO Auto-generated method stub
-		System.out.println("-----------------------");
+		System.out.println("====================================");
 		System.out.println("<메뉴>");
 		System.out.println("1. 방 만들기");
 		System.out.println("2. 방 검색하기");
 		System.out.println("3. 전적 조회<구현예정>");
 		System.out.println("4. 회원 정보 변경<구현예정>");
 		System.out.println("5. 종료");
-		System.out.println("-----------------------");
+		System.out.println("====================================");
 		System.out.print("메뉴 선택 : ");
 
 	}
 
 	public void printLoginMenu() {
-		System.out.println("-----------------------");
+		System.out.println("====================================");
 		System.out.println("<로그인>");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
 		System.out.println("3. 종료<구현예정>");
-		System.out.println("-----------------------");
+		System.out.println("====================================");
 		System.out.print("메뉴선택 : ");
 	}
 
@@ -349,7 +361,7 @@ public class Client {
 		try {
 			menu = sc.nextInt();
 		} catch (InputMismatchException e) {
-			System.out.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			System.err.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
 			sc.nextLine();
 			inputUserLogin();
 			return;
@@ -378,7 +390,7 @@ public class Client {
 				isExit = true;
 				return; // 종료
 			default:
-				System.out.println("메뉴를 잘 못 입력했습니다.");
+				System.err.println("메뉴를 잘 못 입력했습니다.");
 				inputUserLogin();
 				return;
 		}

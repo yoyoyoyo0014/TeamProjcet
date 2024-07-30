@@ -10,7 +10,7 @@ public class ServerMain {
 	public static void main(String[] args) {
 		int port = 5001;
 		try {
-			// 서버용 소켓 객체 생성
+			// 서버용 소켓 객체 생성\
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("[연결 대기중]");
 			while (true) {

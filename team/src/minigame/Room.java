@@ -39,7 +39,7 @@ public class Room {
 			case Type.omok:
 				msg = omok.getCurrentTurn();
 				break;
-			case Type.Typing:
+			case Type.typing:
 				msg = typing.getCurrentTurn();
 				break;
 			case Type.yacht:
@@ -63,7 +63,7 @@ public class Room {
 			case Type.omok:
 				msg = omok.getLoser();
 				break;
-			case Type.Typing:
+			case Type.typing:
 				msg = typing.getLoser();
 				break;
 			case Type.yacht:
@@ -87,7 +87,7 @@ public class Room {
 			case Type.omok:
 				msg = omok.getWinner();
 				break;
-			case Type.Typing:
+			case Type.typing:
 				msg = typing.getWinner();
 				break;
 			case Type.yacht:
@@ -128,7 +128,7 @@ public class Room {
 				}
 				tmp.setMsg(omok.getResult());
 				break;
-			case Type.Typing:
+			case Type.typing:
 //				게임 이닛, 차례 정하고 초기화면 받기
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
@@ -181,7 +181,7 @@ public class Room {
 				omok = new Omok(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
-			case Type.Typing:
+			case Type.typing:
 				typing = new Typing(roomManager.getUser().getId(),
 						player.getUser().getId());
 				break;
@@ -201,8 +201,8 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:"
-				+ roomManager.getUser().getId() + ">";
+		return "[" + Type.kor_tag(gameTitle) + "]" + " [방제: " + roomTitle + "] [방장: "
+				+ roomManager.getUser().getId() + "] ";
 	}
 
 }

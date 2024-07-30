@@ -179,6 +179,7 @@ public class Server implements Program {
 
 					if (userRoom != null) {
 						if (userRoom.getIsPlaying() == Type.playing) {
+							userRoom.setIsPlaying(Type.end);
 							msg = new Message();
 
 							msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
@@ -300,8 +301,8 @@ public class Server implements Program {
 				send(currentRoom.getRoomManager().getOos(), msg);
 				break;
 			case Type.playing:
-				if(!userRoom.getIsPlaying().equals("end")) {
-				msg = currentRoom.gameRun(message);
+				if (!userRoom.getIsPlaying().equals("end")) {
+					msg = currentRoom.gameRun(message);
 				}
 				if (currentRoom.getWinner() == null) {
 
@@ -309,13 +310,12 @@ public class Server implements Program {
 
 					msg.setType(Type.playing);
 					msg.setOpt1(currTurn);
-					
-					if(currTurn.equals(Type.allTurn)) {
+
+					if (currTurn.equals(Type.allTurn)) {
 						send(oos, msg);
-					}
-					else{
-					send(currentRoom.getPlayer().getOos(), msg);
-					send(currentRoom.getRoomManager().getOos(), msg);
+					} else {
+						send(currentRoom.getPlayer().getOos(), msg);
+						send(currentRoom.getRoomManager().getOos(), msg);
 					}
 
 				} else {
@@ -327,23 +327,19 @@ public class Server implements Program {
 					String gameTitle;
 					String winner;
 					String loser;
-//					if (currentRoom.getIsPlaying().equals(Type.playing)) {
 					gameTitle = currentRoom.getGameTitle();
 					winner = currentRoom.getWinner();
 					loser = currentRoom.getLoser();
-						recordScore(gameTitle, winner, loser);
-						if (!currentRoom.getIsPlaying().equals("end")) {
-							msg.setType(Type.end);
-							msg.setOpt1(winner);
-							send(currentRoom.getPlayer().getOos(), msg);
-							send(currentRoom.getRoomManager().getOos(), msg);
-							currentRoom.setIsPlaying("end");
-							roomList.remove(userRoom);
+					recordScore(gameTitle, winner, loser);
+					if (!currentRoom.getIsPlaying().equals("end")) {
+						msg.setType(Type.end);
+						msg.setOpt1(winner);
+						send(currentRoom.getPlayer().getOos(), msg);
+						send(currentRoom.getRoomManager().getOos(), msg);
+						currentRoom.setIsPlaying("end");
+						roomList.remove(userRoom);
 					}
-						if (userRoom != null) {
-							userRoom = null;
-						}
-//					}
+					userRoom = null;
 
 					return;
 				}
@@ -352,7 +348,6 @@ public class Server implements Program {
 
 		}
 
-		
 	}
 
 	public User getUserInfo(String userId) {
@@ -410,7 +405,7 @@ public class Server implements Program {
 		if (roomList.size() != 0) {
 			msg = "";
 			for (int i = 0; i < roomList.size(); i++) {
-				msg += i + 1 + ". [" + roomList.get(i).getGameTitle() + "][" + roomList.get(i) + "]\n";
+				msg += i + 1 + ". " + roomList.get(i) + "\n";
 			}
 
 			message.setMsg(msg);

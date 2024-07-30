@@ -21,7 +21,7 @@ public class Type {
 	// 게임을 구분하기 위한 태그
 	final static String baseBall = "BASEBALL"; // 야구게임
 	final static String omok = "OMOK"; // 야구게임
-	final static String Typing = "TYPING"; // 타자 게임
+	final static String typing = "TYPING"; // 타자 게임
 	final static String yacht = "YACHT"; // 요트 게임
 	final static String speedGame = "SPEEDGAME";
 
@@ -43,8 +43,25 @@ public class Type {
 	final static String rank = "RANK"; // 전적조회(전체회원)
 	final static String search = "SEARCH"; // 전적조회(개인랭크)
 	final static String cuser = "CUSER"; // 접속유저 리스트
-	
+
 	// 종료
-	final static String exit = "EXIT"; // 종료 
+	final static String exit = "EXIT"; // 종료
+
+	public static String kor_tag(String gameTitle) {
+		switch (gameTitle) {
+			case baseBall:
+				return "야구";
+			case omok:
+				return "오목";
+			case typing:
+				return "타자";
+			case yacht:
+				return "요트";
+			case speedGame:
+				return "스피드";
+			default:
+				return "";
+		}
+	}
 
 }
