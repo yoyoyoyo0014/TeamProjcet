@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.Objects;
 import java.util.Scanner;
 
+import minigame.Message;
+
 //연결 소켓을 이용하여 데이터를 주고 받는(Scanner를 통해) 클래스
 
 public class Client {
@@ -23,9 +25,13 @@ public class Client {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 				while(true) {
-					id = ois.readUTF();
-					String chat = ois.readUTF();
-					int room_number = ois.readInt();
+					Message msg = (Message)ois.readObject();
+					id = msg.getSpduser().id;
+					String chat =  msg.getSpduser().chat;
+					int room_number =  msg.getSpduser().roomNum;
+//					id = ois.readUTF();
+//					String chat = ois.readUTF();
+//					int room_number = ois.readInt();
 					if(chat.equals(EXIT)) {
 						break;
 					}
@@ -41,7 +47,7 @@ public class Client {
 					
 					System.out.println(chat);
 				}
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			} 
 		});

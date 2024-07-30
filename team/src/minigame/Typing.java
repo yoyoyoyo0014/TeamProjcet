@@ -234,6 +234,17 @@ public class Typing implements Program {
 	}
 
 	public void run(Message message) {
+		
+		if(message.getOpt1().equals("exit")) {
+			if(currentTurn.equals(player1)) {
+				winner = player2;
+				loser = player1;
+			} else {
+				winner = player1;
+				loser = player2;
+			}
+			return;
+		}
 
 		answer = message.getOptStr();
 		calScore(currentTurn);
@@ -296,7 +307,7 @@ public class Typing implements Program {
 
 		for (int i = 0; i < 10; i++) {
 			
-			if (words.get(i).contains(answer.get(i))) {
+			if (!words.get(i).equals(answer.get(i))) {
 				score -= 100;
 			}
 		}

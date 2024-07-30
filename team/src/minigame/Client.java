@@ -124,9 +124,15 @@ public class Client {
 				List<String> answer = new ArrayList<String>();
 				System.out.println("게임을 시작하려면 Enter를 눌러주세요");
 				sc.nextLine();
+				
 				for (int i = 0; i < 10; i++) {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
+					if(answer.get(i).equals("exit")){
+						msg.setOpt1("exit");
+						send(msg);
+						return;		
+					}
 				}
 				msg.setOptStr(answer);
 			} else {
@@ -250,8 +256,8 @@ public class Client {
 			case 3:
 				gameName = Type.Typing;
 				break;
-			case 4:
-				gameName = "";
+			case 4 :
+				gameName = Type.yacht;
 				break;
 			default:
 				printWrongMenu();

@@ -22,6 +22,8 @@ public class Type {
 	final static String baseBall = "BASEBALL"; // 야구게임
 	final static String omok = "OMOK"; // 야구게임
 	final static String Typing = "TYPING"; // 타자 게임
+	final static String yacht = "YACHT"; // 요트 게임
+	final static String speedGame = "SPEEDGAME";
 
 	// 게임 관련 태그
 	final static String full = "FULL"; // 방 인원이 꽉 찼음
