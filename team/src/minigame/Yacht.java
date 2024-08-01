@@ -42,16 +42,17 @@ public class Yacht {
 		gameResult = Type.blank;
 
 		gameResult = "<게임을 시작합니다.>\n";
-		gameResult += "<" + player1 + " vs " + player2 + ">\n";
+
+		// 게임 룰 출력
+		printRule();
+
+		gameResult += "\n<" + player1 + " vs " + player2 + ">\n\n";
 
 		// 차례 정하기
 		currentTurnInit();
 
-		gameResult += "<player1은 " + currentTurn + "님 입니다.>\n";
-		gameResult += "<player1이 선입니다.>\n";
-
-		// 게임 룰 출력
-		printRule();
+		gameResult += "<player1은 " + currentTurn + "님 입니다.>\n\n";
+		gameResult += "<player1이 선입니다.>\n\n";
 
 		printTest(p1);
 
@@ -88,8 +89,9 @@ public class Yacht {
 	private void currentTurnInit() {
 //		if (new Random().nextBoolean()) {
 		currentTurn = player1;
-//		} else
+//		} else {
 //			currentTurn = player2;
+//		}
 	}
 
 	public String getResult() {
@@ -101,21 +103,15 @@ public class Yacht {
 	public void run(Message message) {
 
 		String[] input = message.getMsg().split(" ");
-		/*
-		 * // String으로 받은 숫자 <예: 3 6 9>를 // integer list로 생성 if (message.getMsg() ==
-		 * null) { // 입력받은 숫자가 안넘어온 것 Error 발생 } List<String> strNum = new
-		 * ArrayList<String>(); strNum = Arrays.asList(message.getMsg().split(" "));
-		 * List<Integer> userNum = new ArrayList<Integer>(); for (String tmp : strNum) {
-		 * userNum.add(Integer.parseInt(tmp)); }
-		 */
 
 		if (currentTurn.equals(player1)) {
 			if (p1.dices[0] == 0) {
 				printTest(p1);
-			}
-			else if (p1.reRollCount < 2) {
+			} else if (p1.reRollCount < 2) {
 				diceReroll(p1, message);
-				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.reRollCount) + "번): \n";
+				if (p1.reRollCount != 2) {
+					gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p1.reRollCount) + "번): \n";
+				}
 			}
 
 			if (p1.reRollCount == 2) {
@@ -123,186 +119,223 @@ public class Yacht {
 				p1.reRollCount++;
 			} else if (p1.reRollCount == 3) {
 				recPoint(p1, message);
-				print();
-
-				turnNext();
+				if (p1.reRollCount == 4) { // 족보에 값이 들어가면 실행
+					turnNext();
+				}
 			}
 		}
 
 		if (currentTurn.equals(player2)) {
 			if (p2.dices[0] == 0) {
 				printTest(p2);
-			}
-			else if (p2.reRollCount < 2) {
+			} else if (p2.reRollCount < 2) {
 				diceReroll(p2, message);
-
-				gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.reRollCount) + "번): \n";
+				if (p2.reRollCount != 2) {
+					gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - p2.reRollCount) + "번): \n";
+				}
 			}
 			if (p2.reRollCount == 2) {
 				gameResult += "\n1~12 중 어디에 넣을 건지를 선택하세요 : ";
 				p2.reRollCount++;
 			} else if (p2.reRollCount == 3) {
 				recPoint(p2, message);
-				print();
-				turnNext();
+				if (p2.reRollCount == 4) {
+					turnNext();
 
-//				total 초기화 이슈
-				p1.reRollCount = 0;
-				p2.reRollCount = 0;
-				turn++;
+					p1.reRollCount = 0;
+					p2.reRollCount = 0;
+					turn++;
+				}
+				// 12턴이 되면 게임을 종료
+				if (turn > 12) {
+					turn = 12;
+
+					// 결과 출력
+					printFinal();
+					
+					victory();
+					reset();
+					
+					return;
+				}
+
 			}
 		}
 
-		// Play();
+	}
+
+	private void victory() {
+		if (p1.total > p2.total) {
+			winner = player1;
+			loser = player2;
+			gameResult += "승자는 <" + winner + "님입니다>\n";
+		} else if (p1.total < p2.total) {
+			loser = player1;
+			winner = player2;
+			gameResult += "승자는 <" + winner + "님입니다>\n";
+		} else if(p1.total == p2.total){
+			winner = player1;
+			loser = player2;
+			gameResult += "무승부입니다.\n";
+		}
 	}
 
 	public void recPoint(YachtVariable yv, Message msg) {
 
-		// while문 조건용 변수
-		yv.validInput = false;
+		String SelHR = "0";
 
-		while (yv.validInput == false) {
-			String SelHR = "0";
+		SelHR = msg.getMsg();
 
-			//gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
-			SelHR = msg.getMsg();
-
-			switch (SelHR) {
-			case "1": {
-				if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue; // whlie문 다시 시작
-				}
-				yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
-				yv.oneBl = true;
-				yv.validInput = true; // while문 빠져나오는 용
-				break;
+		try {
+			int selection = Integer.parseInt(SelHR);
+			if (selection < 1 || selection > 12) {
+				throw new NumberFormatException();
 			}
-			case "2": {
-				if (yv.twoBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
-				yv.twoBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "3": {
-				if (yv.threeBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
-				yv.threeBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "4": {
-				if (yv.fourBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
-				yv.fourBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "5": {
-				if (yv.fiveBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
-				yv.fiveBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "6": {
-				if (yv.sixBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
-				yv.sixBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "7": {
-				if (yv.chBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
-				yv.chBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "8": {
-				if (yv.fkBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
-				yv.fkBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "9": {
-				if (yv.fhBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
-				yv.fhBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "10": {
-				if (yv.ssBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
-				yv.ssBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "11": {
-				if (yv.lsBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
-				yv.lsBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "12": {
-				if (yv.yaBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
-				yv.yaBl = true;
-				yv.validInput = true;
-				break;
-			}
-			}
-			// 보너스 점수 획득 가능한지 계산
-			yv.oneToSix = yv.one + yv.two + yv.three + yv.four + yv.five + yv.six;
-
-			if (yv.oneToSix >= 63) {
-				yv.bonusBl = true;
-				yv.bonus = 35;
-			}
-
-			for (int i = 0; i < yv.dices.length; i++) {
-				yv.dices[i] = 0;
-			}
-
-			yv.total = totalCal(yv);
+		} catch (NumberFormatException e) {
+			yv.duplicateInput++;
+			gameResult += "\n잘못된 입력입니다. 1부터 12까지의 숫자를 입력하세요 : ";
+			return;
 		}
+
+		switch (SelHR) {
+		case "1": {
+			if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
+			yv.oneBl = true;
+			break;
+		}
+		case "2": {
+			if (yv.twoBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
+			yv.twoBl = true;
+			break;
+		}
+		case "3": {
+			if (yv.threeBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
+			yv.threeBl = true;
+			break;
+		}
+		case "4": {
+			if (yv.fourBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
+			yv.fourBl = true;
+			break;
+		}
+		case "5": {
+			if (yv.fiveBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
+			yv.fiveBl = true;
+			break;
+		}
+		case "6": {
+			if (yv.sixBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
+			yv.sixBl = true;
+			break;
+		}
+		case "7": {
+			if (yv.chBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
+			yv.chBl = true;
+			break;
+		}
+		case "8": {
+			if (yv.fkBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
+			yv.fkBl = true;
+			break;
+		}
+		case "9": {
+			if (yv.fhBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
+			yv.fhBl = true;
+			break;
+		}
+		case "10": {
+			if (yv.ssBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
+			yv.ssBl = true;
+			break;
+		}
+		case "11": {
+			if (yv.lsBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
+			yv.lsBl = true;
+			break;
+		}
+		case "12": {
+			if (yv.yaBl == true) {
+				yv.duplicateInput++;
+				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+				return;
+			}
+			yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
+			yv.yaBl = true;
+			break;
+		}
+		}
+
+		yv.reRollCount++;
+		yv.duplicateInput = 0;
+
+		// 보너스 점수 획득 가능한지 계산
+		yv.oneToSix = yv.one + yv.two + yv.three + yv.four + yv.five + yv.six;
+		if (yv.oneToSix >= 63) {
+			yv.bonusBl = true;
+			yv.bonus = 35;
+		}
+
+		for (int i = 0; i < yv.dices.length; i++) {
+			yv.dices[i] = 0;
+		}
+
+		yv.total = totalCal(yv);
+
 	}
 
 	private void diceReroll(YachtVariable yv, Message message) {
@@ -311,17 +344,22 @@ public class Yacht {
 		String input = message.getMsg();
 		// 0을 입력하면 종료
 
-//		if (input.equals("0")) {
-//			// scanner.close();
-//			return;
-//		}
+		if (input.equals("0")) {
+			yv.reRollCount = 2;
+			return;
+		}
+
+		// 입력이 비어 있으면 다시 입력받기
+		if (input.isEmpty()) {
+			gameResult += "입력이 비어 있습니다. 다시 입력하세요.\n";
+			return; // 잘못된 입력이므로 다시 입력을 받도록 함
+		}
 
 		String[] inputArray = input.split(" ");
 
 		// 크기가 5인 배열 선언 및 초기화
 		int[] RerollDices = new int[5];
 
-		boolean validInput = true;
 		for (int i = 0; i < inputArray.length && i < RerollDices.length; i++) {
 			try {
 				int diceIndex = Integer.parseInt(inputArray[i]);
@@ -331,21 +369,10 @@ public class Yacht {
 				RerollDices[i] = diceIndex;
 			} catch (NumberFormatException e) {
 				gameResult += "잘못된 입력입니다. 1부터 5까지의 숫자를 공백으로 구분하여 입력하세요.\n";
-				validInput = false;
-				break;
+
+				return;
 			}
 		}
-
-		if (!validInput) {
-			// continue; // 잘못된 입력이므로 다시 입력을 받도록 함
-		}
-
-		/*
-		 * // 결과 배열 출력 System.out.print("결과 배열: ["); for (int i = 0; i <
-		 * RerollDices.length; i++) { System.out.print(RerollDices[i]); if (i <
-		 * RerollDices.length - 1) { System.out.print(", "); } }
-		 * System.out.println("]");
-		 */
 
 		for (int i = 0; i < RerollDices.length; i++) {
 			if (RerollDices[i] != 0) {
@@ -360,7 +387,7 @@ public class Yacht {
 			}
 			yv.dices[RerollDices[i] - 1] = random.nextInt(6) + 1; // 1부터 6까지의 랜덤 숫자 생성
 		}
-		
+
 		print();
 
 		gameResult += "다시 굴린 주사위 결과:\n";
@@ -370,37 +397,6 @@ public class Yacht {
 
 		yv.reRollCount++;
 
-		// r++;
-
-	}
-
-	public void Play() {
-		if (turn <= 12) {
-
-			// player1의 차례
-			playGame(p1);
-
-			// player2의 차례
-			playGame(p2);
-
-			gameResult += "-------------------------------------------------------------------\n\n";
-			turn++;
-		} else {
-			turn = 12;
-			print();
-
-			if (p1.total > p2.total) {
-				winner = player1;
-				loser = player2;
-				gameResult += "\n" + winner + "의 승리입니다!\n";
-			} else if (p1.total < p2.total) {
-				loser = player1;
-				winner = player2;
-				gameResult += "\n" + winner + "의 승리입니다!\n";
-			} else {
-				gameResult += "\n무승부입니다.\n";
-			}
-		}
 	}
 
 	private static void diceRoll(int[] dices) {
@@ -413,265 +409,8 @@ public class Yacht {
 		}
 	}
 
-	private static int diceReroll(int[] dices, int r) {
-		Random random = new Random();
-
-		while (true) {
-			// 사용자 입력 받기
-			System.out.print("다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + r + "번): ");
-			String input = scanner.nextLine();
-
-			// 0을 입력하면 종료
-			if (input.equals("0")) {
-				// scanner.close();
-				return 0;
-			}
-
-			// 입력이 비어 있으면 다시 입력받기
-			if (input.isEmpty()) {
-				gameResult += "입력이 비어 있습니다. 다시 입력하세요.\n";
-				continue; // 잘못된 입력이므로 다시 입력을 받도록 함
-			}
-
-			// 입력된 문자열을 공백을 기준으로 분리하여 배열에 저장
-			String[] inputArray = input.split(" ");
-
-			// 크기가 5인 배열 선언 및 초기화
-			int[] RerollDices = new int[5];
-
-			boolean validInput = true;
-			for (int i = 0; i < inputArray.length && i < RerollDices.length; i++) {
-				try {
-					int diceIndex = Integer.parseInt(inputArray[i]);
-					if (diceIndex < 1 || diceIndex > 5) {
-						throw new NumberFormatException(); // 1~5 사이의 숫자가 아니면 예외 발생
-					}
-					RerollDices[i] = diceIndex;
-				} catch (NumberFormatException e) {
-					gameResult += "잘못된 입력입니다. 1부터 5까지의 숫자를 공백으로 구분하여 입력하세요.\n";
-					validInput = false;
-					break;
-				}
-			}
-
-			if (!validInput) {
-				continue; // 잘못된 입력이므로 다시 입력을 받도록 함
-			}
-
-			/*
-			 * // 결과 배열 출력 System.out.print("결과 배열: ["); for (int i = 0; i <
-			 * RerollDices.length; i++) { System.out.print(RerollDices[i]); if (i <
-			 * RerollDices.length - 1) { System.out.print(", "); } }
-			 * System.out.println("]");
-			 */
-
-			for (int i = 0; i < RerollDices.length; i++) {
-				if (RerollDices[i] != 0) {
-					gameResult += RerollDices[i] + "번 \n";
-				}
-			}
-			gameResult += "주사위를 다시 돌립니다.\n";
-
-			for (int i = 0; i < 5; i++) {
-				if (RerollDices[i] == 0) {
-					break;
-				}
-				dices[RerollDices[i] - 1] = random.nextInt(6) + 1; // 1부터 6까지의 랜덤 숫자 생성
-			}
-			return r;
-
-			// r++;
-		}
-	}
-
-	public void playGame(YachtVariable yv) {
-
-		{
-			// 주사위 굴리기
-			diceRoll(yv.dices);
-
-			// 화면 출력
-			print();
-
-			// 배열의 내용을 출력
-			gameResult += "player1의 차례입니다\n";
-			gameResult += "주사위 결과:\n";
-			for (int result : yv.dices) {
-				gameResult += "[" + result + "]\n";
-			}
-
-			// 주사위 다시 굴리기(최대 2회)
-			for (int r = 2; r > 0;) {
-				// 주사위를 다시 굴리기
-				r = diceReroll(yv.dices, r);
-
-				// r = n;
-
-				print();
-				// 배열의 내용을 출력
-				gameResult += "다시 굴린 주사위 결과:\n";
-				for (int result : yv.dices) {
-					gameResult += "[" + result + "]\n\n";
-				}
-
-				r--;
-			}
-
-			recPoint(yv);
-		}
-	}
-
-	public void recPoint(YachtVariable yv) {
-
-		// while문 조건용 변수
-		yv.validInput = false;
-
-		while (yv.validInput == false) {
-			String SelHR = "0";
-
-			gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : \n";
-			SelHR = scanner.next();
-			scanner.nextLine();
-
-			switch (SelHR) {
-			case "1": {
-				if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue; // whlie문 다시 시작
-				}
-				yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
-				yv.oneBl = true;
-				yv.validInput = true; // while문 빠져나오는 용
-				break;
-			}
-			case "2": {
-				if (yv.twoBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
-				yv.twoBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "3": {
-				if (yv.threeBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
-				yv.threeBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "4": {
-				if (yv.fourBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
-				yv.fourBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "5": {
-				if (yv.fiveBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
-				yv.fiveBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "6": {
-				if (yv.sixBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
-				yv.sixBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "7": {
-				if (yv.chBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
-				yv.chBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "8": {
-				if (yv.fkBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
-				yv.fkBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "9": {
-				if (yv.fhBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
-				yv.fhBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "10": {
-				if (yv.ssBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
-				yv.ssBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "11": {
-				if (yv.lsBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
-				yv.lsBl = true;
-				yv.validInput = true;
-				break;
-			}
-			case "12": {
-				if (yv.yaBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
-				yv.yaBl = true;
-				yv.validInput = true;
-				break;
-			}
-			}
-			// 보너스 점수 획득 가능한지 계산
-			yv.oneToSix = yv.one + yv.two + yv.three + yv.four + yv.five + yv.six;
-
-			if (yv.oneToSix >= 63) {
-				yv.bonusBl = true;
-				yv.bonus = 35;
-			}
-
-			for (int i = 0; i < yv.dices.length; i++) {
-				yv.dices[i] = 0;
-			}
-
-			yv.total = totalCal(yv);
-		}
-	}
-
 	private void print() {
+		gameResult += "\n--------------------------------------------------------------\n";
 		gameResult += " ================================== \n";
 		gameResult += "|\t   Turn " + turn + "/12  \t\t   |\n";
 		gameResult += "|==================================|\n";
@@ -1049,143 +788,6 @@ public class Yacht {
 		gameResult += " ================================== \n";
 	}
 
-	private static void insertDice(YachtVariable yv) {
-		// while문 조건용 변수
-		boolean validInput = false;
-
-		// 족보에 무사히 값이 들어가면 while문 종료
-		while (validInput == false) {
-			String menu = "0";
-
-			gameResult += "1~12 중 어디에 넣을 건지를 선택하세요 : ";
-			menu = scanner.next();
-			scanner.nextLine();
-
-			switch (menu) {
-			case "1": {
-				if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue; // whlie문 다시 시작
-				}
-				yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
-				yv.oneBl = true;
-				validInput = true; // while문 빠져나오는 용
-				break;
-			}
-			case "2": {
-				if (yv.twoBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
-				yv.twoBl = true;
-				validInput = true;
-				break;
-			}
-			case "3": {
-				if (yv.threeBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
-				yv.threeBl = true;
-				validInput = true;
-				break;
-			}
-			case "4": {
-				if (yv.fourBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
-				yv.fourBl = true;
-				validInput = true;
-				break;
-			}
-			case "5": {
-				if (yv.fiveBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
-				yv.fiveBl = true;
-				validInput = true;
-				break;
-			}
-			case "6": {
-				if (yv.sixBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
-				yv.sixBl = true;
-				validInput = true;
-				break;
-			}
-			case "7": {
-				if (yv.chBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
-				yv.chBl = true;
-				validInput = true;
-				break;
-			}
-			case "8": {
-				if (yv.fkBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
-				yv.fkBl = true;
-				validInput = true;
-				break;
-			}
-			case "9": {
-				if (yv.fhBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
-				yv.fhBl = true;
-				validInput = true;
-				break;
-			}
-			case "10": {
-				if (yv.ssBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
-				yv.ssBl = true;
-				validInput = true;
-				break;
-			}
-			case "11": {
-				if (yv.lsBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
-				yv.lsBl = true;
-				validInput = true;
-				break;
-			}
-			case "12": {
-				if (yv.yaBl == true) {
-					gameResult += "이미 등록되어 있습니다. 다른 족보를 선택해주세요.\n";
-					continue;
-				}
-				yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
-				yv.yaBl = true;
-				validInput = true;
-				break;
-			}
-			}
-		}
-	}
-
 	private static int oneCal(int[] dices, int one, boolean oneBl) {
 		// 숫자 1의 개수를 세기 위한 변수 선언
 		int count = 0;
@@ -1552,4 +1154,158 @@ public class Yacht {
 		gameResult += " ======================================================================= \n\n";
 	}
 
+	private void printFinal() {
+		gameResult += "\n--------------------------------------------------------------\n";
+		gameResult += " ================================== \n";
+		gameResult += "|\t   Turn " + turn + "/12  \t\t   |\n";
+		gameResult += "|==================================|\n";
+		gameResult += "| Categorries\t |player1 |player2 |\n";
+		gameResult += "|==================================|\n";
+
+		// 1 ~ 6
+		gameResult += "|1. Aces\t | " + oneCal(p1.dices, p1.one, p1.oneBl) + "\t  | "
+				+ oneCal(p2.dices, p2.one, p2.oneBl) + "\t   |\n";
+
+		gameResult += "|2. Deuces\t | " + twoCal(p1.dices, p1.two, p1.twoBl) + "\t  | "
+				+ twoCal(p2.dices, p2.two, p2.twoBl) + "\t   |\n";
+
+		gameResult += "|3. Threes\t | " + threeCal(p1.dices, p1.three, p1.threeBl) + "\t  | "
+				+ threeCal(p2.dices, p2.three, p2.threeBl) + "\t   |\n";
+
+		gameResult += "|4. Fours\t | " + fourCal(p1.dices, p1.four, p1.fourBl) + "\t  | "
+				+ fourCal(p2.dices, p2.four, p2.fourBl) + "\t   |\n";
+
+		gameResult += "|5. Fives\t | " + fiveCal(p1.dices, p1.five, p1.fiveBl) + "\t  | "
+				+ fiveCal(p2.dices, p2.five, p2.fiveBl) + "\t   |\n";
+
+		gameResult += "|6. Sixes\t | " + sixCal(p1.dices, p1.six, p1.sixBl) + "\t  | "
+				+ sixCal(p2.dices, p2.six, p2.sixBl) + "\t   |\n";
+
+		gameResult += "|==================================|\n";
+
+		// 보너스
+		if (p1.oneToSix > 9 && p2.oneToSix > 9) {
+			gameResult += "|Subtotal\t | " + p1.oneToSix + "/63" + "  | " + p2.oneToSix + "/63  |\n";
+		} else if (p1.oneToSix > 9 && p2.oneToSix < 10) {
+			gameResult += "|Subtotal\t | " + p1.oneToSix + "/63" + "  | " + p2.oneToSix + "/63   |\n";
+		} else if (p1.oneToSix < 10 && p2.oneToSix > 9) {
+			gameResult += "|Subtotal\t | " + p1.oneToSix + "/63\t" + "  | " + p2.oneToSix + "/63  |\n";
+		} else {
+			gameResult += "|Subtotal\t | " + p1.oneToSix + "/63\t" + "  | " + p2.oneToSix + "/63   |\n";
+		}
+
+		gameResult += "|----------------------------------|\n";
+		gameResult += "|+35 Bonus\t | " + "+" + bonusCal(p1.bonusBl) + "\t  | " + "+" + bonusCal(p2.bonusBl)
+				+ "\t   |\n";
+		gameResult += "|==================================|\n";
+
+		// choice
+		gameResult += "|7. Choice\t | " + chCal(p1.dices, p1.ch, p1.chBl) + "\t  | " + chCal(p2.dices, p2.ch, p2.chBl)
+				+ "\t   |\n";
+		gameResult += "|==================================|\n";
+
+		// 특수 족보
+		gameResult += "|8. 4 of a Kind  | " + fkCal(p1.dices, p1.fk, p1.fkBl) + "\t  | "
+				+ fkCal(p2.dices, p2.fk, p2.fkBl) + "\t   |\n";
+
+		gameResult += "|9. Full House   | " + fhCal(p1.dices, p1.fh, p1.fhBl) + "\t  | "
+				+ fhCal(p2.dices, p2.fh, p2.fhBl) + "\t   |\n";
+
+		gameResult += "|10. S. Straight | " + ssCal(p1.dices, p1.ss, p1.ssBl) + "\t  | "
+				+ ssCal(p2.dices, p2.ss, p2.ssBl) + "\t   |\n";
+
+		gameResult += "|11. L. Straight | " + lsCal(p1.dices, p1.ls, p1.lsBl) + "\t  | "
+				+ lsCal(p2.dices, p2.ls, p2.lsBl) + "\t   |\n";
+
+		gameResult += "|12. Yacht\t | " + yaCal(p1.dices, p1.ya, p1.yaBl) + "\t  | " + yaCal(p2.dices, p2.ya, p2.yaBl)
+				+ "\t   |\n";
+
+		// 합계 출력
+		gameResult += "|==================================|\n";
+
+		if (p1.total > 99 && p2.total > 99) {
+			gameResult += "| Total\t\t | " + blue + p1.total + exit + "\t\t  | " + blue + p2.total + exit + "\t   |\n";
+		} else if (p1.total > 99 && p2.total < 100) {
+			gameResult += "| Total\t\t | " + blue + p1.total + exit + "\t\t  | " + blue + p2.total + exit
+					+ "\t\t   |\n";
+		} else if (p1.total < 100 && p2.total > 99) {
+			gameResult += "| Total\t\t | " + blue + p1.total + exit + "\t\t  | " + blue + p2.total + exit + "\t   |\n";
+		} else if (p1.total < 100 && p2.total < 100) {
+			gameResult += "| Total\t\t | " + blue + p1.total + exit + "\t\t  | " + blue + p2.total + exit
+					+ "\t\t   |\n";
+		} else {
+			gameResult += "| Total\t\t | " + blue + p1.total + exit + "\t\t  | " + blue + p2.total + exit + "\t\t|\n";
+		}
+
+		gameResult += " ================================== \n";
+	}
+
+	private void reset() {
+		{
+			p1.one = 0;
+			p1.two = 0;
+			p1.three = 0;
+			p1.four = 0;
+			p1.five = 0;
+			p1.six = 0;
+			p1.bonus = 0;
+			p1.ch = 0;
+			p1.fk = 0;
+			p1.fh = 0;
+			p1.ss = 0;
+			p1.ls = 0;
+			p1.ya = 0;
+			
+			p1.oneBl = false;
+			p1.twoBl = false;
+			p1.threeBl = false;
+			p1.fourBl = false;
+			p1.fiveBl = false;
+			p1.sixBl = false;
+			p1.chBl = false;
+			p1.fkBl = false;
+			p1.fhBl = false;
+			p1.ssBl = false;
+			p1.lsBl = false;
+			p1.yaBl = false;
+
+			p1.oneToSix = 0;
+
+			p1.total = 0;
+		}
+		
+		{
+			p2.one = 0;
+			p2.two = 0;
+			p2.three = 0;
+			p2.four = 0;
+			p2.five = 0;
+			p2.six = 0;
+			p2.bonus = 0;
+			p2.ch = 0;
+			p2.fk = 0;
+			p2.fh = 0;
+			p2.ss = 0;
+			p2.ls = 0;
+			p2.ya = 0;
+			
+			p2.oneBl = false;
+			p2.twoBl = false;
+			p2.threeBl = false;
+			p2.fourBl = false;
+			p2.fiveBl = false;
+			p2.sixBl = false;
+			p2.chBl = false;
+			p2.fkBl = false;
+			p2.fhBl = false;
+			p2.ssBl = false;
+			p2.lsBl = false;
+			p2.yaBl = false;
+
+			p2.oneToSix = 0;
+
+			p2.total = 0;
+		}
+	}
+	
 }

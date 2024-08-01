@@ -32,7 +32,9 @@ public class YachtVariable {
 		boolean ssBl = false;
 		boolean lsBl = false;
 		boolean yaBl = false;
+		
 		int reRollCount = 0;
+		int duplicateInput = 0;
 		
 		boolean bonusBl = false;
 		boolean validInput = false;
