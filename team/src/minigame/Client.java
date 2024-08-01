@@ -150,12 +150,14 @@ public class Client {
 					}
 				}
 				msg.setOptStr(answer);
-			} else {
+			} 
+			else {
 				String input = sc.nextLine();
 				msg.setMsg(input);
 			}
 			send(msg);
-		} else {
+		}
+		else {
 			System.out.println("<상대방의 차례입니다.>");
 		}
 	}

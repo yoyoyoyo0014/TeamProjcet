@@ -22,24 +22,19 @@ public class Typing implements Program {
 	private List<String> words = new ArrayList<String>();
 	private List<String> answer = new ArrayList<String>();
 
-	private List<Integer> sfirst = new ArrayList<>();
-	private List<Integer> slast = new ArrayList<>();
-
 	private String player1;
 	private String player2;
 
 	private String gameResult;
-
+	
 	private String first;
 	private String last;
 
 	private String currentTurn;
-
+	
 	private String winner = null;
 	private String loser = null;
-
-	// 점수 p1,p2 분리했습니다.
-	// int totalScore = 0;
+	
 	int p1TotalScore = 0;
 	int p2TotalScore = 0;
 
@@ -48,20 +43,21 @@ public class Typing implements Program {
 	String formatedNow, formatedAfter;
 	LocalDateTime after;
 
-	int turn = 0;
-
 	public String getResult() {
 		String tmp = gameResult;
 		gameResult = "";
 		return tmp;
 	}
-
+	
+	int turn = 0;
+	
 	private void currentTurnInit() {
 		if (new Random().nextBoolean()) {
 			currentTurn = player1;
 		} else
 			currentTurn = player2;
 	}
+
 
 	public Typing(String player1, String player2) {
 
@@ -77,11 +73,13 @@ public class Typing implements Program {
 		gameResult += "게임이 시작되면 문장이 나옵니다\n";
 		gameResult += "문장이 나오는 순간부터 시간이 흐릅니다!\n";
 		gameResult += "빠르고 정확하게 문장을 따라 입력합니다\n";
-		gameResult += "시간과 정확도에 따라 점수가 설정되고, 점수가 높은 사람이 승리하게 됩니다.\n";
-
+		gameResult += "시간과 정확도에 따라 점수가 설정되고,\n점수가 높은 사람이 승리하게 됩니다.\n";
+		gameResult += "게임을 도중에 중지하고 싶으시다면\n콘솔 창에 'EXIT'를 입력해주세요.\n";
+		gameResult += "하지만 게임을 중지하게 된다면 패배하게 됩니다.\n";
+		
 		currentTurnInit();
 
-		gameResult += currentTurn + "님 차례입니다.>\n";
+		gameResult += "<" + currentTurn + "님 차례입니다.>\n";
 
 		if (player1.equals(currentTurn)) {
 			first = player1;
@@ -95,69 +93,6 @@ public class Typing implements Program {
 		Collections.shuffle(words);
 
 		timeReset();
-	}
-
-	private void start() {
-
-		// (수정1) init 함수에서 변수 선언했습니다.
-		// centens();
-		// Collections.shuffle(words);
-		//
-		// (수정2) 전연 변수로 뺏습니다.
-		// int totalScore = 0;
-		// (수정2-1)계산하는 부분으로 옮겼습니다.
-		// int score = 0;
-
-		// System.out.println("게임을 시작하려면 Enter를 눌러주세요");
-
-		// (수정) 일단 주석 처리했습니다.
-		// System.out.println("Enter가 아닌 다른 버튼을 입력한 경우 패배하게 됩니다");
-		// scan.nextLine();
-		// String str1 = scan.nextLine();
-		//
-		// if (!str1.isBlank()) {
-		// System.out.println("게임을 포기하셨습니다.");
-		// return;
-		// } else {
-		// System.out.println("게임 시작!");
-		// }
-
-		// (수정 3) 전역 변수로 뺏습니다.
-		// now, formatter, formaterdNow, after, formatter2, formatedAfter
-
-		// (수정 3-5) timeReset 메소드로 따로 만들었습니다.
-		// now = LocalDateTime.now();
-		// formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		// formatedNow = now.format(formatter);
-
-		// (수정 4) 해당 for문은 Client로 넘겼습니다.
-		// for (int i = 0; i < 10; i++) {
-		// System.out.println(words.get(i));
-		// answer.add(scan.nextLine());
-		// }
-
-		//
-		// (수정 5) 점수 계산하는 부분으로 메소드 따로 만들었습니다.
-		// 메소드명 : calScore();
-
-		/*
-		 * after = LocalDateTime.now(); formatedAfter = after.format(formatter);
-		 * 
-		 * long diff = 0;
-		 * 
-		 * try { diff = timeOper(formatedNow, formatedAfter); } catch
-		 * (ParseException e) { e.printStackTrace(); }
-		 * 
-		 * score = (int) Math.max(15000 - diff, 0);
-		 * 
-		 * for (int i = 0; i < 10; i++) { words.get(i).contains(answer.get(i));
-		 * if (words.get(i) != answer.get(i)) { score -= 100; } }
-		 * 
-		 * totalScore += score;
-		 */
-
-		return;
-
 	}
 
 	private void centens() {
@@ -232,10 +167,11 @@ public class Typing implements Program {
 			currentTurn = player1;
 		}
 	}
-
+	
 	public void run(Message message) {
 		
-		if(message.getOpt1() != null && message.getOpt1().equals("exit")) {
+		if(message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
+			gameResult += currentTurn + "님이 게임을 포기하셨습니다.";
 			if(currentTurn.equals(player1)) {
 				winner = player2;
 				loser = player1;
@@ -250,14 +186,14 @@ public class Typing implements Program {
 		calScore(currentTurn);
 		timeReset();
 		
-
-		if (turn == 2) {
+		if(turn == 2) {
 			victory();
 		}
 		else {
 			turnNext();
+			gameResult += "<" + currentTurn + "님 차례입니다.>\n";
 		}
-
+		
 	}
 
 	private void timeReset() {
@@ -277,20 +213,15 @@ public class Typing implements Program {
 			loser = player1;
 			winner = player2;
 		} else {
-			// p1TotalScore == p2TotalScore
-			// 무승부도 구현하실거?
+			gameResult += "게임이 종료되었습니다.\n무승부입니다.\n";
 		}
 
-		System.out.println("게임이 종료되었습니다. 승자는 <" + winner + ">입니다.");
+		gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.";
 	}
 
 	private void calScore(String currentTurn) {
 
 		int score;
-
-		if (currentTurn.equals(player1)) {
-		} else {
-		}
 
 		after = LocalDateTime.now();
 		formatedAfter = after.format(formatter);
@@ -305,12 +236,12 @@ public class Typing implements Program {
 
 		score = (int) Math.max(15000 - diff, 0);
 
-		for (int i = 0; i < 10; i++) {
-			
+		for(int i = 0; i < 10; i++) {
 			if (!words.get(i).equals(answer.get(i))) {
 				score -= 100;
 			}
 		}
+		
 		if (currentTurn.equals(player1)) {
 			p1TotalScore += score;
 		} else {
