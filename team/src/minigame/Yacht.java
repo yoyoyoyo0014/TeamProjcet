@@ -9,7 +9,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 import lombok.Data;
-import program.Program;
 
 @Data
 public class Yacht {
@@ -71,10 +70,6 @@ public class Yacht {
 
 		// 사용자 입력 받기
 		gameResult += "\n다시 굴릴 주사위 번호를 입력하세요 (예: 1 2 4, 종료는 0, 남은 기회 : " + (2 - yv.reRollCount) + "번): \n";
-	}
-
-	private void start() {
-		return;
 	}
 
 	public void turnNext() {
