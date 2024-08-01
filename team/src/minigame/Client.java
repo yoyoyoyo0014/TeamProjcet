@@ -158,7 +158,7 @@ public class Client {
 			send(msg);
 		}
 		else {
-			System.out.println("<상대방의 차례입니다.>");
+			System.out.println("상대방이 입력 중입니다.");
 		}
 	}
 

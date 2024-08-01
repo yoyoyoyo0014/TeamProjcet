@@ -78,6 +78,8 @@ public class Typing implements Program {
 		gameResult += "하지만 게임을 중지하게 된다면 패배하게 됩니다.\n";
 		
 		currentTurnInit();
+		
+		gameResult += "========================\n";
 
 		gameResult += "<" + currentTurn + "님 차례입니다.>\n";
 
@@ -171,7 +173,9 @@ public class Typing implements Program {
 	public void run(Message message) {
 		
 		if(message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
-			gameResult += currentTurn + "님이 게임을 포기하셨습니다.";
+			gameResult += "========================\n";
+			gameResult += currentTurn + "님이 게임을 포기하셨습니다.\n";
+			gameResult += "========================\n";
 			if(currentTurn.equals(player1)) {
 				winner = player2;
 				loser = player1;
@@ -179,6 +183,8 @@ public class Typing implements Program {
 				winner = player1;
 				loser = player2;
 			}
+			
+			gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.";
 			return;
 		}
 
@@ -191,6 +197,7 @@ public class Typing implements Program {
 		}
 		else {
 			turnNext();
+			gameResult += "========================\n";
 			gameResult += "<" + currentTurn + "님 차례입니다.>\n";
 		}
 		
@@ -216,7 +223,9 @@ public class Typing implements Program {
 			gameResult += "게임이 종료되었습니다.\n무승부입니다.\n";
 		}
 
+		gameResult += "========================\n";
 		gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.";
+		gameResult += "========================\n";
 	}
 
 	private void calScore(String currentTurn) {
