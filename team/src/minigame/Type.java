@@ -46,6 +46,7 @@ public class Type {
 
 	// 종료
 	final static String exit = "EXIT"; // 종료
+	final static String logout = "LOGOUT"; // 로그아웃
 
 	public static String kor_tag(String gameTitle) {
 		switch (gameTitle) {

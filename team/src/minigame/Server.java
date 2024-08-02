@@ -459,6 +459,12 @@ public class Server implements Program {
 
 	private void userJoin(String id, String password) {
 		// user 회원가입
+		
+		
+		// ****디비 아이디 넣고 없으면
+		// 아이디랑 비밀번호 넣어서 회원가입.
+
+		
 		Message msg = new Message();
 		User joinUser = new User(id, password);
 		if (totalUser.contains(joinUser)) {
@@ -489,6 +495,8 @@ public class Server implements Program {
 		// totalUser에서 아이디와 비밀번호가 일치한 지
 		// 현재 접속한 유저인 지
 		Message msg = new Message();
+		
+		// ****디비에 id랑 password를 넘겨주고 로그인
 
 		if (totalUser.size() == 0) {
 			msg.setMsg("등록된 유저가 없습니다.");

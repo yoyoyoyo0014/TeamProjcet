@@ -97,6 +97,13 @@ public class Yacht {
 	public void run(Message message) {
 
 		String[] input = message.getMsg().split(" ");
+		if (input.equals(Type.exit)) {
+			
+				loser = message.getPName();
+//				winner
+				
+				return;	
+		}
 
 		if (currentTurn.equals(player1)) {
 			if (p1.dices[0] == 0) {
