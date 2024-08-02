@@ -32,30 +32,90 @@ public class Client {
 	private static Scanner sc = new Scanner(System.in);
 	private ObjectInputStream ois;
 
+	private List<Message> list = new ArrayList<Message>();
+
 	// 로그인 시 입력받은 id
 	private String id;
 
 	private boolean isExit = false;
 
+	private boolean mainTurn = true;
+	private boolean threadTurn = false;
+
+	private void runSub() {
+
+		Thread t = new Thread(() -> {
+			try {
+				while (true) {
+					while (!threadTurn) {
+						mainTurn = true;
+						Thread.sleep(200);
+					}
+
+					Message msg = (Message) ois.readObject();
+					if (msg.getType().equals(Type.alert)) {
+//						System.out.println("sub >> ");
+						readMessage(msg);
+					} else {
+						list.add(msg);
+					}
+
+				}
+			} catch (ClassNotFoundException | IOException | InterruptedException e) {
+
+			}
+
+		});
+		t.start();
+
+	}
+
 	public void run() {
+
+		runSub();
+
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
-
 			while (true) {
+
 				if (isExit) {
 					System.out.println("종료합니다.");
 					break;
 				}
-				Message msg = (Message) ois.readObject();
+
+				while (!mainTurn) {
+					Thread.sleep(200);
+				}
+
+				Message msg;
+				while (list.size() != 0) {
+					msg = list.get(0);
+					list.remove(0);
+					readMessage(msg);
+					continue;
+				}
+
+				msg = (Message) ois.readObject();
+
+				threadTurn = true;
+				mainTurn = false;
+
 				readMessage(msg);
+
+				threadTurn = false;
 			}
 
 			// ois.close();
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			//
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// (Message) ois.readObject() 에러
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -67,7 +127,8 @@ public class Client {
 
 		switch (tag) {
 			case Type.alert:
-				System.out.println(message.getMsg());
+				if (message.getMsg() != null && message.getMsg().length() != 0)
+					System.out.println(message.getMsg());
 				break;
 			case Type.login:
 				if (message.getMsg() != null) {
@@ -150,14 +211,12 @@ public class Client {
 					}
 				}
 				msg.setOptStr(answer);
-			} 
-			else {
+			} else {
 				String input = sc.nextLine();
 				msg.setMsg(input);
 			}
 			send(msg);
-		}
-		else {
+		} else {
 			System.out.println("상대방이 입력 중입니다.");
 		}
 	}
@@ -229,20 +288,28 @@ public class Client {
 					// updateUser()
 					// 아이디, 비밀번호, 새비밀번호
 					// 계정 삭제
-				case 5:
-					// exit(); 종료, 클라이언트 연결끊기 <구현 예정>
+				case 5: // 로그아웃
 					Message msg = new Message();
 					msg.setType(Type.exit);
+					msg.setOpt1(Type.logout);
 					send(msg);
+					id = Type.blank;
+					inputUserLogin();
+					break;
+				case 6: // 종료
+					Message msg1 = new Message();
+					msg1.setType(Type.exit);
+					msg1.setOpt1(Type.exit);
+					send(msg1);
 					isExit = true;
 					break;
 				default:
-					System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+					System.err.println("잘 못 입력했습니다. <메뉴>로 돌아갑니다.");
 					runRoomMenu();
 					break;
 			}
 		} catch (InputMismatchException e) {
-			System.err.println("잘 못 입력하셨습니다. 이전으로 돌아갑니다.");
+			System.err.println("잘 못 입력하셨습니다. <메뉴>로 돌아갑니다.");
 			sc.nextLine();
 			runRoomMenu();
 			return;
@@ -263,15 +330,8 @@ public class Client {
 		// 새로 만드는 게임을 이곳에서 추가하면 됩니다.
 		// 선택된 게임의 Tag를 통해 gameName을 설정합니다.
 		// roomTitle은 방의 제목입니다.
-		System.out.println("====================================");
-		System.out.println(" <방 만들기> ");
-		System.out.println(" 1. 야구");
-		System.out.println(" 2. 오목");
-		System.out.println(" 3. Typing");
-		System.out.println(" 4. Yacht <미구현>");
-		System.out.println(" 5. SpeedQuiz <미구현>");
-		System.out.println("====================================");
-		System.out.print("게임 선택 |이전으로:-1| : ");
+
+		printGameList();
 
 		int gameNum;
 		try {
@@ -331,15 +391,29 @@ public class Client {
 		System.out.println("이전으로 돌아갑니다.");
 	}
 
+	private void printGameList() {
+
+		System.out.println("====================================");
+		System.out.println(" <방 만들기> ");
+		System.out.println(" 1. 야구");
+		System.out.println(" 2. 오목");
+		System.out.println(" 3. Typing");
+		System.out.println(" 4. Yacht <미구현>");
+		System.out.println(" 5. SpeedQuiz <미구현>");
+		System.out.println("====================================");
+		System.out.print("게임 선택 |이전으로:-1| : ");
+
+	}
+
 	private void printRoomMenu() {
-		// TODO Auto-generated method stub
 		System.out.println("====================================");
 		System.out.println("<메뉴>");
 		System.out.println("1. 방 만들기");
 		System.out.println("2. 방 검색하기");
 		System.out.println("3. 전적 조회<구현예정>");
 		System.out.println("4. 회원 정보 변경<구현예정>");
-		System.out.println("5. 종료");
+		System.out.println("5. 로그아웃");
+		System.out.println("6. 종료");
 		System.out.println("====================================");
 		System.out.print("메뉴 선택 : ");
 
@@ -350,7 +424,7 @@ public class Client {
 		System.out.println("<로그인>");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
-		System.out.println("3. 종료<구현예정>");
+		System.out.println("3. 종료");
 		System.out.println("====================================");
 		System.out.print("메뉴선택 : ");
 	}
@@ -359,6 +433,7 @@ public class Client {
 		// ID와 Password를 입력해서 서버에 전송
 
 		printLoginMenu();
+
 		int menu;
 		try {
 			menu = sc.nextInt();
@@ -370,8 +445,8 @@ public class Client {
 		}
 
 		switch (menu) {
-			case 1:
-			case 2:
+			case 1: // 로그인
+			case 2: // 회원가입
 
 				System.out.print("아이디 : ");
 				id = sc.next();
@@ -388,6 +463,7 @@ public class Client {
 				}
 				send(message);
 				break;
+
 			case 3:
 				isExit = true;
 				return; // 종료

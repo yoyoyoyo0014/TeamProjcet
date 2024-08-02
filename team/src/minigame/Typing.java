@@ -26,15 +26,15 @@ public class Typing implements Program {
 	private String player2;
 
 	private String gameResult;
-	
+
 	private String first;
 	private String last;
 
 	private String currentTurn;
-	
+
 	private String winner = null;
 	private String loser = null;
-	
+
 	int p1TotalScore = 0;
 	int p2TotalScore = 0;
 
@@ -48,16 +48,15 @@ public class Typing implements Program {
 		gameResult = "";
 		return tmp;
 	}
-	
+
 	int turn = 0;
-	
+
 	private void currentTurnInit() {
 		if (new Random().nextBoolean()) {
 			currentTurn = player1;
 		} else
 			currentTurn = player2;
 	}
-
 
 	public Typing(String player1, String player2) {
 
@@ -76,9 +75,9 @@ public class Typing implements Program {
 		gameResult += "시간과 정확도에 따라 점수가 설정되고,\n점수가 높은 사람이 승리하게 됩니다.\n";
 		gameResult += "게임을 도중에 중지하고 싶으시다면\n콘솔 창에 'EXIT'를 입력해주세요.\n";
 		gameResult += "하지만 게임을 중지하게 된다면 패배하게 됩니다.\n";
-		
+
 		currentTurnInit();
-		
+
 		gameResult += "========================\n";
 
 		gameResult += "<" + currentTurn + "님 차례입니다.>\n";
@@ -160,7 +159,7 @@ public class Typing implements Program {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void turnNext() {
 
 		if (currentTurn.equals(player1)) {
@@ -169,21 +168,21 @@ public class Typing implements Program {
 			currentTurn = player1;
 		}
 	}
-	
+
 	public void run(Message message) {
-		
-		if(message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
+
+		if (message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
 			gameResult += "========================\n";
 			gameResult += currentTurn + "님이 게임을 포기하셨습니다.\n";
 			gameResult += "========================\n";
-			if(currentTurn.equals(player1)) {
+			if (currentTurn.equals(player1)) {
 				winner = player2;
 				loser = player1;
 			} else {
 				winner = player1;
 				loser = player2;
 			}
-			
+
 			gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.";
 			return;
 		}
@@ -191,24 +190,23 @@ public class Typing implements Program {
 		answer = message.getOptStr();
 		calScore(currentTurn);
 		timeReset();
-		
-		if(turn == 2) {
+
+		if (turn == 2) {
 			victory();
-		}
-		else {
+		} else {
 			turnNext();
 			gameResult += "========================\n";
 			gameResult += "<" + currentTurn + "님 차례입니다.>\n";
 		}
-		
+
 	}
 
 	private void timeReset() {
-		
+
 		now = LocalDateTime.now();
 		formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		formatedNow = now.format(formatter);
-		
+
 	}
 
 	private void victory() {
@@ -221,10 +219,12 @@ public class Typing implements Program {
 			winner = player2;
 		} else {
 			gameResult += "게임이 종료되었습니다.\n무승부입니다.\n";
+			winner = "both";
+			loser = "both";
 		}
 
 		gameResult += "========================\n";
-		gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.";
+		gameResult += "게임이 종료되었습니다.\n승자는 <" + winner + ">입니다.\n";
 		gameResult += "========================\n";
 	}
 
@@ -245,12 +245,12 @@ public class Typing implements Program {
 
 		score = (int) Math.max(15000 - diff, 0);
 
-		for(int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++) {
 			if (!words.get(i).equals(answer.get(i))) {
 				score -= 100;
 			}
 		}
-		
+
 		if (currentTurn.equals(player1)) {
 			p1TotalScore += score;
 		} else {
@@ -260,4 +260,5 @@ public class Typing implements Program {
 		turn++;
 
 	}
+
 }
