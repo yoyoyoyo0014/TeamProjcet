@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import minigame.db.dao.UserDAO;
+import minigame.db.model.vo.UserVO;
 
 // Service Implement 
 public class UserServiceImp implements UserService {
@@ -27,6 +28,15 @@ public class UserServiceImp implements UserService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public UserVO Login(String id, String pw) {
+		return userDao.LoginUser(id, pw);
+	}
+
+	public boolean ExistUser(String id) {
+		 UserVO user = userDao.ExistLogin(id);
+		 return user ==null ? false : true;
 	}
 
 }

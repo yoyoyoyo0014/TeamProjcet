@@ -3,6 +3,7 @@ package minigame.db.controller;
 import java.util.Scanner;
 
 import lombok.NoArgsConstructor;
+import minigame.db.model.vo.UserVO;
 import minigame.db.service.GameServiceImp;
 import minigame.db.service.ScoreServiceImp;
 import minigame.db.service.UserServiceImp;
@@ -19,7 +20,14 @@ public class UserController { // 인터페이스로 선언.
 	public UserController(Scanner scan) {
 		this.scan = scan;
 	}
-
 	
+	public boolean ExistUser(String id) {
+		return userService.ExistUser(id);
+	}
+
+	public UserVO LoginUser(String id,String pw) {
+		UserVO user= userService.Login(id,pw);
+		return user;
+	}
 
 }
