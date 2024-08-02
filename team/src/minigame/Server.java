@@ -311,19 +311,20 @@ public class Server implements Program {
 
 				msg.setType(Type.playing);
 				msg.setOpt1(currTurn);
-				if(currTurn.equals(Type.allTurn)) {
-					
+				if(currTurn.equals(Type.allTurn)&&!msg.isEnd()) {
+					/*
 					if(!msg.isTurnEnd()) {
 						if(!msg.isNotPost()) {
 							System.out.println("한 사람만 문제 완료");
-							send(oos, msg);
+							
 						}
 					}else{
 						msg.setTurnEnd(false);
 						System.out.println("모든 사람이 문제 완료");
 						send(currentRoom.getPlayer().getOos(), msg);
 						send(currentRoom.getRoomManager().getOos(), msg);
-					}
+					}*/
+					send(oos, msg);
 				}
 			} else {
 

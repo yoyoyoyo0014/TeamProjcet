@@ -166,12 +166,16 @@ public class Room {
 			}else {
 				tmp.setTurnEnd(false);
 			}
-			
+			if(speedGame.end ) {
+				System.out.println("안끝나");
+				tmp.setEnd(true);
+			}
+			/*
 			if(speedGame.notPost) {
 				tmp.setNotPost(true);
 			}else {
 				tmp.setNotPost(false);
-			}
+			}*/
 			break;
 
 //			case Tag.otherGame:

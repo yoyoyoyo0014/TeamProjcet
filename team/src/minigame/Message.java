@@ -25,5 +25,7 @@ public class Message implements Serializable {
 
 	private boolean turnEnd = false;
 	private boolean notPost = false;
+	
+	private boolean end = false;
 //	public boolean getTurnEnd;
 }

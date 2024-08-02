@@ -71,7 +71,7 @@ public class SpeedQuiz {
 	boolean sucP2 = false;
 
 	boolean notPost = false;
-	
+	boolean end = false;
 	int winCount =3;
 	//public void resetturnEnd() {
 	//	turnEnd = false;
@@ -113,9 +113,10 @@ public class SpeedQuiz {
 	}
 
 	public void run(Message msg) {
+		boolean success = false;
 		if (msg.equals("")) {
 			return;
-		}
+		}/*
 		else if (!isEnd) {
 			//다른 한명이 성공했을 때   
 			if(sucP1 && !firstSelectPlayer.equals(msg.getPName())) {
@@ -145,12 +146,13 @@ public class SpeedQuiz {
 				gameResult += "엔터를 딱 한 번 누르고 상대편을 기다려주세요";
 				return;
 			}
-
-
+*/
+			
 
 			for (String tmp : answer) {
 				if (tmp.equals(msg.getMsg())) {
 					if (winner == null) {
+						success = true;
 						//처음으로 성공했을 때
 						firstSelectPlayer = msg.getPName();
 						String winnerName = msg.getPName();
@@ -158,12 +160,13 @@ public class SpeedQuiz {
 						
 						if(winnerName.equals(player1)) {
 							player1WinCount++;
-							if(player2WinCount>=winCount) {
-
+							if(player1WinCount>=winCount) {
+								System.out.println("우승");
 								winner = msg.getPName();
 								loser = winner.equals(player1) ? player2 : player1;
 								gameResult += "끝!";
 								notPost = false;
+								end = true;
 								msg.setOpt1(winner);
 								return;
 							}
@@ -171,25 +174,42 @@ public class SpeedQuiz {
 						else 
 						{
 							player2WinCount++;
-							if (player1WinCount>=winCount) {
+							if (player2WinCount>=winCount) {
+								System.out.println("우승");
 								winner = msg.getPName();
 								loser = winner.equals(player1) ? player2 : player1;
 								gameResult += "끝!";
 								notPost = false;
+								end = true;
 								msg.setOpt1(winner);
 								return;
 							}
 						}
+						gameResult +=Score()+"\n";
+
+						GetRandomQuizNum();
+						int i = currentQuizNum;
+						quiz = sqList[i].problem;
+
+						gameResult += quiz;
+
+						answer = sqList[i].answer;
+
+						gameResult += "정답 입력 >> ";
+						/*
 						if(!sucP1 ) {
 							gameResult += "엔터를 딱 한번 누르고 상대편을 기다려주세요";
 							sucP1 = true;
 							return;
-						}
+						}*/
 						break;
 					}
 				}
 			}
 
+		if(!success&& winner==null)
+		{
+			gameResult +=  "떙!";
 		}
 
 		if (winner == null) {
