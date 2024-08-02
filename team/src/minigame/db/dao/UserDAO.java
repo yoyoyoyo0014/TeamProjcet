@@ -11,5 +11,9 @@ public interface UserDAO {
 	UserVO LoginUser(@Param("id")String id,@Param("pw") String pw);
 
 	UserVO ExistLogin(@Param("id")String id);
+
+	String findPassWord(@Param("id")String id, @Param("email")String email);
+	
+	boolean JoinMembership(@Param("us")UserVO user);
 	
 }
