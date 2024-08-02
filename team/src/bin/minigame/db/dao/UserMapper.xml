@@ -14,12 +14,12 @@
 		where us_id=#{id} and us_pw=#{pw};
 	</select>
 	<select id="findPassWord" resultType = "String">
-		select pw
+		select us_pw
 		from user
 		where us_id = #{id} and us_email =#{email};
 	</select>
 	<insert id="JoinMembership">
-	insert into(us_id,us_email,us_pw)
+	insert  into user(us_id,us_email,us_pw)
 	values(#{us.us_id},#{us.us_email},#{us.us_pw})
 	</insert>
 </mapper>

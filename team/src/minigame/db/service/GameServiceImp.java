@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import minigame.db.dao.GameDAO;
+import minigame.db.model.vo.UserVO;
 
 // Service Implement 
 public class GameServiceImp implements UserService {
@@ -32,6 +33,30 @@ public class GameServiceImp implements UserService {
 	public boolean insertGame(String gameTitle) {
 
 		return gameDao.insertGame(gameTitle);
+	}
+
+	@Override
+	public UserVO Login(String id, String pw) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean ExistUser(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String FindPassWord(String id, String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean JoinMembership(String id, String email, String pw) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

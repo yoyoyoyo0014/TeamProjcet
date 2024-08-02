@@ -42,7 +42,7 @@ public class UserServiceImp implements UserService {
 	//비밀번호 찾기 아이디가 존재하지 않거나 이메일과 아이디가 맞지 않을 때 null 값
 	public String FindPassWord(String id, String email) {
 		
-		if(ExistUser(id)) {
+		if(!ExistUser(id)) {
 			return null;
 		}
 		return userDao.findPassWord(id,email);
