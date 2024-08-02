@@ -60,8 +60,8 @@ public class Yacht {
 	private void printTest(YachtVariable yv) {
 		diceRoll(yv.dices);
 		print();
-
-		gameResult += "player1의 차례입니다\n";
+		String tmp = "player" + (currentTurn.equals(player1) ? 1 : 2);
+		gameResult += "<" + tmp + ":" + currentTurn + ">님 의 차례입니다\n";
 		gameResult += "주사위 결과:\n";
 
 		for (int result : yv.dices) {
@@ -73,7 +73,6 @@ public class Yacht {
 	}
 
 	public void turnNext() {
-
 		if (currentTurn.equals(player1)) {
 			currentTurn = player2;
 		} else {
@@ -140,6 +139,14 @@ public class Yacht {
 					p1.reRollCount = 0;
 					p2.reRollCount = 0;
 					turn++;
+
+//					gameResult += "turn :" + turn + "이 종료되었습니다. 계속하려면 enter를 눌러주세요.\n";
+
+					if (turn <= 12) {
+						Message tmp = new Message();
+						tmp.setMsg("");
+						run(tmp);
+					}
 				}
 				// 12턴이 되면 게임을 종료
 				if (turn > 12) {
@@ -147,10 +154,10 @@ public class Yacht {
 
 					// 결과 출력
 					printFinal();
-					
+
 					victory();
 					reset();
-					
+
 					return;
 				}
 
@@ -168,7 +175,7 @@ public class Yacht {
 			loser = player1;
 			winner = player2;
 			gameResult += "승자는 <" + winner + "님입니다>\n";
-		} else if(p1.total == p2.total){
+		} else if (p1.total == p2.total) {
 			winner = player1;
 			loser = player2;
 			gameResult += "무승부입니다.\n";
@@ -193,126 +200,126 @@ public class Yacht {
 		}
 
 		switch (SelHR) {
-		case "1": {
-			if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "1": {
+				if (yv.oneBl == true) { // 족보에 이미 값이 들어가 있으면
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
+				yv.oneBl = true;
+				break;
 			}
-			yv.one = oneCal(yv.dices, yv.one, yv.oneBl);
-			yv.oneBl = true;
-			break;
-		}
-		case "2": {
-			if (yv.twoBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "2": {
+				if (yv.twoBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
+				yv.twoBl = true;
+				break;
 			}
-			yv.two = twoCal(yv.dices, yv.two, yv.twoBl);
-			yv.twoBl = true;
-			break;
-		}
-		case "3": {
-			if (yv.threeBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "3": {
+				if (yv.threeBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
+				yv.threeBl = true;
+				break;
 			}
-			yv.three = threeCal(yv.dices, yv.three, yv.threeBl);
-			yv.threeBl = true;
-			break;
-		}
-		case "4": {
-			if (yv.fourBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "4": {
+				if (yv.fourBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
+				yv.fourBl = true;
+				break;
 			}
-			yv.four = fourCal(yv.dices, yv.four, yv.fourBl);
-			yv.fourBl = true;
-			break;
-		}
-		case "5": {
-			if (yv.fiveBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "5": {
+				if (yv.fiveBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
+				yv.fiveBl = true;
+				break;
 			}
-			yv.five = fiveCal(yv.dices, yv.five, yv.fiveBl);
-			yv.fiveBl = true;
-			break;
-		}
-		case "6": {
-			if (yv.sixBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "6": {
+				if (yv.sixBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
+				yv.sixBl = true;
+				break;
 			}
-			yv.six = sixCal(yv.dices, yv.six, yv.sixBl);
-			yv.sixBl = true;
-			break;
-		}
-		case "7": {
-			if (yv.chBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "7": {
+				if (yv.chBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
+				yv.chBl = true;
+				break;
 			}
-			yv.ch = chCal(yv.dices, yv.ch, yv.chBl);
-			yv.chBl = true;
-			break;
-		}
-		case "8": {
-			if (yv.fkBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "8": {
+				if (yv.fkBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
+				yv.fkBl = true;
+				break;
 			}
-			yv.fk = fkCal(yv.dices, yv.fk, yv.fkBl);
-			yv.fkBl = true;
-			break;
-		}
-		case "9": {
-			if (yv.fhBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "9": {
+				if (yv.fhBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
+				yv.fhBl = true;
+				break;
 			}
-			yv.fh = fhCal(yv.dices, yv.fh, yv.fhBl);
-			yv.fhBl = true;
-			break;
-		}
-		case "10": {
-			if (yv.ssBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "10": {
+				if (yv.ssBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
+				yv.ssBl = true;
+				break;
 			}
-			yv.ss = ssCal(yv.dices, yv.ss, yv.ssBl);
-			yv.ssBl = true;
-			break;
-		}
-		case "11": {
-			if (yv.lsBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "11": {
+				if (yv.lsBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
+				yv.lsBl = true;
+				break;
 			}
-			yv.ls = lsCal(yv.dices, yv.ls, yv.lsBl);
-			yv.lsBl = true;
-			break;
-		}
-		case "12": {
-			if (yv.yaBl == true) {
-				yv.duplicateInput++;
-				gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
-				return;
+			case "12": {
+				if (yv.yaBl == true) {
+					yv.duplicateInput++;
+					gameResult += "\n이미 등록되어 있습니다. 다른 족보를 선택해주세요 : ";
+					return;
+				}
+				yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
+				yv.yaBl = true;
+				break;
 			}
-			yv.ya = yaCal(yv.dices, yv.ya, yv.yaBl);
-			yv.yaBl = true;
-			break;
-		}
 		}
 
 		yv.reRollCount++;
@@ -1250,7 +1257,7 @@ public class Yacht {
 			p1.ss = 0;
 			p1.ls = 0;
 			p1.ya = 0;
-			
+
 			p1.oneBl = false;
 			p1.twoBl = false;
 			p1.threeBl = false;
@@ -1268,7 +1275,7 @@ public class Yacht {
 
 			p1.total = 0;
 		}
-		
+
 		{
 			p2.one = 0;
 			p2.two = 0;
@@ -1283,7 +1290,7 @@ public class Yacht {
 			p2.ss = 0;
 			p2.ls = 0;
 			p2.ya = 0;
-			
+
 			p2.oneBl = false;
 			p2.twoBl = false;
 			p2.threeBl = false;
@@ -1302,5 +1309,5 @@ public class Yacht {
 			p2.total = 0;
 		}
 	}
-	
+
 }
