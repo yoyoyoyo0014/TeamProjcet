@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerMain {
-
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		int port = 5001;

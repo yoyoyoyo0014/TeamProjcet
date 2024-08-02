@@ -31,6 +31,8 @@ public class Server implements Program {
 	private ObjectOutputStream oos;
 	private ConnectedUser cUser;
 	private Room userRoom;
+	
+	
 
 	private void sendUserLogin(Message msg) {
 		// Id와 Password 입력하도록 요청한다.
@@ -179,7 +181,6 @@ public class Server implements Program {
 
 					if (userRoom != null) {
 						if (userRoom.getIsPlaying() == Type.playing) {
-							userRoom.setIsPlaying(Type.end);
 							msg = new Message();
 
 							msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
@@ -205,50 +206,50 @@ public class Server implements Program {
 	}
 
 	private void readMessage(Message message) {
-//		if(message.getMsg().equals("")) {
-//			System.out.println("");
-//		}
+		//		if(message.getMsg().equals("")) {
+		//			System.out.println("");
+		//		}
 		String type = message.getType();
 
 		switch (type) {
-			case Type.login:
-				receiveUserLogin(message.getMsg());
-				break;
-			case Type.join:
-				receiveUserJoin(message.getMsg());
-				break;
-			case Type.createRoom:
-				// opt1에 gameTitle
-				if (message.getOpt1() == null) {
-					// Error 구현 예정
-				}
-				String gameTitle = message.getOpt1();
-				createRoom(gameTitle, message.getMsg());
-				break;
-			case Type.roomList:
-				// 방 리스트를 client에게 보여주고
-				// 방 번호를 선택할 수 있도록 한다.
-				// 생성된 방이 없다면 방이없다고 알려주고
-				// 이전화면으로 이동, 이전으로 기능도 같이 구현
-				if (message.getMsg() == null) {
-					sendRoomList();
-				} else {
-					int roomNum = Integer.parseInt(message.getMsg()) - 1;
-					enterRoom(roomNum);
-				}
-				break;
-			case Type.playing:
-				if (userRoom != null) {
-					runGame(userRoom, message);
-				} else {
+		case Type.login:
+			receiveUserLogin(message.getMsg());
+			break;
+		case Type.join:
+			receiveUserJoin(message.getMsg());
+			break;
+		case Type.createRoom:
+			// opt1에 gameTitle
+			if (message.getOpt1() == null) {
+				// Error 구현 예정
+			}
+			String gameTitle = message.getOpt1();
+			createRoom(gameTitle, message.getMsg());
+			break;
+		case Type.roomList:
+			// 방 리스트를 client에게 보여주고
+			// 방 번호를 선택할 수 있도록 한다.
+			// 생성된 방이 없다면 방이없다고 알려주고
+			// 이전화면으로 이동, 이전으로 기능도 같이 구현
+			if (message.getMsg() == null) {
+				sendRoomList();
+			} else {
+				int roomNum = Integer.parseInt(message.getMsg()) - 1;
+				enterRoom(roomNum);
+			}
+			break;
+		case Type.playing:
+			if (userRoom != null) {
+				runGame(userRoom, message);
+			} else {
 
-				}
+			}
 
-				break;
-			case Type.exit:
-				playerExit();
-				break;
-			default:
+			break;
+		case Type.exit:
+			playerExit();
+			break;
+		default:
 
 		}
 
@@ -269,7 +270,7 @@ public class Server implements Program {
 			send(oos, msg);
 		} else { // 방에 인원이 모두 차서 게임을 시작합니다.
 			msg.setType(Type.start);
-//			msg.setType(Type.playing);
+			//			msg.setType(Type.playing);
 			userRoom = tmpRoom;
 			userRoom.setPlayer(cUser);
 			runGame(userRoom, msg);
@@ -280,73 +281,86 @@ public class Server implements Program {
 	private void runGame(Room currentRoom, Message message) {
 		// TODO Auto-generated method stub
 
-//	게임을 관리하는 메소드 
-//	게임 태그는 크게 start, playing, end로 나뉨 
-//	start : 처음 게임을 시작할 때 안내 멘트와 유저 인터페이스를 제공 
-//	playing : client의 입력 값을 토대로 result를 구하여 client에게 반환 
-//	결과와 다음 차례를 넣어서 보냄 
-//	end : 게임이 끝난 경우로 승자를 안내하고, 데이터를 기록한다. 
-//	end는 server에서 client로 보낼 때 사용하는 태그라 server 받을 일은 없을 듯
+		//	게임을 관리하는 메소드 
+		//	게임 태그는 크게 start, playing, end로 나뉨 
+		//	start : 처음 게임을 시작할 때 안내 멘트와 유저 인터페이스를 제공 
+		//	playing : client의 입력 값을 토대로 result를 구하여 client에게 반환 
+		//	결과와 다음 차례를 넣어서 보냄 
+		//	end : 게임이 끝난 경우로 승자를 안내하고, 데이터를 기록한다. 
+		//	end는 server에서 client로 보낼 때 사용하는 태그라 server 받을 일은 없을 듯
 
 		Message msg = new Message();
-		String currTurn; // 현재 차례
+		String currTurn = null; // 현재 차례
 		switch (message.getType()) {
-			case Type.start:
-				currentRoom.gameInit();
+		case Type.start:
+			currentRoom.gameInit();
+			msg = currentRoom.gameRun(message);
+			currTurn = currentRoom.getCurrentTurn();
+			msg.setType(Type.playing);
+			msg.setOpt1(currTurn);
+			send(currentRoom.getPlayer().getOos(), msg);
+			send(currentRoom.getRoomManager().getOos(), msg);
+			break;
+		case Type.playing:
+			if(!userRoom.getIsPlaying().equals("end")) {
 				msg = currentRoom.gameRun(message);
+			}
+			if (currentRoom.getWinner() == null) {
+
 				currTurn = currentRoom.getCurrentTurn();
+
 				msg.setType(Type.playing);
 				msg.setOpt1(currTurn);
-				send(currentRoom.getPlayer().getOos(), msg);
-				send(currentRoom.getRoomManager().getOos(), msg);
-				break;
-			case Type.playing:
-				if (!userRoom.getIsPlaying().equals("end")) {
-					msg = currentRoom.gameRun(message);
+				if(currTurn.equals(Type.allTurn)) {
+					
+					if(!msg.isTurnEnd()) {
+						if(!msg.isNotPost()) {
+							System.out.println("한 사람만 문제 완료");
+							send(oos, msg);
+						}
+					}else{
+						msg.setTurnEnd(false);
+						System.out.println("모든 사람이 문제 완료");
+						send(currentRoom.getPlayer().getOos(), msg);
+						send(currentRoom.getRoomManager().getOos(), msg);
+					}
 				}
-				if (currentRoom.getWinner() == null) {
+			} else {
 
-					currTurn = currentRoom.getCurrentTurn();
+				// 승자가 정해짐
+				// 승패 기록
+				// 방 폭파시키기
 
-					msg.setType(Type.playing);
-					msg.setOpt1(currTurn);
+				// [DB 등록 필요]
+				String gameTitle;
+				String winner;
+				String loser;
+				//					if (currentRoom.getIsPlaying().equals(Type.playing)) {
+				gameTitle = currentRoom.getGameTitle();
+				winner = currentRoom.getWinner();
+				loser = currentRoom.getLoser();
+				recordScore(gameTitle, winner, loser);
 
-					if (currTurn.equals(Type.allTurn)) {
-						send(oos, msg);
-					} else {
-						send(currentRoom.getPlayer().getOos(), msg);
-						send(currentRoom.getRoomManager().getOos(), msg);
-					}
-
-				} else {
-					// 승자가 정해짐
-					// 승패 기록
-					// 방 폭파시키기
-
-					// [DB 등록 필요]
-					String gameTitle;
-					String winner;
-					String loser;
-					gameTitle = currentRoom.getGameTitle();
-					winner = currentRoom.getWinner();
-					loser = currentRoom.getLoser();
-					recordScore(gameTitle, winner, loser);
-					if (!currentRoom.getIsPlaying().equals("end")) {
-						msg.setType(Type.end);
-						msg.setOpt1(winner);
-						send(currentRoom.getPlayer().getOos(), msg);
-						send(currentRoom.getRoomManager().getOos(), msg);
-						currentRoom.setIsPlaying("end");
-						roomList.remove(userRoom);
-					}
+				if (!currentRoom.getIsPlaying().equals("end")) {
+					msg.setType(Type.end);
+					msg.setOpt1(winner);
+					send(currentRoom.getPlayer().getOos(), msg);
+					send(currentRoom.getRoomManager().getOos(), msg);
+					currentRoom.setIsPlaying("end");
+					roomList.remove(userRoom);
+				}
+				if (userRoom != null) {
 					userRoom = null;
-
-					return;
 				}
+				//					}
 
-				break;
+				return;
+			}
+
+			break;
 
 		}
+
 
 	}
 
@@ -405,7 +419,7 @@ public class Server implements Program {
 		if (roomList.size() != 0) {
 			msg = "";
 			for (int i = 0; i < roomList.size(); i++) {
-				msg += i + 1 + ". " + roomList.get(i) + "\n";
+				msg += i + 1 + ". [" + roomList.get(i).getGameTitle() + "][" + roomList.get(i) + "]\n";
 			}
 
 			message.setMsg(msg);

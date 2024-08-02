@@ -1,5 +1,6 @@
 package minigame;
 
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class Message implements Serializable {
 
 	private String opt1, opt2; // , ... 필요시 더 생성
 	private List<String> optStr;
-	public speedUser spduser;
+	public speedUser spduser = new speedUser(msg, Type, 0, null);
 
+	private boolean turnEnd = false;
+	private boolean notPost = false;
+//	public boolean getTurnEnd;
 }
