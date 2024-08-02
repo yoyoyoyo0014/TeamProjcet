@@ -11,6 +11,7 @@ public class UserVO {
 	private int us_key; // 멤버 번호
 	private String us_id;
 	private String us_pw;
+	private String us_email;
 	
 	public UserVO(String us_id, String us_pw) {
 		
