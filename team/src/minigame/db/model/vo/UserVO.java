@@ -13,9 +13,10 @@ public class UserVO {
 	private String us_pw;
 	private String us_email;
 	
-	public UserVO(String us_id, String us_pw) {
+	public UserVO(String us_id, String us_pw,String us_email) {
 		
 		this.us_id = us_id;
 		this.us_pw = us_pw;
+		this.us_email = us_email;
 	}
 }

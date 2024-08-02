@@ -73,9 +73,9 @@ public class SpeedQuiz {
 	boolean notPost = false;
 	boolean end = false;
 	int winCount =3;
-	//public void resetturnEnd() {
-	//	turnEnd = false;
-	//}
+
+	String[] player1Result;
+	String[] player2Result;
 	//세로운 문제 
 	public void GetRandomQuizNum() {
 		//게임 정답지 세팅
@@ -96,7 +96,6 @@ public class SpeedQuiz {
 
 
 	public SpeedQuiz(String p1, String p2) {
-
 		player1 = p1;
 		player2 = p2;
 
@@ -109,6 +108,8 @@ public class SpeedQuiz {
 
 		answer = sqList[i].answer;
 
+		player1Result = answer;
+		player2Result = answer;
 		gameResult += "정답 입력 >> ";
 	}
 
@@ -116,96 +117,78 @@ public class SpeedQuiz {
 		boolean success = false;
 		if (msg.equals("")) {
 			return;
-		}/*
-		else if (!isEnd) {
-			//다른 한명이 성공했을 때   
-			if(sucP1 && !firstSelectPlayer.equals(msg.getPName())) {
-				sucP1 = true;
-				sucP2 = true;
-				msg.setTurnEnd(true);
+		}
+		boolean isPlayer1;
+		String[] realAnser;
 
-				gameResult +=Score()+"\n";
+		if(msg.getPName().equals(player1)) {
+			isPlayer1 = true;
+			realAnser = player1Result;
+		}
+		else {
+			isPlayer1 = false;
+			realAnser = player2Result;;
+		}
+		
+		for (String tmp : realAnser) {
+			if (tmp.equals(msg.getMsg())) {
+				if (winner == null) {
+					success = true;
+					//처음으로 성공했을 때
+					firstSelectPlayer = msg.getPName();
+					String winnerName = msg.getPName();
+					gameResult +="정답!";
 
-				GetRandomQuizNum();
-				int i = currentQuizNum;
-				quiz = sqList[i].problem;
-
-				gameResult += quiz;
-
-				answer = sqList[i].answer;
-
-				gameResult += "정답 입력 >> ";
-				firstSelectPlayer = "";
-				notPost  = false;
-				
-				
-				return;
-			}
-			if(firstSelectPlayer.equals(msg.getPName())) {
-				notPost = true;
-				gameResult += "엔터를 딱 한 번 누르고 상대편을 기다려주세요";
-				return;
-			}
-*/
-			
-
-			for (String tmp : answer) {
-				if (tmp.equals(msg.getMsg())) {
-					if (winner == null) {
-						success = true;
-						//처음으로 성공했을 때
-						firstSelectPlayer = msg.getPName();
-						String winnerName = msg.getPName();
-						gameResult +="정답!";
-						
-						if(winnerName.equals(player1)) {
-							player1WinCount++;
-							if(player1WinCount>=winCount) {
-								System.out.println("우승");
-								winner = msg.getPName();
-								loser = winner.equals(player1) ? player2 : player1;
-								gameResult += "끝!";
-								notPost = false;
-								end = true;
-								msg.setOpt1(winner);
-								return;
-							}
-						}
-						else 
-						{
-							player2WinCount++;
-							if (player2WinCount>=winCount) {
-								System.out.println("우승");
-								winner = msg.getPName();
-								loser = winner.equals(player1) ? player2 : player1;
-								gameResult += "끝!";
-								notPost = false;
-								end = true;
-								msg.setOpt1(winner);
-								return;
-							}
-						}
-						gameResult +=Score()+"\n";
-
-						GetRandomQuizNum();
-						int i = currentQuizNum;
-						quiz = sqList[i].problem;
-
-						gameResult += quiz;
-
-						answer = sqList[i].answer;
-
-						gameResult += "정답 입력 >> ";
-						/*
-						if(!sucP1 ) {
-							gameResult += "엔터를 딱 한번 누르고 상대편을 기다려주세요";
-							sucP1 = true;
+					if(winnerName.equals(player1)) {
+						player1WinCount++;
+						if(player1WinCount>=winCount) {
+							System.out.println("우승");
+							winner = msg.getPName();
+							loser = winner.equals(player1) ? player2 : player1;
+							gameResult += "끝!";
+							notPost = false;
+							end = true;
+							msg.setOpt1(winner);
 							return;
-						}*/
-						break;
+						}
 					}
+					else 
+					{
+						player2WinCount++;
+						if (player2WinCount>=winCount) {
+							System.out.println("우승");
+							winner = msg.getPName();
+							loser = winner.equals(player1) ? player2 : player1;
+							gameResult += "끝!";
+							notPost = false;
+							end = true;
+							msg.setOpt1(winner);
+							return;
+						}
+					}
+					gameResult +=Score()+"\n";
+
+					GetRandomQuizNum();
+					int i = currentQuizNum;
+					quiz = sqList[i].problem;
+
+					gameResult += quiz;
+					if(msg.getPName().equals(player1)) {
+						player1Result = sqList[i].answer;
+					}
+					else {
+						player2Result = sqList[i].answer;
+					}
+					
+
+					gameResult += "정답 입력 >> ";
+					
+					
+
+					break;
 				}
 			}
+		}
 
 		if(!success&& winner==null)
 		{
