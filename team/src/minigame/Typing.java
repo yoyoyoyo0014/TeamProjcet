@@ -245,8 +245,9 @@ public class Typing implements Program {
 
 		score = (int) Math.max(15000 - diff, 0);
 
-		for (int i = 0; i < 10; i++) {
-			if (!words.get(i).equals(answer.get(i))) {
+		for(int i = 0; i<5; i++) {
+			words.get(i).contains(answer.get(i));
+			if(words.get(i) != answer.get(i)) {
 				score -= 100;
 			}
 		}
