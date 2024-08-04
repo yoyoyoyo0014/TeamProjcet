@@ -19,7 +19,7 @@ public class db_test {
 		//userController.JoinMembership("qweqwe", "qweqwe@naver.com", "qweqwe");
 		//System.out.println(userController.FindPassWord("qweqwe", "qweqwe@naver.com"));
 		// user = userController.Login("qweqwe", "qweqwe");
-		System.out.println(user.getUs_email());
+		//System.out.println(user.getUs_email());
 		gameController.insertGame();
 		
 		

@@ -129,7 +129,7 @@ public class SpeedQuiz {
 			isPlayer1 = false;
 			realAnser = player2Result;;
 		}
-		
+
 		for (String tmp : realAnser) {
 			if (tmp.equals(msg.getMsg())) {
 				if (winner == null) {
@@ -141,6 +141,7 @@ public class SpeedQuiz {
 
 					if(winnerName.equals(player1)) {
 						player1WinCount++;
+						//3번 이겼을 때
 						if(player1WinCount>=winCount) {
 							System.out.println("우승");
 							winner = msg.getPName();
@@ -155,6 +156,7 @@ public class SpeedQuiz {
 					else 
 					{
 						player2WinCount++;
+						//3번 이겼을 때
 						if (player2WinCount>=winCount) {
 							System.out.println("우승");
 							winner = msg.getPName();
@@ -173,32 +175,21 @@ public class SpeedQuiz {
 					quiz = sqList[i].problem;
 
 					gameResult += quiz;
-					if(msg.getPName().equals(player1)) {
+					if(msg.getPName().equals(player1)) 
 						player1Result = sqList[i].answer;
-					}
-					else {
+					
+					else 
 						player2Result = sqList[i].answer;
-					}
 					
 
 					gameResult += "정답 입력 >> ";
-					
-					
-
 					break;
 				}
 			}
 		}
 
 		if(!success&& winner==null)
-		{
 			gameResult +=  "떙!";
-		}
-
-		if (winner == null) {
-			//gameResult += "정답 입력 >> ";
-		}
-
 	}
 
 
@@ -221,7 +212,5 @@ class SpeedQuizList {
 	public SpeedQuizList(String problem, String... answer) {
 		this.problem = problem;
 		this.answer = answer;
-
 	}
-
 }
