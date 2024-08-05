@@ -38,7 +38,8 @@ create table if not exists score(
     sc_gm_key int not null,
     
     foreign key(sc_us_key) references `user` (us_key) ON DELETE CASCADE ON UPDATE CASCADE,
-    foreign key(sc_gm_key) references game (gm_key) ON DELETE CASCADE ON UPDATE CASCADE
+    foreign key(sc_gm_key) references game (gm_key) ON DELETE CASCADE ON UPDATE CASCADE,
+    unique(sc_us_key,sc_gm_key)
 );
 
 insert into game(gm_ti) values("BASEBALL"),("OMOK"),("TYPING"),("YACHT"),("SPEEDQUIZ");
