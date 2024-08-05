@@ -47,6 +47,11 @@ public class Type {
 	// 종료
 	final static String exit = "EXIT"; // 종료
 	final static String logout = "LOGOUT"; // 로그아웃
+	final static String reset = "PASSWORDRESET";
+	final static String update_pwd = "PASSWORDUPDATE";
+	
+	final static String success = "SUCCESS";
+	final static String fail = "FAIL";
 
 	public static String kor_tag(String gameTitle) {
 		switch (gameTitle) {

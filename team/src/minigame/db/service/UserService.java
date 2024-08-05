@@ -1,13 +1,15 @@
 package minigame.db.service;
 
-import minigame.db.model.vo.UserVO;
-
 public interface UserService { // 인터페이스로 선언.
-	public UserVO Login(String id, String pw);
-	
-	 boolean ExistUser(String id);
-	 
-	 String FindPassWord(String id, String email);
-	 
-	 boolean JoinMembership(String id, String email, String pw);
+
+	boolean login(String id, String pw);
+
+	boolean existUser(String id);
+
+	String findPassword(String id, String email);
+
+	boolean join(String id, String email, String pw);
+
+	boolean updatePassword(String id, String pwd, String newPwd);
+
 }

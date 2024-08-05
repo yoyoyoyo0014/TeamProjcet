@@ -1,6 +1,5 @@
 package minigame;
 
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 

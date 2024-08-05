@@ -8,12 +8,14 @@ import minigame.db.model.vo.UserVO;
 // Data Access Object : DB와의 연결, 조작을 도와주는 기능
 public interface UserDAO {
 
-	UserVO LoginUser(@Param("id")String id,@Param("pw") String pw);
+	UserVO login(@Param("id")String id,@Param("pw") String pw);
 
-	UserVO ExistLogin(@Param("id")String id);
+	UserVO existUser(@Param("id")String id);
 
-	String findPassWord(@Param("id")String id, @Param("email")String email);
+	String findPassword(@Param("id")String id, @Param("email")String email);
 	
-	boolean JoinMembership(@Param("us")UserVO user);
+	boolean join(@Param("us")UserVO user);
+
+	boolean updatePassword(@Param("id")String id, @Param("pwd")String pwd, @Param("newPwd")String newPwd);
 	
 }

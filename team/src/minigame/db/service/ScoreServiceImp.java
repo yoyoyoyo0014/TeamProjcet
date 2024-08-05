@@ -12,7 +12,7 @@ import minigame.db.dao.ScoreDAO;
 import minigame.db.model.vo.UserVO;
 
 // Service Implement 
-public class ScoreServiceImp implements UserService {
+public class ScoreServiceImp implements ScoreService {
 
 	private ScoreDAO scoreDao;
 
@@ -28,30 +28,6 @@ public class ScoreServiceImp implements UserService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public UserVO Login(String id, String pw) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean ExistUser(String id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String FindPassWord(String id, String email) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean JoinMembership(String id, String email, String pw) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

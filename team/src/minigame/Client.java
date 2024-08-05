@@ -42,6 +42,16 @@ public class Client {
 	private boolean mainTurn = true;
 	private boolean threadTurn = false;
 
+	public synchronized Message readServerMessage() {
+		try {
+			return (Message) ois.readObject();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private void runSub() {
 
 		Thread t = new Thread(() -> {
@@ -52,7 +62,10 @@ public class Client {
 						Thread.sleep(200);
 					}
 
-					Message msg = (Message) ois.readObject();
+					Message msg = readServerMessage();
+					if (msg == null) {
+						continue;
+					}
 					if (msg.getType().equals(Type.alert)) {
 //						System.out.println("sub >> ");
 						readMessage(msg);
@@ -61,7 +74,7 @@ public class Client {
 					}
 
 				}
-			} catch (ClassNotFoundException | IOException | InterruptedException e) {
+			} catch (InterruptedException e) {
 
 			}
 
@@ -72,7 +85,7 @@ public class Client {
 
 	public void run() {
 
-		runSub();
+		// runSub();
 
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -83,53 +96,46 @@ public class Client {
 					break;
 				}
 
-				while (!mainTurn) {
-					Thread.sleep(200);
-				}
+//				while (!mainTurn) {
+//					Thread.sleep(200);
+//				}
 
 				Message msg;
-				while (list.size() != 0) {
-					msg = list.get(0);
-					list.remove(0);
-					readMessage(msg);
-					continue;
-				}
+//				while (list.size() != 0) {
+//					msg = list.get(0);
+//					list.remove(0);
+//					readMessage(msg);
+//					continue;
+//				}
 
-				msg = (Message) ois.readObject();
+				msg = readServerMessage();
 
-				threadTurn = true;
-				mainTurn = false;
+//				threadTurn = true;
+//				mainTurn = false;
 
 				readMessage(msg);
 
-				threadTurn = false;
+//				threadTurn = false;
 			}
 
 			// ois.close();
-		} catch (
-
-		IOException e) {
+		} catch (IOException e) {
 			//
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// (Message) ois.readObject() 에러
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	private void readMessage(Message message) {
-		// TODO Auto-generated method stub
 		String tag = message.getType();
 		// System.out.println(message);
 
 		switch (tag) {
+			
 			case Type.alert:
 				if (message.getMsg() != null && message.getMsg().length() != 0)
 					System.out.println(message.getMsg());
 				break;
+				
 			case Type.login:
 				if (message.getMsg() != null) {
 					id = Type.blank; // id 초기화
@@ -137,8 +143,20 @@ public class Client {
 				}
 				inputUserLogin();
 				break;
+				
+			case Type.reset:
+				System.out.println("====================================");
+				if (message.getOpt1().equals(Type.success)) {
+					System.out.println("비밀번호 : " + message.getMsg());
+				} else {
+					System.out.println("정보가 일치하지 않아 비밀번호를 가져올 수 없습니다.");
+				}
+				System.out.println("====================================");
+				inputUserLogin();
+				break;
+				
 			case Type.menu:
-				// System.out.println("<로그인 성공>");
+				System.out.println("<로그인 성공>");
 				runRoomMenu();
 				break;
 
@@ -158,6 +176,15 @@ public class Client {
 				runRoomList(message.getMsg(), Integer.parseInt(message.getOpt1()));
 				break;
 
+			case Type.update_pwd:
+				System.out.println("====================================");
+				if (message.getOpt1().equals(Type.success)) {
+					System.out.println("비밀번호가 변경되었습니다.");
+				} else {
+					System.out.println("비밀번호 변경에 실패하였습니다.");
+				}
+				runRoomMenu();
+				break;
 			case Type.start:
 				// gameStart(message);
 				// break;
@@ -176,7 +203,6 @@ public class Client {
 				} else {
 					System.out.println("<당신이 패배하였습니다.>");
 				}
-
 				System.out.println("방을 나갑니다. Enter를 눌러주세요.");
 				sc.nextLine();
 				printPrev();
@@ -270,6 +296,7 @@ public class Client {
 	private void runRoomMenu() {
 
 		printRoomMenu();
+		
 		try {
 			int menu = sc.nextInt();
 			switch (menu) {
@@ -284,10 +311,11 @@ public class Client {
 					// 전체 성적(랭크) 조회
 					// checkScore();
 					break;
-				case 4: // 회원 정보 변경 <구현 예정>
-					// updateUser()
+				case 4: // 회원 정보 변경
+					updateUser();
 					// 아이디, 비밀번호, 새비밀번호
 					// 계정 삭제
+					break;
 				case 5: // 로그아웃
 					Message msg = new Message();
 					msg.setType(Type.exit);
@@ -314,6 +342,64 @@ public class Client {
 			runRoomMenu();
 			return;
 		}
+	}
+
+	private void updateUser() {
+
+		System.out.println("====================================");
+		System.out.println(" <회원 정보 변경> ");
+		System.out.println(" 1. 비밀번호 재설정");
+		System.out.println("====================================");
+		System.out.print("게임 선택 |이전으로:-1| : ");
+
+		int menu;
+
+		try {
+			menu = sc.nextInt();
+		} catch (InputMismatchException e) {
+			System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+			menu = -1;
+			sc.nextLine();
+		}
+
+		if (menu == -1) { // 이전으로
+			runRoomMenu();
+			return;
+		}
+
+		switch (menu) {
+			case 1:
+				updatePassword();
+				break;
+
+		}
+
+	}
+
+	private void updatePassword() {
+
+		Message msg = new Message();
+
+		String pwd, newPwd, newPwd2;
+
+		System.out.print("기존 비밀번호 : ");
+		pwd = sc.next();
+
+		System.out.print("새 비밀번호 : ");
+		newPwd = sc.next();
+
+		System.out.print("새 비밀번호 확인: ");
+		newPwd2 = sc.next();
+
+		if (!newPwd.equals(newPwd2)) {
+			System.out.println("새 비밀번호가 일치하지 않습니다.");
+			updateUser();
+			return;
+		}
+		msg.setMsg(pwd + " " + newPwd);
+		msg.setType(Type.update_pwd);
+		send(msg);
+
 	}
 
 	private void serarchRoom() {
@@ -398,8 +484,8 @@ public class Client {
 		System.out.println(" 1. 야구");
 		System.out.println(" 2. 오목");
 		System.out.println(" 3. Typing");
-		System.out.println(" 4. Yacht <미구현>");
-		System.out.println(" 5. SpeedQuiz <미구현>");
+		System.out.println(" 4. Yacht");
+		System.out.println(" 5. SpeedQuiz");
 		System.out.println("====================================");
 		System.out.print("게임 선택 |이전으로:-1| : ");
 
@@ -411,7 +497,7 @@ public class Client {
 		System.out.println("1. 방 만들기");
 		System.out.println("2. 방 검색하기");
 		System.out.println("3. 전적 조회<구현예정>");
-		System.out.println("4. 회원 정보 변경<구현예정>");
+		System.out.println("4. 회원 정보 변경");
 		System.out.println("5. 로그아웃");
 		System.out.println("6. 종료");
 		System.out.println("====================================");
@@ -424,7 +510,8 @@ public class Client {
 		System.out.println("<로그인>");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
-		System.out.println("3. 종료");
+		System.out.println("3. 비밀번호 찾기");
+		System.out.println("4. 종료");
 		System.out.println("====================================");
 		System.out.print("메뉴선택 : ");
 	}
@@ -454,17 +541,40 @@ public class Client {
 				String password = sc.next();
 
 				Message message = new Message();
-				message.setMsg(id + " " + password);
 
 				if (menu == 1) {
+					message.setMsg(id + " " + password);
 					message.setType(Type.login);
 				} else {
-					message.setType(Type.join);
+					System.out.print("비밀번호 확인: ");
+					String password2 = sc.next();
+					if (password2.equals(password)) {
+						System.out.print("이메일 : ");
+						String email = sc.next();
+						message.setMsg(id + " " + password + " " + email);
+						message.setType(Type.join);
+					} else {
+						System.out.println("비밀번호가 일치하지 않습니다.");
+						inputUserLogin();
+						break;
+					}
 				}
 				send(message);
 				break;
-
 			case 3:
+				// 비밀번호 초기화.
+				Message msg = new Message();
+
+				System.out.print("아이디 : ");
+				id = sc.next();
+				System.out.print("이메일 : ");
+				String email = sc.next();
+				msg.setMsg(id + " " + email);
+				msg.setType(Type.reset);
+				send(msg);
+				break;
+
+			case 4:
 				isExit = true;
 				return; // 종료
 			default:

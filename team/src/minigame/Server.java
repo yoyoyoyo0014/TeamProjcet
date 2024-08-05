@@ -10,6 +10,12 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import minigame.db.controller.GameController;
+import minigame.db.controller.ScoreController;
+import minigame.db.controller.UserController;
+import minigame.db.service.GameServiceImp;
+import minigame.db.service.ScoreServiceImp;
+import minigame.db.service.UserServiceImp;
 import program.Program;
 
 @Data
@@ -18,6 +24,10 @@ public class Server implements Program {
 
 	// private static List<ObjectOutputStream> oosList = new ArrayList<>();
 	// private static List<ObjectInputStream> oisList = new ArrayList<>();
+
+	private UserController userController = new UserController();
+	private ScoreController scoreController = new ScoreController();
+	private GameController gameController = new GameController();
 
 	// oosList 대체, oos와 userId를 동시에 받음.
 	private static List<ConnectedUser> cUserList = new ArrayList<>();
@@ -122,7 +132,7 @@ public class Server implements Program {
 		Thread t = new Thread(() -> {
 			try {
 				while (true) {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 					Message msg = new Message();
 					msg.setType(Type.alert);
 					msg.setMsg("");
@@ -140,13 +150,14 @@ public class Server implements Program {
 
 	@Override
 	public void run() {
+
 		runSub();
 
 		// 임시로 유저 추가.
-		totalUser.add(new User("qwe", "1234"));
-		totalUser.add(new User("asd", "1234"));
-		totalUser.add(new User("zxc", "1234"));
-		totalUser.add(new User("wer", "1234"));
+//		totalUser.add(new User("qwe", "1234"));
+//		totalUser.add(new User("asd", "1234"));
+//		totalUser.add(new User("zxc", "1234"));
+//		totalUser.add(new User("wer", "1234"));
 
 		// new Thread().sleep(1000);
 
@@ -178,12 +189,15 @@ public class Server implements Program {
 	private void playerExit() {
 
 		if (cUserList.size() != 0) {
+			// 접속은 했지만 로그인은 안한 상태에서 종료
+			if (cUser.getUser() == null) {
+				System.out.println("[클라이언트 접속 종료]");
+				cUserList.remove(cUser);
+				cUser.setUser(null);
+				userCount--;
+				return;
+			}
 			for (ConnectedUser tmp : cUserList) {
-				// 접속은 했지만 로그인은 안한 상태에서 종료
-				if (cUser.getUser() == null) {
-					System.out.println("[클라이언트 접속 종료]");
-					break;
-				}
 				String userId = cUser.getUser().getId();
 				if (tmp.getUser().getId().equals(userId)) {
 					Message msg = new Message();
@@ -192,7 +206,8 @@ public class Server implements Program {
 					System.out.println("[<" + userId + ">님이 나갔습니다.]");
 
 					sendAll(msg);
-					cUserList.remove(tmp);
+
+					cUser.setUser(null);
 
 					/*
 					 * 게임 도중에 나갔다면 승자 판별 구현 예정.
@@ -212,14 +227,17 @@ public class Server implements Program {
 						}
 						roomList.remove(userRoom);
 						userRoom = null;
+
+						cUserList.remove(cUser);
+						userCount--;
 					}
 					break;
 				}
 			}
 
-			// userList에서 접속한 사용자 제거
-			cUserList.remove(cUser);
-			userCount--;
+//			// userList에서 접속한 사용자 제거
+//			cUserList.remove(cUser);
+//			userCount--;
 		}
 
 	}
@@ -237,6 +255,13 @@ public class Server implements Program {
 			case Type.join:
 				receiveUserJoin(message.getMsg());
 				break;
+			case Type.reset:
+				findPassword(message.getMsg());
+				break;
+			case Type.update_pwd:
+				updatePwd(message.getMsg());
+				break;
+
 			case Type.createRoom:
 				// opt1에 gameTitle
 				if (message.getOpt1() == null) {
@@ -271,6 +296,55 @@ public class Server implements Program {
 			default:
 
 		}
+
+	}
+
+	private void updatePwd(String msg) {
+
+		// 디비에 아이디와 비밀번호가 일치하는 사용자의 비밀번호를
+		// 새로운 비밀번호로 변경.
+
+		String[] tmp = msg.split(" ");
+		String pwd = tmp[0];
+		String newPwd = tmp[1];
+
+		String id = cUser.getUser().getId();
+
+		Message message = new Message();
+		message.setType(Type.update_pwd);
+
+		if (userController.updatePassword(id, pwd, newPwd)) {
+			message.setOpt1(Type.success);
+		} else {
+			message.setOpt1(Type.fail);
+		}
+
+		send(oos, message);
+
+	}
+
+	private void findPassword(String message) {
+
+		String[] tmp = message.split(" ");
+		String id = tmp[0];
+		String email = tmp[1];
+
+		// id, email을 DB로 보냄.
+		// DB에서 일치하는 정보를 확인하여 비밀번호를 가져옴
+
+		String pwd = userController.findPassword(id, email);
+
+		Message msg = new Message();
+		msg.setType(Type.reset);
+
+		if (pwd == null) {
+			msg.setOpt1("fail");
+		} else {
+			msg.setMsg(pwd);
+			msg.setOpt1("success");
+		}
+
+		send(oos, msg);
 
 	}
 
@@ -468,28 +542,42 @@ public class Server implements Program {
 		// id가 totalUser에 있는 지 확인 후 없다면 id 등록
 		// 이미 있는 id라면 재로그인
 		String[] tmpStr = message.split(" ");
-		String id = tmpStr[0];
-		String password = tmpStr[1];
-		userJoin(id, password);
+		if (tmpStr[0] != null && tmpStr[1] != null && tmpStr[2] != null) {
+			String id = tmpStr[0];
+			String password = tmpStr[1];
+			String email = tmpStr[2];
+			userJoin(id, password, email);
+		} else {
+			userJoin(null, null, null);
+		}
 
 	}
 
-	private void userJoin(String id, String password) {
+	private void userJoin(String id, String password, String email) {
 		// user 회원가입
 
 		// ****디비 아이디 넣고 없으면
 		// 아이디랑 비밀번호 넣어서 회원가입.
 
 		Message msg = new Message();
-		User joinUser = new User(id, password);
-		if (totalUser.contains(joinUser)) {
-			msg.setMsg("이미 등록된 아이디입니다.");
+
+		if (id == null || password == null || email == null) {
+			msg.setMsg("잘 못 입력하셨습니다.");
 			sendUserLogin(msg);
 			return;
 		}
 
-		totalUser.add(joinUser);
-		msg.setMsg("회원가입 되었습니다. 로그인하세요.");
+//		if (userController.existUser(id)) {
+//			msg.setMsg("이미 등록된 아이디입니다.");
+//			sendUserLogin(msg);
+//			return;
+//		}
+
+		if (userController.join(id, password, email)) {
+			msg.setMsg("회원가입 되었습니다. 로그인하세요.");
+		} else {
+			msg.setMsg("회원가입에 실패하였습니다.");
+		}
 		sendUserLogin(msg);
 	}
 
@@ -511,25 +599,29 @@ public class Server implements Program {
 		// 현재 접속한 유저인 지
 		Message msg = new Message();
 
-		// ****디비에 id랑 password를 넘겨주고 로그인
-
-		if (totalUser.size() == 0) {
-			msg.setMsg("등록된 유저가 없습니다.");
-			sendUserLogin(msg);
-			return;
-
-		}
+//		if (totalUser.size() == 0) {
+//			msg.setMsg("등록된 유저가 없습니다.");
+//			sendUserLogin(msg);
+//			return;
+//
+//		}
 		User loginUser = getUser(id, password);
-
-		for (ConnectedUser tmp : cUserList) {
-			if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
-				msg.setMsg("이미 접속한 유저입니다.");
-				sendUserLogin(msg);
-				return;
+		
+		if (loginUser != null) {
+			for (ConnectedUser tmp : cUserList) {
+				if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
+					msg.setMsg("이미 접속한 유저입니다.");
+					sendUserLogin(msg);
+					return;
+				}
 			}
 		}
+		else {
+			loginUser = new User(id, password);
+		}
 
-		if (loginUser == null) {
+		// ****디비에 id랑 password를 넘겨주고 로그인
+		if (!userController.login(id, password)) {
 			msg.setMsg("아이디 혹은 비밀번호가 일치하지 않습니다.");
 			sendUserLogin(msg);
 			return;
@@ -541,13 +633,40 @@ public class Server implements Program {
 			// "<로그인 성공>";
 			msg.setMsg("<로그인 성공>\n");
 			cUser.setUser(loginUser);
+//			if(!cUserList.contains(cUser)) {
+//				cUserList.add(cUser);
+//			}
 			msg.setType(Type.menu);
 			send(oos, msg);
+
 			Message welcomeMsg = new Message();
 			welcomeMsg.setMsg("[<" + id + ">님이 접속하셨습니다.]");
 			welcomeMsg.setType(Type.alert);
 			sendAll(welcomeMsg);
 		}
+
+//		if (loginUser == null) {
+//			msg.setMsg("아이디 혹은 비밀번호가 일치하지 않습니다.");
+//			sendUserLogin(msg);
+//			return;
+//			// 재로그인 요구.
+//
+//		} else {
+//			// loginedUser 객체에 추가
+//			// 게임을 선택할 수 있도록 메뉴판 제공
+//			// "<로그인 성공>";
+//			msg.setMsg("<로그인 성공>\n");
+//			cUser.setUser(loginUser);
+////			if(!cUserList.contains(cUser)) {
+////				cUserList.add(cUser);
+////			}
+//			msg.setType(Type.menu);
+//			send(oos, msg);
+//			Message welcomeMsg = new Message();
+//			welcomeMsg.setMsg("[<" + id + ">님이 접속하셨습니다.]");
+//			welcomeMsg.setType(Type.alert);
+//			sendAll(welcomeMsg);
+//		}
 
 	}
 
