@@ -22,7 +22,7 @@ create table if not exists game(
 	gm_key int auto_increment primary key,
     gm_ti varchar(20) not null unique,
     gm_vPoint int not null default 100,
-    gm_lPoint int not null default 50
+    gm_lPoint int not null default -50
 );
 
 # Score Table

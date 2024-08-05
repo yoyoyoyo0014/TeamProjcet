@@ -153,13 +153,11 @@ public class Server implements Program {
 
 		runSub();
 
-		// 임시로 유저 추가.
+//		임시로 유저 추가.
 //		totalUser.add(new User("qwe", "1234"));
 //		totalUser.add(new User("asd", "1234"));
 //		totalUser.add(new User("zxc", "1234"));
 //		totalUser.add(new User("wer", "1234"));
-
-		// new Thread().sleep(1000);
 
 		Thread t = new Thread(() -> {
 			try {
@@ -206,15 +204,30 @@ public class Server implements Program {
 					System.out.println("[<" + userId + ">님이 나갔습니다.]");
 
 					sendAll(msg);
-
-					cUser.setUser(null);
-
 					/*
 					 * 게임 도중에 나갔다면 승자 판별 구현 예정.
 					 */
 
 					if (userRoom != null) {
 						if (userRoom.getIsPlaying() == Type.playing) {
+
+							userRoom.setIsPlaying(Type.end);
+
+							String p1 = userRoom.getRoomManager().getUser().getId();
+							String p2 = userRoom.getPlayer().getUser().getId();
+							String winner, loser;
+							String gameTitle = userRoom.getGameTitle();
+
+							if (p1.equals(userId)) {
+								loser = p1;
+								winner = p2;
+							} else {
+								loser = p2;
+								winner = p1;
+							}
+
+							recordScore(gameTitle, winner, loser, false);
+
 							msg = new Message();
 
 							msg.setMsg("[<" + userId + "> 님이 나가서 게임이 종료 됩니다.]");
@@ -231,6 +244,9 @@ public class Server implements Program {
 						cUserList.remove(cUser);
 						userCount--;
 					}
+					
+					cUser.setUser(null);
+					
 					break;
 				}
 			}
@@ -283,11 +299,15 @@ public class Server implements Program {
 				}
 				break;
 			case Type.playing:
-				if (userRoom != null) {
-					runGame(userRoom, message);
-				} else {
 
+				if (!roomList.contains(userRoom)) {
+					if (userRoom != null) {
+						userRoom = null;
+					}
+					return;
 				}
+
+				runGame(userRoom, message);
 
 				break;
 			case Type.exit:
@@ -398,6 +418,7 @@ public class Server implements Program {
 				if (!userRoom.getIsPlaying().equals("end")) {
 					msg = currentRoom.gameRun(message);
 				}
+
 				if (currentRoom.getWinner() == null) {
 
 					currTurn = currentRoom.getCurrentTurn();
@@ -405,21 +426,12 @@ public class Server implements Program {
 					msg.setType(Type.playing);
 					msg.setOpt1(currTurn);
 					if (currTurn.equals(Type.allTurn) && !msg.isEnd()) {
-						/*
-						 * if(!msg.isTurnEnd()) { if(!msg.isNotPost()) {
-						 * System.out.println("한 사람만 문제 완료");
-						 * 
-						 * } }else{ msg.setTurnEnd(false); System.out.println("모든 사람이 문제 완료");
-						 * send(currentRoom.getPlayer().getOos(), msg);
-						 * send(currentRoom.getRoomManager().getOos(), msg); }
-						 */
 						send(oos, msg);
 					} else {
 						send(currentRoom.getPlayer().getOos(), msg);
 						send(currentRoom.getRoomManager().getOos(), msg);
 					}
 				} else {
-
 					// 승자가 정해짐
 					// 승패 기록
 					// 방 폭파시키기
@@ -428,24 +440,26 @@ public class Server implements Program {
 					String gameTitle;
 					String winner;
 					String loser;
-					// if (currentRoom.getIsPlaying().equals(Type.playing)) {
+
 					gameTitle = currentRoom.getGameTitle();
 					winner = currentRoom.getWinner();
 					loser = currentRoom.getLoser();
-					recordScore(gameTitle, winner, loser);
+
+					if (currentRoom.isDraw()) {
+						recordScore(gameTitle, winner, loser, true);
+						msg.setOpt1(Type.drawEnd);
+					} else {
+						recordScore(gameTitle, winner, loser, false);
+						msg.setOpt1(winner);
+					}
 
 					if (!currentRoom.getIsPlaying().equals("end")) {
 						msg.setType(Type.end);
-						msg.setOpt1(winner);
 						send(currentRoom.getPlayer().getOos(), msg);
 						send(currentRoom.getRoomManager().getOos(), msg);
 						currentRoom.setIsPlaying("end");
 						roomList.remove(userRoom);
 					}
-					if (userRoom != null) {
-						userRoom = null;
-					}
-					// }
 
 					return;
 				}
@@ -488,17 +502,32 @@ public class Server implements Program {
 		return null;
 	}
 
-	private void recordScore(String gameTitle, String winner, String loser) {
+	private void recordScore(String gameTitle, String winner, String loser, boolean isDraw) {
 		// 게임의 결과를 user의 game 객체에 update한다.
 		// 승자와 패자의 객체를 가져와서 승패를 업데이트한다.
 
-		User tmpUser = getUserInfo(winner);
-		Game gameTmp = getUserGameInfo(tmpUser, gameTitle);
-		gameTmp.updateWin();
+//		User tmpUser = getUserInfo(winner);
+//		Game gameTmp = getUserGameInfo(tmpUser, gameTitle);
+//		gameTmp.updateWin();
+//
+//		tmpUser = getUserInfo(loser);
+//		gameTmp = getUserGameInfo(tmpUser, gameTitle);
+//		gameTmp.updateLose();
+		int win, lose;
+		if (isDraw) {
+			win = lose = 0;
+		} else {
+			win = 1;
+			lose = 2;
+		}
 
-		tmpUser = getUserInfo(loser);
-		gameTmp = getUserGameInfo(tmpUser, gameTitle);
-		gameTmp.updateLose();
+		if (scoreController.updateScore(gameTitle, winner, win)) {
+			System.out.println("승자 등록 성공");
+		}
+
+		if (scoreController.updateScore(gameTitle, loser, lose)) {
+			System.out.println("패자 등록 성공");
+		}
 
 	}
 
@@ -528,9 +557,9 @@ public class Server implements Program {
 		for (ConnectedUser tmp : cUserList) {
 			if (oos.equals(tmp.getOos())) {
 				userRoom = new Room(tmp, gameTitle, roomTitle);
+				userRoom.setRoomManager(cUser);
 				roomList.add(userRoom);
 				System.out.println(roomList);
-				System.out.println();
 				break;
 			}
 		}
@@ -606,7 +635,7 @@ public class Server implements Program {
 //
 //		}
 		User loginUser = getUser(id, password);
-		
+
 		if (loginUser != null) {
 			for (ConnectedUser tmp : cUserList) {
 				if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
@@ -615,8 +644,7 @@ public class Server implements Program {
 					return;
 				}
 			}
-		}
-		else {
+		} else {
 			loginUser = new User(id, password);
 		}
 

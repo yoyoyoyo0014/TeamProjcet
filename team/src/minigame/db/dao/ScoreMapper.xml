@@ -3,5 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="minigame.db.dao.ScoreDAO">
-	
+	<insert id="updateScore">
+		insert into score (sc_win, sc_draw, sc_lose,
+		sc_point, sc_us_key, sc_gm_key)
+		values (#{win}, #{draw}, #{lose},
+		#{point}, #{us_key}, #{gm_key})
+		on duplicate key update
+		sc_win = sc_win + #{win},
+		sc_draw = sc_draw + #{draw},
+		sc_lose = sc_lose + #{lose},
+		sc_point = sc_point + #{point};
+	</insert>
+
 </mapper>

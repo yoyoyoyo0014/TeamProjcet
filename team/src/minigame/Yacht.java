@@ -31,6 +31,7 @@ public class Yacht {
 
 	private String winner = null;
 	private String loser = null;
+	private boolean isDraw = false;
 
 	private List<String> reDices = new ArrayList<String>();
 
@@ -186,6 +187,7 @@ public class Yacht {
 			winner = player1;
 			loser = player2;
 			gameResult += "무승부입니다.\n";
+			isDraw = true;
 		}
 	}
 

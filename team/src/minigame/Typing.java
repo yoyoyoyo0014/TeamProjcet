@@ -35,6 +35,8 @@ public class Typing implements Program {
 	private String winner = null;
 	private String loser = null;
 
+	private boolean isDraw = false;
+
 	int p1TotalScore = 0;
 	int p2TotalScore = 0;
 
@@ -187,7 +189,7 @@ public class Typing implements Program {
 			return;
 		}
 
-		answer = message.getOptStr();
+		answer = message.getStrList();
 		calScore(currentTurn);
 		timeReset();
 

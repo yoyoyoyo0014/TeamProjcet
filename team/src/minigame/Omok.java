@@ -10,10 +10,10 @@ import program.Program;
 
 @Data
 public class Omok implements Program {
-	
-	public static final String yellow   = "\u001B[33m" ;
-  public static final String blue     = "\u001B[34m" ;
-  public static final String exit     = "\u001B[0m";
+
+	public static final String yellow = "\u001B[33m";
+	public static final String blue = "\u001B[34m";
+	public static final String exit = "\u001B[0m";
 
 	private List<String> list = new ArrayList<>();
 	private final static String row_init = "   0 1 2 3 4 5 6 7 8 9 A B C D E F";
@@ -23,6 +23,8 @@ public class Omok implements Program {
 
 	List<List<Integer>> twhiteStone = new ArrayList<>();
 	List<List<Integer>> tblackStone = new ArrayList<>();
+
+	private final boolean isDraw = false;
 
 	private String player1;
 	private String player2;
@@ -114,8 +116,8 @@ public class Omok implements Program {
 		gameResult += row_init + "\n";
 		for (int i = 0x0; i < BOARD_SIZE; i++) {
 //			System.out.printf(" %X %s\n", i, list.get(i));
-			String tmp = list.get(i).replace("B", blue +"●"+ exit);
-			tmp = tmp.replace("W", yellow +"●" + exit);
+			String tmp = list.get(i).replace("B", blue + "●" + exit);
+			tmp = tmp.replace("W", yellow + "●" + exit);
 			gameResult += " " + Integer.toHexString(i) + " " + tmp + "\n";
 			// ●
 		}

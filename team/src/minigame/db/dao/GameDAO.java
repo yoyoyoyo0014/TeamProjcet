@@ -9,4 +9,12 @@ public interface GameDAO {
 	// 테스트용 코드
 	boolean insertGame(@Param("title")String gameTitle);
 
+	int selectGameKey(@Param("title")String gameTitle);
+
+	int selectVPoint(@Param("title")String gameTitle);
+
+	int selectLPoint(@Param("title")String gameTitle);
+
+	int selectDPoint(@Param("title")String gameTitle);
+
 }

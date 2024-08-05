@@ -66,6 +66,11 @@ public class UserServiceImp implements UserService {
 		return userDao.updatePassword(id, pwd, newPwd);
 	}
 
+	public int getUserKey(String playerID) {
+	
+		return userDao.selectUserKey(playerID);
+	}
+
 
 
 }

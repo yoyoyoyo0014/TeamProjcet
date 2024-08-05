@@ -19,11 +19,11 @@ public class Type {
 	final static String rExit = "ROOMEXIT"; // 방퇴장
 
 	// 게임을 구분하기 위한 태그
-	final static String baseBall = "BASEBALL"; // 야구게임
+	final static String baseball = "BASEBALL"; // 야구게임
 	final static String omok = "OMOK"; // 야구게임
 	final static String typing = "TYPING"; // 타자 게임
 	final static String yacht = "YACHT"; // 요트 게임
-	final static String speedGame = "SPEEDGAME";
+	final static String speedQuiz = "SPEEDQUIZ";
 
 	// 게임 관련 태그
 	final static String full = "FULL"; // 방 인원이 꽉 찼음
@@ -53,9 +53,12 @@ public class Type {
 	final static String success = "SUCCESS";
 	final static String fail = "FAIL";
 
+	final static String drawEnd = "DRAWEND";
+	
+
 	public static String kor_tag(String gameTitle) {
 		switch (gameTitle) {
-			case baseBall:
+			case baseball:
 				return "야구";
 			case omok:
 				return "오목";
@@ -63,7 +66,7 @@ public class Type {
 				return "타자";
 			case yacht:
 				return "요트";
-			case speedGame:
+			case speedQuiz:
 				return "스피드";
 			default:
 				return "";

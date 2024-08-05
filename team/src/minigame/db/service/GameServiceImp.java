@@ -35,4 +35,22 @@ public class GameServiceImp implements GameService {
 		return gameDao.insertGame(gameTitle);
 	}
 
+	public int getGameKey(String gameTitle) {
+		
+		return gameDao.selectGameKey(gameTitle);
+	}
+
+
+	public int getGameVPoint(String gameTitle) {
+		return gameDao.selectVPoint(gameTitle);
+	}
+
+	public int getGameLPoint(String gameTitle) {
+		return gameDao.selectLPoint(gameTitle);
+	}
+
+	public int getGameDPoint(String gameTitle) {
+		return gameDao.selectDPoint(gameTitle);
+	}
+
 }

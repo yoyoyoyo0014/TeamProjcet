@@ -30,4 +30,12 @@ public class ScoreServiceImp implements ScoreService {
 		}
 	}
 
+	public boolean updateScore(int gmKey, int usKey, int win, int draw, int lose, int point) {
+		
+		return scoreDao.updateScore(gmKey, usKey, win, draw, lose, point);
+	}
+
+
+
+
 }

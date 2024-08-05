@@ -14,7 +14,7 @@ public class Room {
 	private Omok omok;
 	private Typing typing;
 	private Yacht yacht;
-	private SpeedQuiz speedGame;
+	private SpeedQuiz speedQuiz;
 	// .. private otherGame otherGame
 
 	private String isPlaying = Type.start;
@@ -28,26 +28,42 @@ public class Room {
 		this.roomTitle = roomTitle;
 	}
 
+	public boolean isDraw() {
+		switch (gameTitle) {
+			case Type.baseball:
+				return baseball.isDraw();
+			case Type.omok:
+				return omok.isDraw();
+			case Type.typing:
+				return typing.isDraw();
+			case Type.yacht:
+				return yacht.isDraw();
+			case Type.speedQuiz:
+				return speedQuiz.isDraw();
+		}
+		return false;
+	}
+
 	public String getCurrentTurn() {
 		String msg = "";
 
 		switch (gameTitle) {
-		case Type.baseBall:
-			msg = baseball.getCurrentTurn();
-			break;
-		// case Tag.otherGame :
-		case Type.omok:
-			msg = omok.getCurrentTurn();
-			break;
-		case Type.typing:
-			msg = typing.getCurrentTurn();
-			break;
-		case Type.yacht:
-			msg = yacht.getCurrentTurn();
-			break;
-		case Type.speedGame:
-			msg = speedGame.getCurrentTurn();
-			break;
+			case Type.baseball:
+				msg = baseball.getCurrentTurn();
+				break;
+			// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getCurrentTurn();
+				break;
+			case Type.typing:
+				msg = typing.getCurrentTurn();
+				break;
+			case Type.yacht:
+				msg = yacht.getCurrentTurn();
+				break;
+			case Type.speedQuiz:
+				msg = speedQuiz.getCurrentTurn();
+				break;
 		}
 		return msg;
 	}
@@ -56,22 +72,22 @@ public class Room {
 		String msg = null;
 
 		switch (gameTitle) {
-		case Type.baseBall:
-			msg = baseball.getLoser();
-			break;
-		// case Tag.otherGame :
-		case Type.omok:
-			msg = omok.getLoser();
-			break;
-		case Type.typing:
-			msg = typing.getLoser();
-			break;
-		case Type.yacht:
-			msg = yacht.getLoser();
-			break;
-		case Type.speedGame:
-			msg = speedGame.getLoser();
-			break;
+			case Type.baseball:
+				msg = baseball.getLoser();
+				break;
+			// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getLoser();
+				break;
+			case Type.typing:
+				msg = typing.getLoser();
+				break;
+			case Type.yacht:
+				msg = yacht.getLoser();
+				break;
+			case Type.speedQuiz:
+				msg = speedQuiz.getLoser();
+				break;
 		}
 		return msg;
 	}
@@ -80,22 +96,22 @@ public class Room {
 		String msg = null;
 
 		switch (gameTitle) {
-		case Type.baseBall:
-			msg = baseball.getWinner();
-			break;
-		// case Tag.otherGame :
-		case Type.omok:
-			msg = omok.getWinner();
-			break;
-		case Type.typing:
-			msg = typing.getWinner();
-			break;
-		case Type.yacht:
-			msg = yacht.getWinner();
-			break;
-		case Type.speedGame:
-			msg = speedGame.getWinner();
-			break;
+			case Type.baseball:
+				msg = baseball.getWinner();
+				break;
+			// case Tag.otherGame :
+			case Type.omok:
+				msg = omok.getWinner();
+				break;
+			case Type.typing:
+				msg = typing.getWinner();
+				break;
+			case Type.yacht:
+				msg = yacht.getWinner();
+				break;
+			case Type.speedQuiz:
+				msg = speedQuiz.getWinner();
+				break;
 		}
 		return msg;
 	}
@@ -108,75 +124,77 @@ public class Room {
 		Message tmp = new Message();
 
 		switch (gameTitle) {
-		case Type.baseBall:
+			case Type.baseball:
 
-			if (isPlaying.equals(Type.start)) {
-				// 게임 첫 시작.
-				isPlaying = Type.playing;
-			} else {
-				baseball.run(message);
-			}
-			tmp.setMsg(baseball.getResult());
-			break;
-		case Type.omok:
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					baseball.run(message);
+				}
+				tmp.setMsg(baseball.getResult());
+				break;
+			case Type.omok:
 //				게임 이닛, 차례 정하고 초기화면 받기
-			if (isPlaying.equals(Type.start)) {
-				// 게임 첫 시작.
-				isPlaying = Type.playing;
-			} else {
-				omok.run(message);
-			}
-			tmp.setMsg(omok.getResult());
-			break;
-		case Type.typing:
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					omok.run(message);
+				}
+				tmp.setMsg(omok.getResult());
+				break;
+			case Type.typing:
 //				게임 이닛, 차례 정하고 초기화면 받기
-			if (isPlaying.equals(Type.start)) {
-				// 게임 첫 시작.
-				isPlaying = Type.playing;
-			} else {
-				typing.run(message);
-			}
-			// word list를 객체로 넘겨줌.
-			tmp.setOptStr(typing.getWords());
-			tmp.setMsg(typing.getResult());
-			break;
-		case Type.yacht:
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					typing.run(message);
+				}
+				// word list를 객체로 넘겨줌.
+				tmp.setStrList(typing.getWords());
+				tmp.setMsg(typing.getResult());
+				break;
+			case Type.yacht:
 //				게임 이닛, 차례 정하고 초기화면 받기
-			if (isPlaying.equals(Type.start)) {
-				// 게임 첫 시작.
-				isPlaying = Type.playing;
-			} else {
-				yacht.run(message);
-			}
-			tmp.setMsg(yacht.getResult());
-			break;
-		case Type.speedGame:
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					yacht.run(message);
+				}
+				tmp.setMsg(yacht.getResult());
+				break;
+			case Type.speedQuiz:
 
-			if (isPlaying.equals(Type.start)) {
-				// 게임 첫 시작.
-				isPlaying = Type.playing;
-			} else {
-				speedGame.run(message);
-			}
-			tmp.setMsg(speedGame.getResult());
-			if (speedGame.sucP1 && speedGame.sucP2 ) {
-				tmp.setTurnEnd(true);
-				speedGame.sucP1 = false;
-				speedGame.sucP2 = false;
-			}else {
-				tmp.setTurnEnd(false);
-			}
-			if(speedGame.end ) {
-				System.out.println("안끝나");
-				tmp.setEnd(true);
-			}
-			/*
-			if(speedGame.notPost) {
-				tmp.setNotPost(true);
-			}else {
-				tmp.setNotPost(false);
-			}*/
-			break;
+				if (isPlaying.equals(Type.start)) {
+					// 게임 첫 시작.
+					isPlaying = Type.playing;
+				} else {
+					speedQuiz.run(message);
+				}
+				String result = speedQuiz.getResult();
+				if (result == null) {
+					result = "";
+				}
+				tmp.setMsg(result);
+				if (speedQuiz.sucP1 && speedQuiz.sucP2) {
+					tmp.setTurnEnd(true);
+					speedQuiz.sucP1 = false;
+					speedQuiz.sucP2 = false;
+				} else {
+					tmp.setTurnEnd(false);
+				}
+				if (speedQuiz.end) {
+//				System.out.println("안끝나");
+					tmp.setEnd(true);
+				}
+				/*
+				 * if(speedGame.notPost) { tmp.setNotPost(true); }else { tmp.setNotPost(false);
+				 * }
+				 */
+				break;
 
 //			case Tag.otherGame:
 //				break;
@@ -190,22 +208,22 @@ public class Room {
 		// 객체는 방장, 플레이어 두 객의 닉네임 정도만 간단하게 받음(가안)
 
 		switch (gameTitle) {
-		case Type.baseBall:
-			baseball = new Baseball(roomManager.getUser().getId(), player.getUser().getId());
-			break;
-		case Type.omok:
-			omok = new Omok(roomManager.getUser().getId(), player.getUser().getId());
-			break;
-		case Type.typing:
-			typing = new Typing(roomManager.getUser().getId(), player.getUser().getId());
-			break;
-		case Type.yacht:
-			yacht = new Yacht(roomManager.getUser().getId(), player.getUser().getId());
-			break;
+			case Type.baseball:
+				baseball = new Baseball(roomManager.getUser().getId(), player.getUser().getId());
+				break;
+			case Type.omok:
+				omok = new Omok(roomManager.getUser().getId(), player.getUser().getId());
+				break;
+			case Type.typing:
+				typing = new Typing(roomManager.getUser().getId(), player.getUser().getId());
+				break;
+			case Type.yacht:
+				yacht = new Yacht(roomManager.getUser().getId(), player.getUser().getId());
+				break;
 
-		case Type.speedGame:
-			speedGame = new SpeedQuiz(roomManager.getUser().getId(), player.getUser().getId());
-			break;
+			case Type.speedQuiz:
+				speedQuiz = new SpeedQuiz(roomManager.getUser().getId(), player.getUser().getId());
+				break;
 
 		}
 

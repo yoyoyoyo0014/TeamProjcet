@@ -39,9 +39,6 @@ public class Client {
 
 	private boolean isExit = false;
 
-	private boolean mainTurn = true;
-	private boolean threadTurn = false;
-
 	public synchronized Message readServerMessage() {
 		try {
 			return (Message) ois.readObject();
@@ -50,37 +47,6 @@ public class Client {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	private void runSub() {
-
-		Thread t = new Thread(() -> {
-			try {
-				while (true) {
-					while (!threadTurn) {
-						mainTurn = true;
-						Thread.sleep(200);
-					}
-
-					Message msg = readServerMessage();
-					if (msg == null) {
-						continue;
-					}
-					if (msg.getType().equals(Type.alert)) {
-//						System.out.println("sub >> ");
-						readMessage(msg);
-					} else {
-						list.add(msg);
-					}
-
-				}
-			} catch (InterruptedException e) {
-
-			}
-
-		});
-		t.start();
-
 	}
 
 	public void run() {
@@ -96,46 +62,32 @@ public class Client {
 					break;
 				}
 
-//				while (!mainTurn) {
-//					Thread.sleep(200);
-//				}
-
-				Message msg;
-//				while (list.size() != 0) {
-//					msg = list.get(0);
-//					list.remove(0);
-//					readMessage(msg);
-//					continue;
-//				}
-
-				msg = readServerMessage();
-
-//				threadTurn = true;
-//				mainTurn = false;
+				Message msg = readServerMessage();
 
 				readMessage(msg);
 
-//				threadTurn = false;
 			}
 
-			// ois.close();
 		} catch (IOException e) {
-			//
 			e.printStackTrace();
 		}
 	}
 
 	private void readMessage(Message message) {
+
+		if (message == null || message.getType() == null) {
+			return;
+		}
+
 		String tag = message.getType();
-		// System.out.println(message);
 
 		switch (tag) {
-			
+
 			case Type.alert:
 				if (message.getMsg() != null && message.getMsg().length() != 0)
 					System.out.println(message.getMsg());
 				break;
-				
+
 			case Type.login:
 				if (message.getMsg() != null) {
 					id = Type.blank; // id 초기화
@@ -143,7 +95,7 @@ public class Client {
 				}
 				inputUserLogin();
 				break;
-				
+
 			case Type.reset:
 				System.out.println("====================================");
 				if (message.getOpt1().equals(Type.success)) {
@@ -154,7 +106,7 @@ public class Client {
 				System.out.println("====================================");
 				inputUserLogin();
 				break;
-				
+
 			case Type.menu:
 				System.out.println("<로그인 성공>");
 				runRoomMenu();
@@ -179,15 +131,13 @@ public class Client {
 			case Type.update_pwd:
 				System.out.println("====================================");
 				if (message.getOpt1().equals(Type.success)) {
-					System.out.println("비밀번호가 변경되었습니다.");
+					System.err.println("<비밀번호가 변경되었습니다.>");
 				} else {
-					System.out.println("비밀번호 변경에 실패하였습니다.");
+					System.err.println("<비밀번호 변경에 실패하였습니다.>");
 				}
 				runRoomMenu();
 				break;
 			case Type.start:
-				// gameStart(message);
-				// break;
 			case Type.playing:
 				gamePlay(message);
 				break;
@@ -196,13 +146,17 @@ public class Client {
 					System.out.println(message.getMsg());
 				}
 				if (message.getOpt1().equals("exit")) {
-					System.out.println("게임이 비정상적으로 종료되었습니다.");
+					System.err.println("게임이 비정상적으로 종료되었습니다.");
+					System.out.println("<당신이 승리하였습니다.>");
 				} else if (message.getOpt1().equals(id)) {
 					System.out.println("<당신이 승리하였습니다.>");
 
+				} else if (message.getOpt1().equals(Type.drawEnd)) {
+					System.out.println("<게임이 무승부로 끝났습니다.>");
 				} else {
 					System.out.println("<당신이 패배하였습니다.>");
 				}
+
 				System.out.println("방을 나갑니다. Enter를 눌러주세요.");
 				sc.nextLine();
 				printPrev();
@@ -221,13 +175,13 @@ public class Client {
 		if (id.equals(message.getOpt1()) || message.getOpt1().equals(Type.allTurn)) {
 			Message msg = new Message();
 			msg.setType(Type.playing);
-			if (message.getOptStr() != null) {
-				List<String> words = message.getOptStr();
+			if (message.getStrList() != null) {
+				List<String> words = message.getStrList();
 				List<String> answer = new ArrayList<String>();
 				System.out.println("게임을 시작하려면 Enter를 눌러주세요");
 				sc.nextLine();
 
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < words.size(); i++) {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
 					if (answer.get(i).equals(Type.exit)) {
@@ -236,7 +190,7 @@ public class Client {
 						return;
 					}
 				}
-				msg.setOptStr(answer);
+				msg.setStrList(answer);
 			} else {
 				String input = sc.nextLine();
 				msg.setMsg(input);
@@ -247,24 +201,10 @@ public class Client {
 		}
 	}
 
-	// private void gameStart(Message message) {
-	//
-	// System.out.print(message.getMsg());
-	// if (id.equals(message.getOpt1())) {
-	// String input = sc.nextLine();
-	// Message msg = new Message();
-	// msg.setType(Type.playing);
-	// msg.setMsg(input);
-	// send(msg);
-	// } else {
-	// System.out.println("<상대방의 차례입니다.>");
-	// }
-	// }
-
 	private void runRoomList(String message, int num) {
 
-		System.out.println("<방 목록>");
 		System.out.println("====================================");
+		System.out.println("<방 목록>");
 		System.out.print(message);
 		System.out.println("====================================");
 		System.out.print(">> 방 번호 입력 |이전으로:-1| : ");
@@ -296,7 +236,7 @@ public class Client {
 	private void runRoomMenu() {
 
 		printRoomMenu();
-		
+
 		try {
 			int menu = sc.nextInt();
 			switch (menu) {
@@ -307,9 +247,7 @@ public class Client {
 					serarchRoom();
 					break;
 				case 3: // 전적 조회
-					// 개인 성적 조회
-					// 전체 성적(랭크) 조회
-					// checkScore();
+					searchScore();
 					break;
 				case 4: // 회원 정보 변경
 					updateUser();
@@ -344,14 +282,60 @@ public class Client {
 		}
 	}
 
-	private void updateUser() {
+	private void printScore() {
 
+		System.out.println("====================================");
+		System.out.println(" <회원 전적 조회> ");
+		System.out.println(" 1. 개인 전적 조회");
+		System.out.println(" 2. 상위 전적 조회");
+		System.out.println("====================================");
+		System.out.print("게임 선택 |이전으로:-1| : ");
+
+	}
+
+	private void searchScore() {
+
+//		1. 게임별로 내 전적만 보여주기
+//		2. 게임별로 상위 3위 리스트
+
+		printScore();
+
+		int menu;
+
+		try {
+			menu = sc.nextInt();
+		} catch (InputMismatchException e) {
+			System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+			menu = -1;
+			sc.nextLine();
+		}
+
+		if (menu == -1) { // 이전으로
+			runRoomMenu();
+			return;
+		}
+
+		switch (menu) {
+			
+			case 1:
+				break;
+
+			case 2:
+				break;
+		}
+	}
+
+	private void printUpdateMenu() {
 		System.out.println("====================================");
 		System.out.println(" <회원 정보 변경> ");
 		System.out.println(" 1. 비밀번호 재설정");
 		System.out.println("====================================");
 		System.out.print("게임 선택 |이전으로:-1| : ");
+	}
 
+	private void updateUser() {
+
+		printUpdateMenu();
 		int menu;
 
 		try {
@@ -434,7 +418,7 @@ public class Client {
 		}
 		switch (gameNum) {
 			case 1:
-				gameName = Type.baseBall;
+				gameName = Type.baseball;
 				break;
 			case 2:
 				gameName = Type.omok;
@@ -446,7 +430,7 @@ public class Client {
 				gameName = Type.yacht;
 				break;
 			case 5:
-				gameName = Type.speedGame;
+				gameName = Type.speedQuiz;
 				break;
 			default:
 				printWrongMenu();

@@ -31,6 +31,8 @@ public class Baseball {
 	private int min = 1;
 	private int max = 9;
 
+	private final boolean isDraw = false;
+
 	public Baseball(String player1, String player2) {
 
 		this.player1 = player1;
@@ -54,7 +56,7 @@ public class Baseball {
 	}
 
 	private void currentTurnInit() {
-		// 순서 랜덤으로 지정. 
+		// 순서 랜덤으로 지정.
 		// true, false가 랜덤으로 나옴.
 		if (new Random().nextBoolean()) {
 			currentTurn = player1;

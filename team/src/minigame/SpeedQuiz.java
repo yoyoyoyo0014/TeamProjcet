@@ -5,20 +5,19 @@ import java.util.List;
 
 import lombok.Data;
 
-
 @Data
 public class SpeedQuiz {
 
 	public SpeedQuizList[] sqList = {
-			new SpeedQuizList("1982년생 가수이며 안동 장씨이다. 2008년 밴드로 데뷔했으며 \n 현재까지도 꾸준히 앨범을 출시하고있다. 해당 가수의 이름은?", "장기하"),
+			new SpeedQuizList("1982년생 가수이며 안동 장씨이다. 2008년 밴드로 데뷔했으며 \n 현재까지도 꾸준히 앨범을 출시하고있다. 해당 가수의 이름은?\n", "장기하"),
 			new SpeedQuizList("뜻이 맞는 사람들이 모여 목적을 달성하기 위해 맴세하는 뜻으로\n" + "복숭아 나무 밑에서 유비,관우, 장비가 의형제를 맺은것에 유래된 고사성어는 무엇일까\n",
 					"도원결의"),
 			new SpeedQuizList("인재를 맞아들이기 위해 노력하거나 마음을 쓴다는 뜻으로\n" + " 유비가 제갈량을 얻기위해 초가집을 세번이나 찾아간 일화에서 유래된 고사성어는 무엇일까\n",
 					"삼고초려"),
 			new SpeedQuizList("1천원에 나오는 인물은 누구일까 무엇일까\n",
-					"율곡이이","이이","율곡 이이"),
+					"율곡이이", "이이", "율곡 이이"),
 			new SpeedQuizList("1999년에 태어난 친구들은 토끼띠이다. 그럼 2001년 생은 무슨 띠일까? \n",
-					"뱀","뱀띠"),
+					"뱀", "뱀띠"),
 			new SpeedQuizList("몇 명씩 무리를 지어 다니거나 함께 일을 하는 모양.을 뜻하는 사자성어 초성 : ㅅㅅㅇㅇ\n",
 					"삼삼오오"),
 			new SpeedQuizList("열 가운데 여덟이나 아홉.을 뜻하는 사자성어  초성 : ㅅㅈㅍㄱ\n",
@@ -40,7 +39,7 @@ public class SpeedQuiz {
 			new SpeedQuizList("한 번에 천금을 얻다. 즉 단 한 번에 큰 재산이나 이익을 얻는 것.을 뜻하는 사자성어 초성 : ㅇㅎㅊㄱ\n",
 					"일확천금"),
 			new SpeedQuizList("하늘이나 땅에서 일어나는 재난이나 변사.을 뜻하는 사자성어 초성 : ㅊㅈㅈㅂ\n",
-					"천재지변"),};
+					"천재지변"), };
 
 	public boolean turnEnd = false;
 
@@ -64,36 +63,39 @@ public class SpeedQuiz {
 
 	private String firstSelectPlayer = "";
 
-	List<Integer> correctAnswerRecord =new ArrayList<Integer>();
-	public int currentQuizNum=0;//현재 문제 번호
+	private boolean isDraw = false;
+
+	List<Integer> correctAnswerRecord = new ArrayList<Integer>();
+	public int currentQuizNum = 0;// 현재 문제 번호
 
 	public boolean sucP1 = false;
 	boolean sucP2 = false;
 
 	boolean notPost = false;
 	boolean end = false;
-	int winCount =3;
+	int winCount = 3;
 
 	String[] player1Result;
 	String[] player2Result;
-	//세로운 문제 
+
+	// 세로운 문제
 	public void GetRandomQuizNum() {
-		//게임 정답지 세팅
-		if(correctAnswerRecord.size()==0) {
-			for(int i=0;i<sqList.length;i++) 
+		// 게임 정답지 세팅
+		if (correctAnswerRecord.size() == 0) {
+			for (int i = 0; i < sqList.length; i++)
 				correctAnswerRecord.add(i);
 		}
-		Integer ran=new java.util.Random().nextInt(correctAnswerRecord.size());
-		currentQuizNum =  correctAnswerRecord.get(ran);
+		Integer ran = new java.util.Random().nextInt(correctAnswerRecord.size());
+		currentQuizNum = correctAnswerRecord.get(ran);
 		correctAnswerRecord.remove(correctAnswerRecord.get(ran));
 
 		winner = null;
 		loser = null;
 	}
+
 	public String GetCurrentQuizProblem() {
 		return sqList[currentQuizNum].problem;
 	}
-
 
 	public SpeedQuiz(String p1, String p2) {
 		player1 = p1;
@@ -121,28 +123,28 @@ public class SpeedQuiz {
 		boolean isPlayer1;
 		String[] realAnser;
 
-		if(msg.getPName().equals(player1)) {
+		if (msg.getPName().equals(player1)) {
 			isPlayer1 = true;
 			realAnser = player1Result;
-		}
-		else {
+		} else {
 			isPlayer1 = false;
-			realAnser = player2Result;;
+			realAnser = player2Result;
+			;
 		}
 
 		for (String tmp : realAnser) {
 			if (tmp.equals(msg.getMsg())) {
 				if (winner == null) {
 					success = true;
-					//처음으로 성공했을 때
+					// 처음으로 성공했을 때
 					firstSelectPlayer = msg.getPName();
 					String winnerName = msg.getPName();
-					gameResult +="정답!";
+					gameResult += "정답!";
 
-					if(winnerName.equals(player1)) {
+					if (winnerName.equals(player1)) {
 						player1WinCount++;
-						//3번 이겼을 때
-						if(player1WinCount>=winCount) {
+						// 3번 이겼을 때
+						if (player1WinCount >= winCount) {
 							System.out.println("우승");
 							winner = msg.getPName();
 							loser = winner.equals(player1) ? player2 : player1;
@@ -152,12 +154,10 @@ public class SpeedQuiz {
 							msg.setOpt1(winner);
 							return;
 						}
-					}
-					else 
-					{
+					} else {
 						player2WinCount++;
-						//3번 이겼을 때
-						if (player2WinCount>=winCount) {
+						// 3번 이겼을 때
+						if (player2WinCount >= winCount) {
 							System.out.println("우승");
 							winner = msg.getPName();
 							loser = winner.equals(player1) ? player2 : player1;
@@ -168,19 +168,18 @@ public class SpeedQuiz {
 							return;
 						}
 					}
-					gameResult +=Score()+"\n";
+					gameResult += Score() + "\n";
 
 					GetRandomQuizNum();
 					int i = currentQuizNum;
 					quiz = sqList[i].problem;
 
 					gameResult += quiz;
-					if(msg.getPName().equals(player1)) 
+					if (msg.getPName().equals(player1))
 						player1Result = sqList[i].answer;
-					
-					else 
+
+					else
 						player2Result = sqList[i].answer;
-					
 
 					gameResult += "정답 입력 >> ";
 					break;
@@ -188,14 +187,14 @@ public class SpeedQuiz {
 			}
 		}
 
-		if(!success&& winner==null)
-			gameResult +=  "떙!";
+		if (!success && winner == null)
+			gameResult += "떙!";
 	}
-
 
 	public String Score() {
-		return player1+" : "+ player1WinCount +",  "+player2+" : " + player2WinCount;
+		return player1 + " : " + player1WinCount + ",  " + player2 + " : " + player2WinCount;
 	}
+
 	public String getResult() {
 		String tmp = gameResult;
 		gameResult = "";
@@ -213,4 +212,5 @@ class SpeedQuizList {
 		this.problem = problem;
 		this.answer = answer;
 	}
+
 }

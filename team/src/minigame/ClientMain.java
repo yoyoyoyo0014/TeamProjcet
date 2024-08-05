@@ -23,12 +23,12 @@ public class ClientMain {
 			String ip = local.getHostAddress();
 			return ip;
 		}
- 
+
 	}
 
 	public static void main(String[] args) {
 
-		String ip = getServerIp(); 
+		String ip = getServerIp();
 		// String ip = "192.168.30.206";
 		int port = 5001;
 
@@ -46,4 +46,5 @@ public class ClientMain {
 			e.printStackTrace();
 		}
 	}
+
 }
