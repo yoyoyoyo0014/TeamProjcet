@@ -112,6 +112,14 @@ public class Client {
 				runRoomMenu();
 				break;
 
+			case Type.personal:
+			case Type.topPlayer:
+				System.out.println(message.getMsg());
+				System.out.println("이전 메뉴로 돌아갑니다. ENTER를 눌러주세요.");
+				sc.nextLine();
+				runRoomMenu();
+				break;
+
 			case Type.roomList:
 				if (message.getMsg() == null) {
 					System.out.println("<생성된 방이 없습니다.>");
@@ -315,14 +323,29 @@ public class Client {
 			return;
 		}
 
+		Message msg = new Message();
+		msg.setType(Type.rank);
+
 		switch (menu) {
-			
+
 			case 1:
+				msg.setOpt1(Type.personal);
+				send(msg);
 				break;
 
 			case 2:
+				msg.setOpt1(Type.topPlayer);
+				send(msg);
 				break;
+
+			default: {
+				System.err.println("잘 못 입력했습니다. 이전으로 돌아갑니다.");
+				runRoomMenu();
+				return;
+			}
+			
 		}
+		sc.nextLine();
 	}
 
 	private void printUpdateMenu() {
@@ -375,8 +398,8 @@ public class Client {
 		System.out.print("새 비밀번호 확인: ");
 		newPwd2 = sc.next();
 
-		if (!newPwd.equals(newPwd2)) {
-			System.out.println("새 비밀번호가 일치하지 않습니다.");
+		if (!newPwd.equals(newPwd2) || pwd.equals(newPwd)) {
+			System.err.println("변경할 비밀번호를 다시 한번 확인 해주세요.");
 			updateUser();
 			return;
 		}

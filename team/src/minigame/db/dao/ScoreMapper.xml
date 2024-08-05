@@ -9,10 +9,23 @@
 		values (#{win}, #{draw}, #{lose},
 		#{point}, #{us_key}, #{gm_key})
 		on duplicate key update
-		sc_win = sc_win + #{win},
+		sc_win = sc_win
+		+ #{win},
 		sc_draw = sc_draw + #{draw},
 		sc_lose = sc_lose + #{lose},
 		sc_point = sc_point + #{point};
 	</insert>
+
+	<select id="selectUserScore" resultType="ScoreVO">
+		select * from score where sc_us_key = #{key};
+	</select>
+	
+	<select id="selectScoreAllList" resultType="Integer">
+	select distinct sc_gm_key from score;
+	</select>
+	
+	<select id="selectScoreList" resultType="ScoreVO">
+	select * from score where sc_gm_key = #{gm_key} order by sc_point desc limit 3;
+	</select>
 
 </mapper>

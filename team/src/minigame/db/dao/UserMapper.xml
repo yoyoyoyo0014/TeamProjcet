@@ -33,4 +33,7 @@
 	<select id="selectUserKey" resultType="int">
 		select us_key from user where us_id = #{id};
 	</select>
+	<select id="selectUserId" resultType="String">
+		select us_id from user where us_key = #{key};
+	</select>
 </mapper>

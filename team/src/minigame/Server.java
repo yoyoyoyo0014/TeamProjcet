@@ -244,9 +244,9 @@ public class Server implements Program {
 						cUserList.remove(cUser);
 						userCount--;
 					}
-					
+
 					cUser.setUser(null);
-					
+
 					break;
 				}
 			}
@@ -297,6 +297,22 @@ public class Server implements Program {
 					int roomNum = Integer.parseInt(message.getMsg()) - 1;
 					enterRoom(roomNum);
 				}
+				break;
+			case Type.rank:
+				Message msg = null;
+				// opt1
+				// personal : 개인전적
+				// topplayer : 상위 플레이어 3명 성적 출력
+				if (message.getOpt1().equals(Type.personal)) {
+					msg = scoreController.getScore(message.getPName());
+					msg.setType(Type.personal);
+				} else if (message.getOpt1().equals(Type.topPlayer)) {
+					msg = scoreController.getTopScore();
+					msg.setType(Type.topPlayer);
+				}
+
+				send(oos, msg);
+
 				break;
 			case Type.playing:
 

@@ -17,4 +17,6 @@ public interface GameDAO {
 
 	int selectDPoint(@Param("title")String gameTitle);
 
+	String selectGameTitle(@Param("key")int sc_gm_key);
+
 }

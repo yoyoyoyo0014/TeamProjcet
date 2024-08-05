@@ -20,4 +20,6 @@ public interface UserDAO {
 
 	int selectUserKey(@Param("id") String playerID);
 
+	String selectUserId(@Param("key")int us_key);
+
 }

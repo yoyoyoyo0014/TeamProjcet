@@ -12,4 +12,8 @@ public interface UserService { // 인터페이스로 선언.
 
 	boolean updatePassword(String id, String pwd, String newPwd);
 
+	int getUserKey(String playerID);
+
+	String getUserId(int us_key);
+
 }

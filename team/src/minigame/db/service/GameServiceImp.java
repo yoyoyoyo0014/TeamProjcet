@@ -53,4 +53,8 @@ public class GameServiceImp implements GameService {
 		return gameDao.selectDPoint(gameTitle);
 	}
 
+	public String getGameTitle(int sc_gm_key) {
+		return gameDao.selectGameTitle(sc_gm_key);
+	}
+
 }

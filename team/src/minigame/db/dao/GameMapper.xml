@@ -19,5 +19,9 @@
 	<select id="selectDPoint" resultType="int">
 		select gm_vPoint + gm_lPoint from game where gm_ti = #{title};
 	</select>
+	<select id="selectGameTitle" resultType="String">
+		select gm_ti from game where gm_key = #{key};
+	</select>
+	
 
 </mapper>

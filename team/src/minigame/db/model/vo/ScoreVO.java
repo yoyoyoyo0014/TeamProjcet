@@ -12,15 +12,17 @@ public class ScoreVO {
 	private int sc_win; //
 	private int sc_draw; //
 	private int sc_lose;
-	private String sc_id;
-	private String sc_gm_ti;
+	private int sc_point;
+	private int sc_us_key;
+	private int sc_gm_key;
 
-	public ScoreVO(int sc_win, int sc_lose, int sc_draw, String sc_id, String gm_ti) {
+	public ScoreVO(int sc_win, int sc_lose, int sc_draw, int sc_point, int sc_us_key, int sc_gm_key) {
 		this.sc_win = sc_win;
 		this.sc_lose = sc_lose;
 		this.sc_draw = sc_draw;
-		this.sc_id = sc_id;
-		this.sc_gm_ti = gm_ti;
+		this.sc_point = sc_point;
+		this.sc_us_key = sc_us_key;
+		this.sc_gm_key = sc_gm_key;
 	}
 
 }

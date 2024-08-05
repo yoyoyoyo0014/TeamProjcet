@@ -65,10 +65,17 @@ public class UserServiceImp implements UserService {
 
 		return userDao.updatePassword(id, pwd, newPwd);
 	}
-
+	
+	@Override
 	public int getUserKey(String playerID) {
 	
 		return userDao.selectUserKey(playerID);
+	}
+	
+	@Override
+	public String getUserId(int us_key) {
+		
+		return userDao.selectUserId(us_key);
 	}
 
 
