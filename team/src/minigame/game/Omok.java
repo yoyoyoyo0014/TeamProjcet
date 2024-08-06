@@ -10,7 +10,7 @@ import minigame.utils.Message;
 import minigame.utils.Type;
 
 @Data
-public class Omok{
+public class Omok {
 
 	public static final String yellow = "\u001B[33m";
 	public static final String blue = "\u001B[34m";
@@ -197,7 +197,7 @@ public class Omok{
 	}
 
 	public void run(Message msg) {
-		
+
 		gameResult += "\n";
 
 		List<String> select = new ArrayList<String>();
@@ -205,9 +205,10 @@ public class Omok{
 
 		select = Arrays.asList(msg.getMsg().trim().split(" "));
 
-		if (select.get(0).equals("exit")) {
-			// 종료희망 => 종료 예정
-			gameResult += "<" + currentTurn + "님이 경기를 포기하였습니다.>\n";
+		if (select.get(0).equals(Type.exit)) {
+
+			gameResult += "<" + currentTurn + " 님이 경기를 포기하였습니다.>\n";
+			gameResult += "<게임이 종료됩니다>";
 
 			turnNext();
 			victory();

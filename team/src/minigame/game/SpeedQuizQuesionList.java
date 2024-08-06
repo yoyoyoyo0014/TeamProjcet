@@ -1,6 +1,7 @@
 package minigame.game;
 
 public class SpeedQuizQuesionList {
+
 	public static SpeedQuizList[] sqList = {
 			new SpeedQuizList("1982년생 가수이며 안동 장씨이다. 2008년 밴드로 데뷔했으며 \n 현재까지도 꾸준히 앨범을 출시하고있다. 해당 가수의 이름은?\n", "장기하"),
 			new SpeedQuizList("뜻이 맞는 사람들이 모여 목적을 달성하기 위해 맴세하는 뜻으로\n" + "복숭아 나무 밑에서 유비,관우, 장비가 의형제를 맺은것에 유래된 고사성어는 무엇일까\n",
@@ -33,4 +34,5 @@ public class SpeedQuizQuesionList {
 					"일확천금"),
 			new SpeedQuizList("하늘이나 땅에서 일어나는 재난이나 변사.을 뜻하는 사자성어 초성 : ㅊㅈㅈㅂ\n",
 					"천재지변"), };
+
 }

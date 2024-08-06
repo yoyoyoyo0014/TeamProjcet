@@ -156,7 +156,7 @@ public class Typing{
 
 	public void run(Message message) {
 
-		if (message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
+		if (message.getMsg().equals(Type.exit)) {
 			gameResult += "====================================\n";
 			gameResult += currentTurn + "님이 게임을 포기하셨습니다.\n";
 			gameResult += "====================================\n";

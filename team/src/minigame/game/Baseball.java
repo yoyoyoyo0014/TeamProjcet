@@ -21,7 +21,7 @@ public class Baseball {
 	private String player1;
 	private String player2;
 	private String currentTurn;
-	
+
 	private List<Integer> randomNumber;
 
 	// 게임에 관한 모든 출력 값을 gameResult 변수로 받음.
@@ -151,14 +151,34 @@ public class Baseball {
 
 		// String으로 받은 숫자 <예: 3 6 9>를
 		// integer list로 생성
-		if (message.getMsg() == null) {
-			// 입력받은 숫자가 안넘어온 것 Error 발생
+		
+		if (message.getMsg().equals(Type.exit)) {
+
+			loser = message.getPName();
+			winner = loser.equals(player1)?player2:player1;
+			
+			gameResult += "<" + loser + " 님이 경기를 포기하였습니다.>\n";
+			gameResult += "<게임이 종료됩니다>";
+
+			return;
 		}
+
 		List<String> strNum = new ArrayList<String>();
 		strNum = Arrays.asList(message.getMsg().split(" "));
 		List<Integer> userNum = new ArrayList<Integer>();
-		for (String tmp : strNum) {
-			userNum.add(Integer.parseInt(tmp));
+		try {
+			for (String tmp : strNum) {
+				int num = Integer.parseInt(tmp);
+				if (num > 9 || num <= 0) {
+					Exception e = new Exception();
+					throw e;
+				}
+				userNum.add(Integer.parseInt(tmp));
+			}
+		} catch (Exception e) {
+			gameResult += "<올바른 숫자가 입력되지 않았습니다.>\n";
+			gameResult += "<숫자 3개를 입력해주세요.(예: 3 6 9) > |종료: EXIT| : ";
+			return;
 		}
 
 		// 게임 시작

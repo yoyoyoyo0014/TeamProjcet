@@ -37,7 +37,6 @@ public class SpeedQuiz {
 	List<Integer> correctAnswerRecord = new ArrayList<Integer>();
 	public List<Integer> currentQuizNum = new ArrayList<Integer>();// 현재 문제 번호
 
-	
 	public boolean end = false;
 
 	final int winCount = 3;
@@ -76,20 +75,20 @@ public class SpeedQuiz {
 	}
 
 	public void run(Message msg) {
-		if (msg.equals("")) 
+		if (msg.equals(""))
 			return;
 
 		String[] realAnser;
 
 		if (msg.getPName().equals(player1))
 			realAnser = player1Result;
-		else 
+		else
 			realAnser = player2Result;
 
 		for (String tmp : realAnser) {
 			if (tmp.equals(msg.getMsg())) {
 				if (winner == null) {
-					
+
 					String winnerName = msg.getPName();
 					gameResult += "정답!";
 
@@ -118,7 +117,8 @@ public class SpeedQuiz {
 		gameResult += "정답 입력 >> ";
 
 	}
-	//문제 만든 후 유저에게 정보 전달
+
+	// 문제 만든 후 유저에게 정보 전달
 	public void MakeQuiz(Message msg) {
 		gameResult += Score() + "\n";
 
@@ -130,7 +130,6 @@ public class SpeedQuiz {
 			gameResult += quiz;
 			player1Result = sqList[i].answer;
 		}
-			
 
 		else {
 			GetRandomQuizNum();
@@ -140,12 +139,11 @@ public class SpeedQuiz {
 			gameResult += quiz;
 			player2Result = sqList[i].answer;
 		}
-			
 
 		gameResult += "정답 입력 >> ";
 	}
 
-	//모든 문제를 클리어
+	// 모든 문제를 클리어
 	public void SuccessSpeedQuiz(Message msg) {
 		winner = msg.getPName();
 		loser = winner.equals(player1) ? player2 : player1;
@@ -153,8 +151,8 @@ public class SpeedQuiz {
 		end = true;
 		return;
 	}
-	
-	//스코어 정보 전달
+
+	// 스코어 정보 전달
 	public String Score() {
 		return player1 + " : " + player1WinCount + ",  " + player2 + " : " + player2WinCount;
 	}
@@ -164,9 +162,11 @@ public class SpeedQuiz {
 		gameResult = "";
 		return tmp;
 	}
+
 }
 
 class SpeedQuizList {
+
 	public String problem;
 	public String[] answer;
 

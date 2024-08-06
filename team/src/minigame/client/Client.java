@@ -185,7 +185,7 @@ public class Client {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
 					if (answer.get(i).equals(Type.exit)) {
-						msg.setOpt1(Type.exit);
+						msg.setMsg(Type.exit);
 						send(msg);
 						return;
 					}
