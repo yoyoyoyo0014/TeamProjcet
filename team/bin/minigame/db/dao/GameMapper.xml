@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="minigame.db.dao.GameDAO">
+	<insert id="insertGame">
+		insert into game(gm_ti) values(#{title})
+	</insert>
+
+	<select id="selectGameKey" resultType="int">
+		select gm_key from game where gm_ti = #{title};
+	</select>
+	<select id="selectVPoint" resultType="int">
+		select gm_vPoint from game where gm_ti = #{title};
+	</select>
+	<select id="selectLPoint" resultType="int">
+		select gm_lPoint from game where gm_ti = #{title};
+	</select>
+	<select id="selectDPoint" resultType="int">
+		select gm_vPoint + gm_lPoint from game where gm_ti = #{title};
+	</select>
+	<select id="selectGameTitle" resultType="String">
+		select gm_ti from game where gm_key = #{key};
+	</select>
+	
+
+</mapper>

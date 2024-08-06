@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="minigame.db.dao.UserDAO">
+	<select id="existUser" resultType="UserVO">
+		select *
+		from user
+		where
+		us_id=#{id};
+	</select>
+	<select id="login" resultType="UserVO">
+		select *
+		from user
+		where us_id=#{id}
+		and us_pw=#{pw};
+	</select>
+	<select id="findPassword" resultType="String">
+		select us_pw
+		from user
+		where
+		us_id = #{id} and us_email =#{email};
+	</select>
+	<insert id="join">
+		insert into user(us_id,us_email,us_pw)
+		values(#{us.us_id},#{us.us_email},#{us.us_pw});
+	</insert>
+	<update id="updatePassword">
+		update user set us_pw = #{newPwd}
+		where us_id = #{id}
+		and us_pw = #{pwd};
+	</update>
+	<select id="selectUserKey" resultType="int">
+		select us_key from user where us_id = #{id};
+	</select>
+	<select id="selectUserId" resultType="String">
+		select us_id from user where us_key = #{key};
+	</select>
+</mapper>
