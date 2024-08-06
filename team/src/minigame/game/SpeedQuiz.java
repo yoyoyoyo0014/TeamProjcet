@@ -37,8 +37,7 @@ public class SpeedQuiz {
 	List<Integer> correctAnswerRecord = new ArrayList<Integer>();
 	public List<Integer> currentQuizNum = new ArrayList<Integer>();// 현재 문제 번호
 
-	public boolean sucP1 = false;
-	public boolean sucP2 = false;
+	
 	public boolean end = false;
 
 	int winCount = 3;
