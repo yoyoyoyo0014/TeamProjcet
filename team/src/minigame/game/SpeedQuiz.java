@@ -40,7 +40,7 @@ public class SpeedQuiz {
 	
 	public boolean end = false;
 
-	int winCount = 3;
+	final int winCount = 3;
 
 	String[] player1Result;
 	String[] player2Result;
@@ -164,11 +164,9 @@ public class SpeedQuiz {
 		gameResult = "";
 		return tmp;
 	}
-
 }
 
 class SpeedQuizList {
-
 	public String problem;
 	public String[] answer;
 
@@ -176,5 +174,4 @@ class SpeedQuizList {
 		this.problem = problem;
 		this.answer = answer;
 	}
-
 }
