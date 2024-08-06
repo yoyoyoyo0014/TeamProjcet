@@ -21,7 +21,7 @@ import minigame.utils.User;
 
 @Data
 @RequiredArgsConstructor
-public class Server{
+public class Server {
 
 	// private static List<ObjectOutputStream> oosList = new ArrayList<>();
 	// private static List<ObjectInputStream> oisList = new ArrayList<>();
@@ -170,7 +170,7 @@ public class Server{
 					System.out.println("[<" + userId + ">님이 나갔습니다.]");
 
 					sendAll(msg);
-					
+
 					if (userRoom != null) {
 						if (userRoom.getIsPlaying() == Type.playing) {
 
@@ -457,7 +457,7 @@ public class Server{
 		}
 		return null;
 	}
-	
+
 	private void recordScore(String gameTitle, String winner, String loser, boolean isDraw) {
 		// 게임의 결과를 user의 game 객체에 update한다.
 		// 승자와 패자의 객체를 가져와서 승패를 업데이트한다.
@@ -489,7 +489,7 @@ public class Server{
 		if (roomList.size() != 0) {
 			msg = "";
 			for (int i = 0; i < roomList.size(); i++) {
-				msg += (i + 1) + ". " +roomList.get(i).toString() +"\n";
+				msg += (i + 1) + ". " + roomList.get(i).toString() + "\n";
 			}
 
 			message.setMsg(msg);
@@ -577,26 +577,6 @@ public class Server{
 		// 현재 접속한 유저인 지
 		Message msg = new Message();
 
-//		if (totalUser.size() == 0) {
-//			msg.setMsg("등록된 유저가 없습니다.");
-//			sendUserLogin(msg);
-//			return;
-//
-//		}
-		User loginUser = getUser(id, password);
-
-		if (loginUser != null) {
-			for (ConnectedUser tmp : cUserList) {
-				if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
-					msg.setMsg("이미 접속한 유저입니다.");
-					sendUserLogin(msg);
-					return;
-				}
-			}
-		} else {
-			loginUser = new User(id, password);
-		}
-
 		// ****디비에 id랑 password를 넘겨주고 로그인
 		if (!userController.login(id, password)) {
 			msg.setMsg("아이디 혹은 비밀번호가 일치하지 않습니다.");
@@ -604,59 +584,30 @@ public class Server{
 			return;
 			// 재로그인 요구.
 
-		} else {
-			// loginedUser 객체에 추가
-			// 게임을 선택할 수 있도록 메뉴판 제공
-			// "<로그인 성공>";
-			msg.setMsg("<로그인 성공>\n");
-			cUser.setUser(loginUser);
-//			if(!cUserList.contains(cUser)) {
-//				cUserList.add(cUser);
-//			}
-			msg.setType(Type.menu);
-			send(oos, msg);
-
-			Message welcomeMsg = new Message();
-			welcomeMsg.setMsg("[<" + id + ">님이 접속하셨습니다.]");
-			welcomeMsg.setType(Type.alert);
-			sendAll(welcomeMsg);
 		}
 
-//		if (loginUser == null) {
-//			msg.setMsg("아이디 혹은 비밀번호가 일치하지 않습니다.");
-//			sendUserLogin(msg);
-//			return;
-//			// 재로그인 요구.
-//
-//		} else {
-//			// loginedUser 객체에 추가
-//			// 게임을 선택할 수 있도록 메뉴판 제공
-//			// "<로그인 성공>";
-//			msg.setMsg("<로그인 성공>\n");
-//			cUser.setUser(loginUser);
-////			if(!cUserList.contains(cUser)) {
-////				cUserList.add(cUser);
-////			}
-//			msg.setType(Type.menu);
-//			send(oos, msg);
-//			Message welcomeMsg = new Message();
-//			welcomeMsg.setMsg("[<" + id + ">님이 접속하셨습니다.]");
-//			welcomeMsg.setType(Type.alert);
-//			sendAll(welcomeMsg);
-//		}
-
-	}
-
-	private User getUser(String id, String password) {
-		// 입력받은 id와 password로
-		// id가 일치할 때 password도 일치한다면 해당하는 객체 반환
-		// 없다면 null 반환, id가 일치하지만 비밀번호가 다르다면 null 반환
-		for (User tmp : totalUser) {
-			if (tmp.getId().equals(id) && tmp.isValidPassword(password)) {
-				return tmp;
+		User loginUser = new User(id, password);
+		for (ConnectedUser tmp : cUserList) {
+			if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
+				msg.setMsg("이미 접속한 유저입니다.");
+				sendUserLogin(msg);
+				return;
 			}
 		}
-		return null;
-	}
 
+		// loginedUser 객체에 추가
+		// 게임을 선택할 수 있도록 메뉴판 제공
+		// "<로그인 성공>";
+		msg.setMsg("<로그인 성공>\n");
+		cUser.setUser(loginUser);
+
+		msg.setType(Type.menu);
+		send(oos, msg);
+
+		Message welcomeMsg = new Message();
+		welcomeMsg.setMsg("[<" + id + ">님이 접속하셨습니다.]");
+		welcomeMsg.setType(Type.alert);
+		sendAll(welcomeMsg);
+
+	}
 }
