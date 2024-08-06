@@ -1,9 +1,11 @@
-package minigame;
+package minigame.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 @Data
 public class SpeedQuiz {
@@ -69,10 +71,11 @@ public class SpeedQuiz {
 	public int currentQuizNum = 0;// 현재 문제 번호
 
 	public boolean sucP1 = false;
-	boolean sucP2 = false;
-
+	public boolean sucP2 = false;
+	public boolean end = false;
+	
 	boolean notPost = false;
-	boolean end = false;
+	
 	int winCount = 3;
 
 	String[] player1Result;

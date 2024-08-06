@@ -1,4 +1,4 @@
-package minigame;
+package minigame.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 import lombok.Data;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 @Data
 public class Yacht {

@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import lombok.NoArgsConstructor;
-import minigame.Message;
-import minigame.Type;
 import minigame.db.model.vo.ScoreVO;
 import minigame.db.service.GameServiceImp;
 import minigame.db.service.UserServiceImp;
+import minigame.utils.Message;
+import minigame.utils.Type;
 import minigame.db.service.ScoreServiceImp;
 
 @NoArgsConstructor

@@ -1,4 +1,4 @@
-package minigame;
+package minigame.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 import lombok.Data;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 @Data
 public class Baseball {
@@ -19,7 +21,7 @@ public class Baseball {
 	private String player1;
 	private String player2;
 	private String currentTurn;
-
+	
 	private List<Integer> randomNumber;
 
 	// 게임에 관한 모든 출력 값을 gameResult 변수로 받음.

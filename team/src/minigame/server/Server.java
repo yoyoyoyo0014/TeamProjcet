@@ -1,4 +1,4 @@
-package minigame;
+package minigame.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,14 +13,15 @@ import lombok.RequiredArgsConstructor;
 import minigame.db.controller.GameController;
 import minigame.db.controller.ScoreController;
 import minigame.db.controller.UserController;
-import minigame.db.service.GameServiceImp;
-import minigame.db.service.ScoreServiceImp;
-import minigame.db.service.UserServiceImp;
-import program.Program;
+import minigame.utils.ConnectedUser;
+import minigame.utils.Message;
+import minigame.utils.Room;
+import minigame.utils.Type;
+import minigame.utils.User;
 
 @Data
 @RequiredArgsConstructor
-public class Server implements Program {
+public class Server{
 
 	// private static List<ObjectOutputStream> oosList = new ArrayList<>();
 	// private static List<ObjectInputStream> oisList = new ArrayList<>();
@@ -116,17 +117,6 @@ public class Server implements Program {
 
 	}
 
-	@Override
-	public void printMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void runMenu(int menu) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void runSub() {
 		Thread t = new Thread(() -> {
@@ -148,7 +138,6 @@ public class Server implements Program {
 
 	}
 
-	@Override
 	public void run() {
 
 		runSub();
@@ -491,41 +480,11 @@ public class Server implements Program {
 		}
 		return null;
 	}
-
-	// [DB 등록 필요]
-	private Game getUserGameInfo(User user, String gameTitle) {
-		// user의 게임 성적 정보를 받아온다.
-
-		Game tGame = new Game(gameTitle);
-
-		boolean isExist = false;
-		for (Game tmp : user.getGames()) {
-			// 이전에 했던 게임이라면 객체를 반환
-			if (tmp.getName().equals(gameTitle)) {
-				isExist = true;
-				return tmp;
-			}
-		}
-
-		// 처음한 게임이라면 게임의 객체를 생성하고 반환한다.
-		if (!isExist) {
-			user.getGames().add(tGame);
-			return user.getGames().get(user.getGames().size() - 1);
-		}
-		return null;
-	}
-
+	
 	private void recordScore(String gameTitle, String winner, String loser, boolean isDraw) {
 		// 게임의 결과를 user의 game 객체에 update한다.
 		// 승자와 패자의 객체를 가져와서 승패를 업데이트한다.
 
-//		User tmpUser = getUserInfo(winner);
-//		Game gameTmp = getUserGameInfo(tmpUser, gameTitle);
-//		gameTmp.updateWin();
-//
-//		tmpUser = getUserInfo(loser);
-//		gameTmp = getUserGameInfo(tmpUser, gameTitle);
-//		gameTmp.updateLose();
 		int win, lose;
 		if (isDraw) {
 			win = lose = 0;
@@ -721,18 +680,6 @@ public class Server implements Program {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public void save(String fileName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void load(String fileName) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

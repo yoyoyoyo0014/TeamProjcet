@@ -1,4 +1,4 @@
-package minigame;
+package minigame.game;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,10 +12,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 import lombok.Data;
-import program.Program;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 @Data
-public class Typing implements Program {
+public class Typing{
 
 	private Scanner scan = new Scanner(System.in);
 
@@ -141,24 +142,6 @@ public class Typing implements Program {
 		long diff = date2.getTime() - date1.getTime();
 
 		return diff / 1000;
-
-	}
-
-	@Override
-	public void printMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void runMenu(int menu) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
 
 	}
 

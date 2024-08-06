@@ -1,4 +1,4 @@
-package minigame;
+package minigame.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ public class User implements Serializable {
 	private String id;
 	@NonNull
 	private String password;
-	private List<Game> games = new ArrayList<>();
 
 	@Override
 	public boolean equals(Object obj) {
@@ -46,14 +45,6 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public List<Game> getGames() {
-		return games;
-	}
-
-	public void setGames(List<Game> games) {
-		this.games = games;
-	}
-
 	public boolean isValidPassword(String password) {
 		return this.password.equals(password);
 	}
@@ -63,23 +54,7 @@ public class User implements Serializable {
 			this.password = newPwd;
 		}
 	}
+	
 //	보안상 이유로 password는 getter/setter 미구현
 
-//	public String getPassword() {
-//		return password;
-//	}
-
-//	public void setPassword(String password) {
-//		this.password = password;
-//	}
-
 }
-
-// id를 입력하면
-// A게임에서 몇승몇패
-// B게임에서 몇승몇패
-// C게임에서 몇승몇패
-// D게임에서 몇승몇패
-// E게임에서 몇승몇패
-
-// ID마다 전적?

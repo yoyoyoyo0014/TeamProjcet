@@ -1,6 +1,11 @@
-package minigame;
+package minigame.utils;
 
 import lombok.Data;
+import minigame.game.Baseball;
+import minigame.game.Omok;
+import minigame.game.SpeedQuiz;
+import minigame.game.Typing;
+import minigame.game.Yacht;
 
 @Data
 public class Room {
@@ -51,7 +56,6 @@ public class Room {
 			case Type.baseball:
 				msg = baseball.getCurrentTurn();
 				break;
-			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getCurrentTurn();
 				break;
@@ -75,7 +79,6 @@ public class Room {
 			case Type.baseball:
 				msg = baseball.getLoser();
 				break;
-			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getLoser();
 				break;
@@ -99,7 +102,6 @@ public class Room {
 			case Type.baseball:
 				msg = baseball.getWinner();
 				break;
-			// case Tag.otherGame :
 			case Type.omok:
 				msg = omok.getWinner();
 				break;
@@ -135,7 +137,6 @@ public class Room {
 				tmp.setMsg(baseball.getResult());
 				break;
 			case Type.omok:
-//				게임 이닛, 차례 정하고 초기화면 받기
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
 					isPlaying = Type.playing;
@@ -145,7 +146,6 @@ public class Room {
 				tmp.setMsg(omok.getResult());
 				break;
 			case Type.typing:
-//				게임 이닛, 차례 정하고 초기화면 받기
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
 					isPlaying = Type.playing;
@@ -157,7 +157,6 @@ public class Room {
 				tmp.setMsg(typing.getResult());
 				break;
 			case Type.yacht:
-//				게임 이닛, 차례 정하고 초기화면 받기
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
 					isPlaying = Type.playing;
@@ -187,17 +186,10 @@ public class Room {
 					tmp.setTurnEnd(false);
 				}
 				if (speedQuiz.end) {
-//				System.out.println("안끝나");
 					tmp.setEnd(true);
 				}
-				/*
-				 * if(speedGame.notPost) { tmp.setNotPost(true); }else { tmp.setNotPost(false);
-				 * }
-				 */
-				break;
 
-//			case Tag.otherGame:
-//				break;
+				break;
 
 		}
 		return tmp;
@@ -231,8 +223,8 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "[" + Type.kor_tag(getGameTitle()) +"(" +getGameTitle()+")]" 
-				+ "[" + getRoomTitle() + "]" 
+		return "[" + Type.kor_tag(getGameTitle()) + "(" + getGameTitle() + ")]"
+				+ "[" + getRoomTitle() + "]"
 				+ "[방장:" + getRoomManager().getUser().getId() + "]";
 	}
 

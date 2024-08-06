@@ -1,4 +1,4 @@
-package minigame;
+package minigame.client;
 
 import java.io.IOException;
 import java.net.InetAddress;

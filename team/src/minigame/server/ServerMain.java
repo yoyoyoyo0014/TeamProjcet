@@ -1,4 +1,4 @@
-package minigame;
+package minigame.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

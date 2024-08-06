@@ -1,4 +1,4 @@
-package minigame;
+package minigame.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Random;
 
 import lombok.Data;
-import program.Program;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 @Data
-public class Omok implements Program {
+public class Omok{
 
 	public static final String yellow = "\u001B[33m";
 	public static final String blue = "\u001B[34m";
@@ -121,18 +122,6 @@ public class Omok implements Program {
 			gameResult += " " + Integer.toHexString(i) + " " + tmp + "\n";
 			// ●
 		}
-	}
-
-	@Override
-	public void printMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void runMenu(int menu) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isValidNum(int num) {
@@ -303,24 +292,6 @@ public class Omok implements Program {
 			winner = player2;
 		}
 		gameResult += "승자는 <" + winner + "님입니다>\n";
-
-	}
-
-	@Override
-	public void save(String fileName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void load(String fileName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -1,4 +1,4 @@
-package minigame;
+package minigame.utils;
 
 import java.io.ObjectOutputStream;
 import java.util.Objects;

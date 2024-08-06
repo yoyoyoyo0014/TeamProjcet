@@ -1,4 +1,4 @@
-package minigame;
+package minigame.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import minigame.utils.Message;
+import minigame.utils.Type;
 
 // 연결된 소켓을 이용하여 데이터를 주고 받는 클래스
 @RequiredArgsConstructor
