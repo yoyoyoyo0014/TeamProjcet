@@ -117,30 +117,7 @@ public class Server{
 
 	}
 
-
-	public void runSub() {
-		Thread t = new Thread(() -> {
-			try {
-				while (true) {
-					Thread.sleep(1000);
-					Message msg = new Message();
-					msg.setType(Type.alert);
-					msg.setMsg("");
-					sendAll(msg);
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		});
-		t.start();
-
-	}
-
 	public void run() {
-
-		runSub();
 
 //		임시로 유저 추가.
 //		totalUser.add(new User("qwe", "1234"));
