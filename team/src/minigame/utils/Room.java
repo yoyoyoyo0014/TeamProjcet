@@ -166,7 +166,6 @@ public class Room {
 				tmp.setMsg(yacht.getResult());
 				break;
 			case Type.speedQuiz:
-
 				if (isPlaying.equals(Type.start)) {
 					// 게임 첫 시작.
 					isPlaying = Type.playing;
