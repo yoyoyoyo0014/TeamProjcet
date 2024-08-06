@@ -553,9 +553,7 @@ public class Server implements Program {
 		if (roomList.size() != 0) {
 			msg = "";
 			for (int i = 0; i < roomList.size(); i++) {
-				msg += i + 1 + ".[" + Type.kor_tag(roomList.get(i).getGameTitle()) +"(" +roomList.get(i).getGameTitle()+")]" 
-						+ "[" + roomList.get(i).getRoomTitle() + "]" 
-						+ "[방장:" + roomList.get(i).getRoomManager().getUser().getId() + "]\n";
+				msg += (i + 1) + ". " +roomList.get(i).toString() +"\n";
 			}
 
 			message.setMsg(msg);
@@ -574,7 +572,7 @@ public class Server implements Program {
 				userRoom = new Room(tmp, gameTitle, roomTitle);
 				userRoom.setRoomManager(cUser);
 				roomList.add(userRoom);
-				System.out.println(roomList);
+				System.out.println("방 생성:" + userRoom);
 				break;
 			}
 		}

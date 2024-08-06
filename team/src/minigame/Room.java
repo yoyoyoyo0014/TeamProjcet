@@ -231,7 +231,9 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "[" + gameTitle + "]" + " " + roomTitle + " <방장:" + roomManager.getUser().getId() + ">";
+		return "[" + Type.kor_tag(getGameTitle()) +"(" +getGameTitle()+")]" 
+				+ "[" + getRoomTitle() + "]" 
+				+ "[방장:" + getRoomManager().getUser().getId() + "]";
 	}
 
 }

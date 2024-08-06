@@ -145,7 +145,7 @@ public class SpeedQuiz {
 						player1WinCount++;
 						// 3번 이겼을 때
 						if (player1WinCount >= winCount) {
-							System.out.println("우승");
+//							System.out.println("우승");
 							winner = msg.getPName();
 							loser = winner.equals(player1) ? player2 : player1;
 							gameResult += "끝!";
@@ -187,8 +187,10 @@ public class SpeedQuiz {
 			}
 		}
 
-		if (!success && winner == null)
-			gameResult += "떙!";
+		if (!success && winner == null) {
+			gameResult += "떙!\n";
+			gameResult += "정답 입력 >> ";
+		}
 	}
 
 	public String Score() {
