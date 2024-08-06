@@ -45,7 +45,7 @@ public class SpeedQuiz {
 	String[] player1Result;
 	String[] player2Result;
 
-	// 세로운 문제
+	// 새로운 문제
 	public void GetRandomQuizNum() {
 		// 게임 정답지 세팅
 		if (correctAnswerRecord.size() == 0) {
@@ -55,10 +55,6 @@ public class SpeedQuiz {
 		Integer ran = new java.util.Random().nextInt(correctAnswerRecord.size());
 		currentQuizNum.add(correctAnswerRecord.get(ran));
 		correctAnswerRecord.remove(correctAnswerRecord.get(ran));
-	}
-
-	public String GetCurrentQuizProblem(int num) {
-		return sqList[currentQuizNum.get(num)].problem;
 	}
 
 	public SpeedQuiz(String p1, String p2) {
@@ -80,7 +76,6 @@ public class SpeedQuiz {
 	}
 
 	public void run(Message msg) {
-		boolean success = false;
 		if (msg.equals("")) 
 			return;
 
@@ -94,8 +89,7 @@ public class SpeedQuiz {
 		for (String tmp : realAnser) {
 			if (tmp.equals(msg.getMsg())) {
 				if (winner == null) {
-					success = true;
-					// 처음으로 성공했을 때
+					
 					String winnerName = msg.getPName();
 					gameResult += "정답!";
 
@@ -124,14 +118,10 @@ public class SpeedQuiz {
 		gameResult += "정답 입력 >> ";
 
 	}
-
+	//문제 만든 후 유저에게 정보 전달
 	public void MakeQuiz(Message msg) {
 		gameResult += Score() + "\n";
 
-		
-		
-		
-		
 		if (msg.getPName().equals(player1)) {
 			GetRandomQuizNum();
 			int i = currentQuizNum.get(player1WinCount);
@@ -155,7 +145,7 @@ public class SpeedQuiz {
 		gameResult += "정답 입력 >> ";
 	}
 
-
+	//모든 문제를 클리어
 	public void SuccessSpeedQuiz(Message msg) {
 		winner = msg.getPName();
 		loser = winner.equals(player1) ? player2 : player1;
@@ -163,7 +153,8 @@ public class SpeedQuiz {
 		end = true;
 		return;
 	}
-
+	
+	//스코어 정보 전달
 	public String Score() {
 		return player1 + " : " + player1WinCount + ",  " + player2 + " : " + player2WinCount;
 	}
@@ -173,6 +164,7 @@ public class SpeedQuiz {
 		gameResult = "";
 		return tmp;
 	}
+
 }
 
 class SpeedQuizList {
