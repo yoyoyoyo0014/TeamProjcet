@@ -545,12 +545,6 @@ public class Server {
 			return;
 		}
 
-//		if (userController.existUser(id)) {
-//			msg.setMsg("이미 등록된 아이디입니다.");
-//			sendUserLogin(msg);
-//			return;
-//		}
-
 		if (userController.join(id, password, email)) {
 			msg.setMsg("회원가입 되었습니다. 로그인하세요.");
 		} else {
@@ -561,9 +555,7 @@ public class Server {
 
 	private void receiveUserLogin(String message) {
 		// message는 id + " " + password로 형태
-		// 서버는 list(db)에서 로그인 정보를 확인
-		// id가 없다면 새로 등록.
-		// id가 있는데 password가 다르다면 로그인 실패. <종료>
+		
 		String[] tmp = message.split(" ");
 		String id = tmp[0];
 		String password = tmp[1];
@@ -573,16 +565,14 @@ public class Server {
 
 	private void userLogin(String id, String password) {
 
-		// totalUser에서 아이디와 비밀번호가 일치한 지
-		// 현재 접속한 유저인 지
 		Message msg = new Message();
 
 		// ****디비에 id랑 password를 넘겨주고 로그인
 		if (!userController.login(id, password)) {
 			msg.setMsg("아이디 혹은 비밀번호가 일치하지 않습니다.");
+			// 재로그인 요구.
 			sendUserLogin(msg);
 			return;
-			// 재로그인 요구.
 
 		}
 
@@ -590,14 +580,12 @@ public class Server {
 		for (ConnectedUser tmp : cUserList) {
 			if (tmp.getUser() != null && tmp.getUser().equals(loginUser)) {
 				msg.setMsg("이미 접속한 유저입니다.");
+				// 재로그인 요구.
 				sendUserLogin(msg);
 				return;
 			}
 		}
 
-		// loginedUser 객체에 추가
-		// 게임을 선택할 수 있도록 메뉴판 제공
-		// "<로그인 성공>";
 		msg.setMsg("<로그인 성공>\n");
 		cUser.setUser(loginUser);
 

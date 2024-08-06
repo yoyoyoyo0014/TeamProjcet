@@ -58,7 +58,6 @@ public class Type {
 	public final static String personal = "PERSONALRANK";
 	public final static String topPlayer = "TOPPLAYER";
 	
-
 	public static String kor_tag(String gameTitle) {
 		switch (gameTitle) {
 			case baseball:

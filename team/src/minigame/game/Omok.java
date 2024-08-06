@@ -89,12 +89,6 @@ public class Omok{
 		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> : ";
 	}
 
-//	public static void clearConsoleScreen() {
-//		for (int i = 0; i < 20; i++) {
-//			System.out.println();
-//		}
-//	}
-
 	public void turnNext() {
 
 		if (currentTurn.equals(player1)) {
@@ -113,10 +107,8 @@ public class Omok{
 	}
 
 	public void resetBoard() {
-//		System.out.println(row_init);
 		gameResult += row_init + "\n";
 		for (int i = 0x0; i < BOARD_SIZE; i++) {
-//			System.out.printf(" %X %s\n", i, list.get(i));
 			String tmp = list.get(i).replace("B", blue + "●" + exit);
 			tmp = tmp.replace("W", yellow + "●" + exit);
 			gameResult += " " + Integer.toHexString(i) + " " + tmp + "\n";
@@ -205,6 +197,8 @@ public class Omok{
 	}
 
 	public void run(Message msg) {
+		
+		gameResult += "\n";
 
 		List<String> select = new ArrayList<String>();
 		int sel_r, sel_c;
@@ -213,7 +207,7 @@ public class Omok{
 
 		if (select.get(0).equals("exit")) {
 			// 종료희망 => 종료 예정
-			gameResult += "<" + currentTurn + "님이 게임을 종료합니다>\n";
+			gameResult += "<" + currentTurn + "님이 경기를 포기하였습니다.>\n";
 
 			turnNext();
 			victory();
@@ -291,7 +285,7 @@ public class Omok{
 			loser = player1;
 			winner = player2;
 		}
-		gameResult += "승자는 <" + winner + "님입니다>\n";
+		gameResult += "<승자는 " + winner + "님입니다>\n";
 
 	}
 

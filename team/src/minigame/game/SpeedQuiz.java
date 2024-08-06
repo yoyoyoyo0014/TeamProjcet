@@ -73,9 +73,9 @@ public class SpeedQuiz {
 	public boolean sucP1 = false;
 	public boolean sucP2 = false;
 	public boolean end = false;
-	
+
 	boolean notPost = false;
-	
+
 	int winCount = 3;
 
 	String[] player1Result;
@@ -123,14 +123,14 @@ public class SpeedQuiz {
 		if (msg.equals("")) {
 			return;
 		}
-		boolean isPlayer1;
+//		boolean isPlayer1;
 		String[] realAnser;
 
 		if (msg.getPName().equals(player1)) {
-			isPlayer1 = true;
+//			isPlayer1 = true;
 			realAnser = player1Result;
 		} else {
-			isPlayer1 = false;
+//			isPlayer1 = false;
 			realAnser = player2Result;
 			;
 		}
@@ -161,10 +161,10 @@ public class SpeedQuiz {
 						player2WinCount++;
 						// 3번 이겼을 때
 						if (player2WinCount >= winCount) {
-							System.out.println("우승");
+//							System.out.println("우승");
 							winner = msg.getPName();
 							loser = winner.equals(player1) ? player2 : player1;
-							gameResult += "끝!";
+							gameResult += "끝!\n";
 							notPost = false;
 							end = true;
 							msg.setOpt1(winner);

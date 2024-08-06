@@ -15,7 +15,6 @@ import minigame.utils.Type;
 @Data
 public class Yacht {
 
-	static Scanner scanner = new Scanner(System.in);
 	public static final String blue = "\u001B[34m";
 	public static final String exit = "\u001B[0m";
 
@@ -26,10 +25,10 @@ public class Yacht {
 	static int reRollCount = 0;
 
 	private String currentTurn;
-	private static String player1;
-	private static String player2;
+	private String player1;
+	private String player2;
 
-	private static String gameResult;
+	private String gameResult;
 
 	private String winner = null;
 	private String loser = null;
@@ -100,12 +99,14 @@ public class Yacht {
 	public void run(Message message) {
 
 		String[] input = message.getMsg().split(" ");
-		if (input.equals(Type.exit)) {
+		if (input[0] != null && input[0].equals(Type.exit)) {
+
+			loser = message.getPName();
+			winner = loser.equals(player1)?player2:player1;
 			
-				loser = message.getPName();
-//				winner
-				
-				return;	
+			gameResult += "<" + loser + " 님이 경기를 포기하였습니다.>\n";
+
+			return;
 		}
 
 		if (currentTurn.equals(player1)) {
@@ -125,6 +126,8 @@ public class Yacht {
 				recPoint(p1, message);
 				if (p1.reRollCount == 4) { // 족보에 값이 들어가면 실행
 					turnNext();
+					
+					p1.reRollCount = 0;
 				}
 			}
 		}
@@ -146,11 +149,8 @@ public class Yacht {
 				if (p2.reRollCount == 4) {
 					turnNext();
 
-					p1.reRollCount = 0;
 					p2.reRollCount = 0;
 					turn++;
-
-//					gameResult += "turn :" + turn + "이 종료되었습니다. 계속하려면 enter를 눌러주세요.\n";
 
 					if (turn <= 12) {
 						Message tmp = new Message();
@@ -164,9 +164,8 @@ public class Yacht {
 
 					// 결과 출력
 					printFinal();
-
 					victory();
-					reset();
+//					reset();
 
 					return;
 				}
@@ -1121,7 +1120,7 @@ public class Yacht {
 		return total;
 	}
 
-	private static void printRule() {
+	private void printRule() {
 		gameResult += "1. 주사위 5개를 던진다.\n";
 		gameResult += "2. 이 중 원하는 주사위들은 남겨두고, 나머지 주사위들을 다시 던진다. \n다시 던지기는 한 라운드에 2번까지 가능하며, 앞에서 던지지 않았던 주사위도 원한다면 다시 던질 수 있다.\n";
 		gameResult += "3. 주사위 던지기가 끝난 후 나온 최종 조합으로, 아래 제시된 족보 중 아직까지 기록되지 않은 하나를 반드시 선택하여, 점수판에 기록한다.\n";
@@ -1251,74 +1250,6 @@ public class Yacht {
 		}
 
 		gameResult += " ================================== \n";
-	}
-
-	private void reset() {
-		{
-			p1.one = 0;
-			p1.two = 0;
-			p1.three = 0;
-			p1.four = 0;
-			p1.five = 0;
-			p1.six = 0;
-			p1.bonus = 0;
-			p1.ch = 0;
-			p1.fk = 0;
-			p1.fh = 0;
-			p1.ss = 0;
-			p1.ls = 0;
-			p1.ya = 0;
-
-			p1.oneBl = false;
-			p1.twoBl = false;
-			p1.threeBl = false;
-			p1.fourBl = false;
-			p1.fiveBl = false;
-			p1.sixBl = false;
-			p1.chBl = false;
-			p1.fkBl = false;
-			p1.fhBl = false;
-			p1.ssBl = false;
-			p1.lsBl = false;
-			p1.yaBl = false;
-
-			p1.oneToSix = 0;
-
-			p1.total = 0;
-		}
-
-		{
-			p2.one = 0;
-			p2.two = 0;
-			p2.three = 0;
-			p2.four = 0;
-			p2.five = 0;
-			p2.six = 0;
-			p2.bonus = 0;
-			p2.ch = 0;
-			p2.fk = 0;
-			p2.fh = 0;
-			p2.ss = 0;
-			p2.ls = 0;
-			p2.ya = 0;
-
-			p2.oneBl = false;
-			p2.twoBl = false;
-			p2.threeBl = false;
-			p2.fourBl = false;
-			p2.fiveBl = false;
-			p2.sixBl = false;
-			p2.chBl = false;
-			p2.fkBl = false;
-			p2.fhBl = false;
-			p2.ssBl = false;
-			p2.lsBl = false;
-			p2.yaBl = false;
-
-			p2.oneToSix = 0;
-
-			p2.total = 0;
-		}
 	}
 
 }

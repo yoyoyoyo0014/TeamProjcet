@@ -204,8 +204,10 @@ public class Typing{
 			winner = player2;
 		} else {
 			gameResult += "게임이 종료되었습니다.\n무승부입니다.\n";
-			winner = "both";
-			loser = "both";
+			winner = player1;
+			loser = player2;
+			
+			isDraw = true;
 		}
 
 		gameResult += "========================\n";

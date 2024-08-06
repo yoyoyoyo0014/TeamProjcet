@@ -1,19 +1,15 @@
 package minigame.utils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class User implements Serializable {
+public class User /* implements Serializable */ {
 	// 추후 DB 대체 데이터
 
-	private static final long serialVersionUID = -1178561973660991852L;
+//	private static final long serialVersionUID = -1178561973660991852L;
 
 	@NonNull
 	private String id;

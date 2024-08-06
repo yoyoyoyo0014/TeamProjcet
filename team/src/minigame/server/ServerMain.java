@@ -5,12 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerMain {
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		int port = 5001;
-		try {
-			// 서버용 소켓 객체 생성\
-			ServerSocket serverSocket = new ServerSocket(port);
+		// 서버용 소켓 객체 생성\
+		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			System.out.println("[연결 대기중]");
 			while (true) {
 				Socket socket = serverSocket.accept();
@@ -21,7 +19,6 @@ public class ServerMain {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("예외발생");
 		}
 
 	}

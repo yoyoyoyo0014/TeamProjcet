@@ -21,11 +21,8 @@ public class Message implements Serializable {
 	
 	private List<String> strList;
 	
-//	public speedUser spduser = new speedUser(msg, Type, 0, null);
-
 	private boolean turnEnd = false;
 	private boolean notPost = false;
 	
 	private boolean end = false;
-//	public boolean getTurnEnd;
 }
