@@ -105,7 +105,7 @@ public class Client {
 			case Type.personal:
 			case Type.topPlayer:
 				System.out.println(message.getMsg());
-				System.out.println("이전 메뉴로 돌아갑니다. ENTER를 눌러주세요.");
+				System.out.print("이전 메뉴로 돌아갑니다. ENTER를 눌러주세요.");
 				sc.nextLine();
 				runRoomMenu();
 				break;
@@ -287,7 +287,7 @@ public class Client {
 		System.out.println(" 1. 개인 전적 조회");
 		System.out.println(" 2. 상위 전적 조회");
 		System.out.println("====================================");
-		System.out.print("게임 선택 |이전으로:-1| : ");
+		System.out.print(">> 메뉴 선택 |이전으로:-1| : ");
 
 	}
 
@@ -343,7 +343,7 @@ public class Client {
 		System.out.println(" <회원 정보 변경> ");
 		System.out.println(" 1. 비밀번호 재설정");
 		System.out.println("====================================");
-		System.out.print("게임 선택 |이전으로:-1| : ");
+		System.out.print(">> 메뉴 선택 |이전으로:-1| : ");
 	}
 
 	private void updateUser() {
@@ -477,14 +477,14 @@ public class Client {
 	private void printGameList() {
 
 		System.out.println("====================================");
-		System.out.println(" <방 만들기> ");
-		System.out.println(" 1. 야구");
-		System.out.println(" 2. 오목");
-		System.out.println(" 3. Typing");
-		System.out.println(" 4. Yacht");
-		System.out.println(" 5. SpeedQuiz");
+		System.out.println("<방 만들기> ");
+		System.out.println("1. Baseball(야구)");
+		System.out.println("2. Omok(오목)");
+		System.out.println("3. Typing(한컴타자)");
+		System.out.println("4. Yacht(요트)");
+		System.out.println("5. SpeedQuiz(스피드)");
 		System.out.println("====================================");
-		System.out.print("게임 선택 |이전으로:-1| : ");
+		System.out.print(">> 게임 선택 |이전으로:-1| : ");
 
 	}
 
@@ -498,7 +498,7 @@ public class Client {
 		System.out.println("5. 로그아웃");
 		System.out.println("6. 종료");
 		System.out.println("====================================");
-		System.out.print("메뉴 선택 : ");
+		System.out.print(">> 메뉴 선택 : ");
 
 	}
 
@@ -510,7 +510,7 @@ public class Client {
 		System.out.println("3. 비밀번호 찾기");
 		System.out.println("4. 종료");
 		System.out.println("====================================");
-		System.out.print("메뉴선택 : ");
+		System.out.print(">> 메뉴선택 : ");
 	}
 
 	private void inputUserLogin() {

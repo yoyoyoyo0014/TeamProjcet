@@ -62,13 +62,13 @@ public class ScoreController { // 인터페이스로 선언.
 		List<ScoreVO> list = scoreService.getScore(us_key);
 		Message msg = new Message();
 
-		if (list == null) {
+		if (list.size() == 0) {
 			msg.setMsg("<등록된 전적이 없습니다.>");
 			return msg;
 		}
 
-		String str = "<개인 전적 조회>\n";
-		str += "====================================";
+		String str = "====================================\n";
+		str += "<개인 전적 조회>";
 		for (ScoreVO tmp : list) {
 			str += "\n";
 			String gameTitle = gameService.getGameTitle(tmp.getSc_gm_key());
