@@ -174,9 +174,9 @@ public class Typing implements Program {
 	public void run(Message message) {
 
 		if (message.getOpt1() != null && message.getOpt1().equals(Type.exit)) {
-			gameResult += "========================\n";
+			gameResult += "====================================\n";
 			gameResult += currentTurn + "님이 게임을 포기하셨습니다.\n";
-			gameResult += "========================\n";
+			gameResult += "====================================\n";
 			if (currentTurn.equals(player1)) {
 				winner = player2;
 				loser = player1;

@@ -204,10 +204,7 @@ public class Server implements Program {
 					System.out.println("[<" + userId + ">님이 나갔습니다.]");
 
 					sendAll(msg);
-					/*
-					 * 게임 도중에 나갔다면 승자 판별 구현 예정.
-					 */
-
+					
 					if (userRoom != null) {
 						if (userRoom.getIsPlaying() == Type.playing) {
 
@@ -556,7 +553,9 @@ public class Server implements Program {
 		if (roomList.size() != 0) {
 			msg = "";
 			for (int i = 0; i < roomList.size(); i++) {
-				msg += i + 1 + ". [" + roomList.get(i).getGameTitle() + "][" + roomList.get(i) + "]\n";
+				msg += i + 1 + ".[" + Type.kor_tag(roomList.get(i).getGameTitle()) +"(" +roomList.get(i).getGameTitle()+")]" 
+						+ "[" + roomList.get(i).getRoomTitle() + "]" 
+						+ "[방장:" + roomList.get(i).getRoomManager().getUser().getId() + "]\n";
 			}
 
 			message.setMsg(msg);

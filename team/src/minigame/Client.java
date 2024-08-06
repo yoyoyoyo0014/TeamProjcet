@@ -39,16 +39,6 @@ public class Client {
 
 	private boolean isExit = false;
 
-	public synchronized Message readServerMessage() {
-		try {
-			return (Message) ois.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	public void run() {
 
 		// runSub();
@@ -62,13 +52,13 @@ public class Client {
 					break;
 				}
 
-				Message msg = readServerMessage();
-
+				Message msg = (Message) ois.readObject();
+				
 				readMessage(msg);
 
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -189,7 +179,7 @@ public class Client {
 				System.out.println("게임을 시작하려면 Enter를 눌러주세요");
 				sc.nextLine();
 
-				for (int i = 0; i < words.size(); i++) {
+				for (int i = 0; i < 10/*words.size()*/; i++) {
 					System.out.println("" + words.get(i));
 					answer.add(sc.nextLine());
 					if (answer.get(i).equals(Type.exit)) {
@@ -503,7 +493,7 @@ public class Client {
 		System.out.println("<메뉴>");
 		System.out.println("1. 방 만들기");
 		System.out.println("2. 방 검색하기");
-		System.out.println("3. 전적 조회<구현예정>");
+		System.out.println("3. 전적 조회");
 		System.out.println("4. 회원 정보 변경");
 		System.out.println("5. 로그아웃");
 		System.out.println("6. 종료");
