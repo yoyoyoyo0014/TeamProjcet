@@ -86,7 +86,7 @@ public class Omok {
 		stoneInit(twhiteStone);
 		stoneInit(tblackStone);
 
-		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> : ";
+		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9) [종료: EXIT]>: ";
 	}
 
 	public void turnNext() {
@@ -205,7 +205,7 @@ public class Omok {
 
 		select = Arrays.asList(msg.getMsg().trim().split(" "));
 
-		if (select.get(0).equals(Type.exit)) {
+		if (select.get(0).equals(Type.exit) || select.get(0).toUpperCase().equals(Type.exit)) {
 
 			gameResult += "<" + currentTurn + " 님이 경기를 포기하였습니다.>\n";
 			gameResult += "<게임이 종료됩니다>";
@@ -223,28 +223,27 @@ public class Omok {
 			sel_r = Integer.parseInt(select.get(row), 16);
 			sel_c = Integer.parseInt(select.get(col), 16);
 		} catch (Exception e) {
-			gameResult += "올바르지 않은 입력입니다." + currentTurn + "패배<반칙패>\n";
-
-			turnNext();
-			victory();
+			resetBoard();
+			gameResult += "<올바르지 않은 입력입니다. 다시 입력해주세요>\n";
+			gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> [종료: EXIT]: ";
 
 			return;
 		}
 		// 범위를 벗어난 숫자 입력. 반칙패로 규정
 		// 재선택으로 구현 예정
 		if (!isValidNum(sel_r) || !isValidNum(sel_c)) {
-			gameResult += "올바르지 않은 위치입니다." + currentTurn + " 패배<반칙패>\n";
-			turnNext();
-			victory();
+			resetBoard();
+			gameResult += "<올바르지 않은 위치입니다. 다시 입력해주세요>\n";
+			gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> [종료: EXIT]: ";
 			return;
 		}
 
 		// 흑돌이나 백돌에 이미 등록된 위치라면 반칙패 처리
 		// 재선택으로 구현 예정
 		if (twhiteStone.get(sel_r).get(sel_c) != 0 || tblackStone.get(sel_r).get(sel_c) != 0) {
-			gameResult += "이미 선택한 위치입니다. " + currentTurn + " 패배<반칙패>\n";
-			turnNext();
-			victory();
+			resetBoard();
+			gameResult += "<이미 선택한 위치입니다. 다시 입력해주세요>\n";
+			gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> [종료: EXIT]: ";
 			return;
 		}
 
@@ -272,7 +271,7 @@ public class Omok {
 			return;
 		}
 
-		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> : ";
+		gameResult += "<좌표를 입력해주세요(ex. A A, 9 9)> [종료: EXIT]: ";
 
 		turnNext();
 	}

@@ -40,6 +40,7 @@ public class Client {
 	private String id;
 
 	private boolean isExit = false;
+	private boolean isDuplicated = false;
 
 	public void run() {
 
@@ -170,9 +171,10 @@ public class Client {
 
 	private void gamePlay(Message message) {
 
-		System.out.print(message.getMsg());
 
 		if (id.equals(message.getOpt1()) || message.getOpt1().equals(Type.allTurn)) {
+			isDuplicated = false;
+			System.out.print(message.getMsg());
 			Message msg = new Message();
 			msg.setType(Type.playing);
 			if (message.getStrList() != null) {
@@ -187,6 +189,7 @@ public class Client {
 					if (answer.get(i).equals(Type.exit)) {
 						msg.setMsg(Type.exit);
 						send(msg);
+						answer.add(sc.nextLine());
 						return;
 					}
 				}
@@ -197,7 +200,11 @@ public class Client {
 			}
 			send(msg);
 		} else {
-			System.out.println("상대방이 입력 중입니다.");
+			if(!isDuplicated) {
+			System.out.println(message.getMsg());
+			System.out.println("<상대방이 입력 중입니다>.");
+			}
+			isDuplicated = true;
 		}
 	}
 

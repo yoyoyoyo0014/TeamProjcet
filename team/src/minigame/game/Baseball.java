@@ -54,7 +54,7 @@ public class Baseball {
 		//
 		gameResult += "<" + turnCount++ + "차 시도>\n";
 		gameResult += "<" + currentTurn + "의 차례입니다.>\n";
-		gameResult += "<숫자 3개를 입력해주세요.(예: 3 6 9) > : ";
+		gameResult += "<숫자 3개를 입력해주세요.(예: 3 6 9) > |종료: EXIT| : ";
 	}
 
 	private void currentTurnInit() {
@@ -152,7 +152,7 @@ public class Baseball {
 		// String으로 받은 숫자 <예: 3 6 9>를
 		// integer list로 생성
 		
-		if (message.getMsg().equals(Type.exit)) {
+		if (message.getMsg().toUpperCase().equals(Type.exit) || message.getMsg().equals(Type.exit)) {
 
 			loser = message.getPName();
 			winner = loser.equals(player1)?player2:player1;
