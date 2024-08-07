@@ -99,7 +99,7 @@ public class Yacht {
 	public void run(Message message) {
 
 		String[] input = message.getMsg().split(" ");
-		if (input[0].equals(Type.exit)) {
+		if (input[0].equals(Type.exit) || input[0].toUpperCase().equals(Type.exit)) {
 
 			loser = message.getPName();
 			winner = loser.equals(player1)?player2:player1;

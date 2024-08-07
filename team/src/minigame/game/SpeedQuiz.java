@@ -68,6 +68,7 @@ public class SpeedQuiz {
 		gameResult += quiz;
 
 		answer = sqList[i].answer;
+		System.out.println("스피드 퀴즈 정답: answer");
 
 		player1Result = answer;
 		player2Result = answer;

@@ -98,6 +98,7 @@ public class Baseball {
 		}
 
 		randomNumber = new ArrayList<Integer>(baseSet);
+		System.out.println(randomNumber);
 	}
 
 	// User가 입력한 숫자에 대한 결과 값 출력
