@@ -34,8 +34,6 @@ public class Client {
 	private static Scanner sc = new Scanner(System.in);
 	private ObjectInputStream ois;
 
-	private List<Message> list = new ArrayList<Message>();
-
 	// 로그인 시 입력받은 id
 	private String id;
 
@@ -143,6 +141,7 @@ public class Client {
 				gamePlay(message);
 				break;
 			case Type.end:
+				isDuplicated = false;
 				if (message.getMsg() != null) {
 					System.out.println(message.getMsg());
 				}
@@ -189,7 +188,7 @@ public class Client {
 					if (answer.get(i).equals(Type.exit)) {
 						msg.setMsg(Type.exit);
 						send(msg);
-						answer.add(sc.nextLine());
+						//answer.add(sc.nextLine());
 						return;
 					}
 				}

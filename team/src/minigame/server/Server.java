@@ -337,10 +337,10 @@ public class Server {
 		msg.setType(Type.reset);
 
 		if (pwd == null) {
-			msg.setOpt1("fail");
+			msg.setOpt1(Type.fail);
 		} else {
 			msg.setMsg(pwd);
-			msg.setOpt1("success");
+			msg.setOpt1(Type.success);
 		}
 
 		send(oos, msg);
